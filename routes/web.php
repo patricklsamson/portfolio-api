@@ -14,5 +14,17 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return 'Portfolio API v1 - ' . $router->app->version();
+});
+
+$router->group(['prefix' => 'v1'], function () use ($router) {
+    $router->get('messages', [
+        'uses' => 'MessageController@getAll',
+        'middleware' => ['validate-request:App\Http\Requests\GetMessageRequest']
+    ]);
+
+    $router->get('messages/{id}', [
+        'uses' => 'MessageController@getOne',
+        'middleware' => ['validate-request:App\Http\Requests\GetMessageRequest']
+    ]);
 });
