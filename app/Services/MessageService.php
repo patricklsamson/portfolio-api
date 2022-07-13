@@ -6,8 +6,18 @@ use App\Repositories\MessageRepository;
 
 class MessageService
 {
+    /**
+     * Model repository
+     *
+     * @var MessageRepository
+     */
     private $messageRepository;
 
+    /**
+     * Constructor
+     *
+     * @param MessageRepository $messageRepository
+     */
     public function __construct(MessageRepository $messageRepository)
     {
         $this->messageRepository = $messageRepository;
