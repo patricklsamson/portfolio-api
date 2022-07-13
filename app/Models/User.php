@@ -7,12 +7,21 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
+
+    /**
+     * Resource attributes
+     *
+     * @var array
+     */
+    const ATTRIBUTES = ['name', 'email', 'username', 'objective', 'about', 'metadata'];
 
     /**
      * The attributes that are mass assignable.
@@ -65,24 +74,30 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     /**
      * Get associated models
+     *
+     * @return HasMany
      */
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany(Message::class);
     }
 
     /**
      * Get associated models
+     *
+     * @return HasMany
      */
-    public function profiles()
+    public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class);
     }
 
     /**
      * Get associated model
+     *
+     * @return MorphOne
      */
-    public function address()
+    public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'parentable');
     }

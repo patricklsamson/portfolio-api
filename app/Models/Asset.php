@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Asset extends Model
 {
@@ -42,16 +44,20 @@ class Asset extends Model
 
     /**
      * Get associated models
+     *
+     * @return HasMany
      */
-    public function profiles()
+    public function profiles(): HasMany
     {
         return $this->hasMany(Profile::class);
     }
 
     /**
      * Get associated model
+     *
+     * @return MorphOne
      */
-    public function address()
+    public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'parentable');
     }
