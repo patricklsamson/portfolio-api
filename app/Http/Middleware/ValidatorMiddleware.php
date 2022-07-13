@@ -16,7 +16,12 @@ class ValidatorMiddleware
      */
     public function handle($request, Closure $next, string $customRequest)
     {
-        Validator::make($request->all(), $customRequest::rules());
+        $validator = Validator::make(
+            $customRequest::data($request),
+            $customRequest::rules($request)
+        );
+
+        $validator->validated();
 
         return $next($request);
     }
