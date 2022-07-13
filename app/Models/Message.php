@@ -67,7 +67,7 @@ class Message extends Model
      *
      * @return Builder
      */
-    public function scopeSortCreatedAt(Builder $query, string $order = 'DESC'): Builder
+    public function scopeSortCreatedAt(Builder $query, string $order = 'desc'): Builder
     {
         return $query->orderBy('created_at', $order);
     }
