@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Requests\GetMessageRequest;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,6 +14,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->registerRequests();
+    }
+
+    /**
+     * Register requests
+     */
+    private function registerRequests()
+    {
+        $this->app->singleton(
+            GetMessageRequest::class,
+            function () {
+                return GetMessageRequest::capture();
+            }
+        );
     }
 }
