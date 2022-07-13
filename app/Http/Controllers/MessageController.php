@@ -12,8 +12,18 @@ class MessageController extends Controller
 {
     use ResourceTrait;
 
+    /**
+     * Model service
+     *
+     * @var MessageService
+     */
     private $messageService;
 
+    /**
+     * Constructor
+     *
+     * @param MessageService $messageService
+     */
     public function __construct(MessageService $messageService)
     {
         $this->messageService = $messageService;
@@ -26,6 +36,7 @@ class MessageController extends Controller
 
     public function getOne(string $id, GetMessageRequest $request): JsonResource
     {
-        return $this->resource($this->messageService->getOne($id, $request->data()));
+        // dd($request->data($request));
+        return $this->resource($this->messageService->getOne($id, $request->data($request)));
     }
 }
