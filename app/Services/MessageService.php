@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\GetMessageRequest;
 use App\Repositories\MessageRepository;
 
 class MessageService
