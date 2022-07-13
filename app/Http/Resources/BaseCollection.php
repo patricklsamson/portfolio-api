@@ -25,20 +25,30 @@ class BaseCollection extends ResourceCollection
             return [];
         }
 
-        $included = [];
+        $includes = [];
 
         $this->collection->each(
-            function($model) use ($request, &$included) {
+            function($model) use ($request, &$includes) {
                 foreach ($this->strToArray($request->get('include')) as $include) {
                     if ($model->whenLoaded($include) instanceof MissingValue) {
                         continue;
                     }
 
-                    $included[] = $this->resource($model->whenLoaded($include));
+                    $resource = $this->resource($model->whenLoaded($include));
+
+                    if (!$resource) {
+                        continue;
+                    }
+
+                    foreach ($resource as $single) {
+                        $includes[] = $single;
+                    }
                 }
             }
         );
 
-        return $included ? ['included' => $included] : [];
+        return empty(array_filter($includes)) ? [] : [
+            'included' => array_values(array_filter($includes))
+        ];
     }
 }

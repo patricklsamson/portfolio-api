@@ -6,6 +6,7 @@ use App\Traits\ArrayTrait;
 use App\Traits\ResourceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -32,8 +33,7 @@ class BaseResource extends JsonResource
         $relationships,
         array $attributes,
         ?string $type = null
-    ): array
-    {
+    ): array {
         $type = $this->type($type);
         $fields = Arr::get($request->get('fields'), $type);
 
@@ -85,10 +85,26 @@ class BaseResource extends JsonResource
                 continue;
             }
 
-            $includes[] = $this->resource($this->whenLoaded($include));
+            $resource = $this->resource($this->whenLoaded($include));
+
+            if (!$resource) {
+                continue;
+            }
+
+            if ($resource instanceof ResourceCollection) {
+                foreach ($resource as $single) {
+                    $includes[] = $single;
+                }
+
+                continue;
+            }
+
+            $includes[] = $resource;
         }
 
-        return $includes ? ['included' => $includes] : [];
+        return empty(array_filter($includes)) ? [] : [
+            'included' => array_values(array_filter($includes))
+        ];
     }
 
     /**
@@ -96,9 +112,9 @@ class BaseResource extends JsonResource
      *
      * @param Request $request
      *
-     * @return array
+     * @return mixed
      */
-    public function relationships($request): array
+    public function relationships($request)
     {
         if (!$request->get('include')) {
             return [];
@@ -113,12 +129,27 @@ class BaseResource extends JsonResource
 
             $resource = $this->resource($this->whenLoaded($include));
 
+            if (!$resource) {
+                continue;
+            }
+
+            if ($resource instanceof ResourceCollection) {
+                foreach ($resource as $single) {
+                    $relationships[$include]['data'][] = array_merge(
+                        $single->only('id'),
+                        ['type' => Str::plural($include)]
+                    );
+                }
+
+                continue;
+            }
+
             $relationships[$include]['data'][] = array_merge(
                 $resource->only('id'),
                 ['type' => Str::plural($include)]
             );
         }
 
-        return $relationships ? ['relationships' => $relationships] : [];
+        return empty(array_filter($relationships)) ? null : ['relationships' => $relationships];
     }
 }
