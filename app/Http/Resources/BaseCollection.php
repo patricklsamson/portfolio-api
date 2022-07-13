@@ -2,29 +2,43 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\ArrayTrait;
 use App\Traits\ResourceTrait;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
 
 class BaseCollection extends ResourceCollection
 {
+    use ArrayTrait;
     use ResourceTrait;
 
+    /**
+     * Get any additional data that should be returned with the resource array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return array
+     */
     public function with($request): array
     {
-        $include = $request->get('include');
+        if (!$request->get('include')) {
+            return [];
+        }
+
         $included = [];
 
         $this->collection->each(
-            function($model) use ($include, &$included) {
-                if ($model->whenLoaded($include) instanceof MissingValue) {
-                    return;
-                }
+            function($model) use ($request, &$included) {
+                foreach ($this->strToArray($request->get('include')) as $include) {
+                    if ($model->whenLoaded($include) instanceof MissingValue) {
+                        continue;
+                    }
 
-                $included[] = $this->resource($model->whenLoaded($include));
+                    $included[] = $this->resource($model->whenLoaded($include));
+                }
             }
         );
 
-        return $include && $included ? ['included' => $included] : [];
+        return $included ? ['included' => $included] : [];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Message;
+
 class MessageResource extends BaseResource
 {
     /**
@@ -12,11 +14,16 @@ class MessageResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse([
-            'sender' => $this->sender,
-            'email' => $this->email,
-            'body' => $this->body,
-            'type' => $this->type
-        ], $this->id);
+        return $this->formatResponse(
+            $request,
+            $this->id,
+            $this->relationships($request),
+            array_combine(Message::ATTRIBUTES, [
+                $this->sender,
+                $this->email,
+                $this->body,
+                $this->type
+            ])
+        );
     }
 }

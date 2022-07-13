@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserResource extends BaseResource
 {
@@ -14,9 +14,18 @@ class UserResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse([
-            'name' => $this->name,
-            'username' => $this->username
-        ], $this->id);
+        return $this->formatResponse(
+            $request,
+            $this->id,
+            $this->relationships($request),
+            array_combine(User::ATTRIBUTES, [
+                $this->name,
+                $this->email,
+                $this->username,
+                $this->objective,
+                $this->about,
+                $this->metadata
+            ])
+        );
     }
 }
