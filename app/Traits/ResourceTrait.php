@@ -4,6 +4,9 @@ namespace App\Traits;
 
 trait ResourceTrait
 {
+    /**
+     * Make resource/collection from model
+     */
     public function resource(object $model): object
     {
         $resource = 'App\Http\Resources\\' . class_basename($model) . 'Resource';
