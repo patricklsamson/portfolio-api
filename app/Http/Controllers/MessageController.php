@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GetMessageRequest;
 use App\Traits\ResourceTrait;
 use App\Services\MessageService;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class MessageController extends Controller
 {
@@ -29,14 +27,28 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function getAll(): ResourceCollection
+    /**
+     * Get all models
+     *
+     * @param GetMessageRequest $request
+     *
+     * @return mixed
+     */
+    public function getAll(GetMessageRequest $request)
     {
-        return $this->resource($this->messageService->getAll());
+        return $this->resource($this->messageService->getAll($request->data($request)));
     }
 
-    public function getOne(string $id, GetMessageRequest $request): JsonResource
+    /**
+     * Get one model
+     *
+     * @param string $id
+     * @param GetMessageRequest $request
+     *
+     * @return mixed
+     */
+    public function getOne(string $id, GetMessageRequest $request)
     {
-        // dd($request->data($request));
         return $this->resource($this->messageService->getOne($id, $request->data($request)));
     }
 }

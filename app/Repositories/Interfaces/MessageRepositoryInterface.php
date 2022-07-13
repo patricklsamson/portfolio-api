@@ -2,11 +2,24 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\Models\Message;
-use Illuminate\Database\Eloquent\Collection;
-
 interface MessageRepositoryInterface
 {
-    public function getAll();
-    public function getOne($id, $request);
+    /**
+     * Get all models
+     *
+     * @param array $request
+     *
+     * @return mixed
+     */
+    public function getAll(array $request);
+
+    /**
+     * Get one model
+     *
+     * @param string $id
+     * @param array $request
+     *
+     * @return mixed
+     */
+    public function getOne(string $id, array $request);
 }
