@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Message\CreateMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
@@ -36,6 +37,13 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerRequests()
     {
+        $this->app->singleton(
+            LoginRequest::class,
+            function ($app) {
+                return LoginRequest::capture();
+            }
+        );
+
         $this->app->singleton(
             GetMessageRequest::class,
             function () {
