@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetMessageRequest;
+use App\Http\Requests\Message\CreateMessageRequest;
+use App\Http\Requests\Message\GetMessageRequest;
+use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Traits\ResourceTrait;
 use App\Services\MessageService;
 
@@ -50,5 +52,40 @@ class MessageController extends Controller
     public function getOne(string $id, GetMessageRequest $request)
     {
         return $this->resource($this->messageService->getOne($id, $request->data($request)));
+    }
+
+    /**
+     * Create model
+     *
+     * @param CreateMessageRequest $request
+     *
+     * @return mixed
+     */
+    public function create(CreateMessageRequest $request)
+    {
+        return $this->resource($this->messageService->create($request->data($request)));
+    }
+
+    /**
+     * Update model
+     *
+     * @param string $id
+     * @param UpdateMessageRequest $request
+     *
+     * @return mixed
+     */
+    public function updateType(string $id, UpdateMessageRequest $request)
+    {
+        return $this->resource($this->messageService->updateType($id, $request->data($request)));
+    }
+
+    /**
+     * Delete model
+     *
+     * @param string $id
+     */
+    public function delete(string $id)
+    {
+        $this->messageService->delete($id);
     }
 }
