@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Message;
+
+use App\Http\Resources\BaseCollection;
 
 class MessageCollection extends BaseCollection
 {

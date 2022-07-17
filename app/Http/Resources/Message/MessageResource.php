@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Message;
 
+use App\Http\Resources\BaseResource;
 use App\Models\Message;
 
 class MessageResource extends BaseResource
