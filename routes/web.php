@@ -13,18 +13,47 @@
 |
 */
 
+$namespace = 'App\Http\Requests';
+
 $router->get('/', function () use ($router) {
-    return 'Portfolio API v1 - ' . $router->app->version();
+    return 'Portfolio API v1 | ' . $router->app->version();
 });
 
-$router->group(['prefix' => 'v1'], function () use ($router) {
+$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
     $router->get('messages', [
         'uses' => 'MessageController@getAll',
-        'middleware' => ['validate-request:App\Http\Requests\GetMessageRequest']
+        'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
     ]);
 
     $router->get('messages/{id}', [
         'uses' => 'MessageController@getOne',
-        'middleware' => ['validate-request:App\Http\Requests\GetMessageRequest']
+        'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
+    ]);
+
+    $router->post('messages', [
+        'uses' => 'MessageController@create',
+        'middleware' => ["validate-request:$namespace\Message\CreateMessageRequest"]
+    ]);
+
+    $router->put('messages/{id}/type', [
+        'uses' => 'MessageController@updateType',
+        'middleware' => ["validate-request:$namespace\Message\UpdateMessageRequest"]
+    ]);
+
+    $router->delete('messages', [
+        'uses' => 'MessageController@delete',
+        'middleware' => ["validate-request:$namespace\Message\DeleteMessageRequest"]
+    ]);
+});
+
+$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
+    $router->get('users', [
+        'uses' => 'UserController@getAll',
+        'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
+    ]);
+
+    $router->get('users/{id}', [
+        'uses' => 'UserController@getOne',
+        'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
     ]);
 });
