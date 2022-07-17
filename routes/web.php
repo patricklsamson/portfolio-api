@@ -56,4 +56,26 @@ $router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
         'uses' => 'UserController@getOne',
         'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
     ]);
+
+    $router->post('users', [
+        'uses' => 'UserController@create',
+        'middleware' => ["validate-reqest:$namespace\User\CreateUserRequest"]
+    ]);
+});
+
+$router->group([
+    'prefix' => 'v1/auth'
+], function () use ($router, $namespace) {
+    $router->post('login', [
+        'uses' => 'AuthController@login',
+        'middleware' => ["validate-request:$namespace\Auth\LoginRequest"]
+    ]);
+});
+
+$router->group([
+    'prefix' => 'v1/auth',
+    'middleware' => ['auth']
+], function () use ($router, $namespace) {
+    $router->get('refresh', ['uses' => 'AuthController@refresh']);
+    $router->delete('logout', ['uses' => 'AuthController@logout']);
 });
