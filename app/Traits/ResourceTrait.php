@@ -13,15 +13,15 @@ trait ResourceTrait
      */
     public function resource($model)
     {
-        if (!$model->count()) {
+        if (!$model || !$model->count()) {
             return null;
         }
 
-        $resource = 'App\Http\Resources\\' . class_basename($model) . 'Resource';
-
-        if (class_basename($model) == 'Collection') {
-            $resource = 'App\Http\Resources\\' . class_basename($model[0]) . 'Collection';
-        }
+        $resource = class_basename($model) == 'Collection' ?
+            'App\Http\Resources\\' . class_basename($model[0]) . '\\' .
+                class_basename($model[0]) . 'Collection' :
+            'App\Http\Resources\\' . class_basename($model) . '\\' .
+                class_basename($model) . 'Resource';
 
         return new $resource($model);
     }

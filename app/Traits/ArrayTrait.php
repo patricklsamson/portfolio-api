@@ -7,16 +7,26 @@ trait ArrayTrait
     /**
      * Sanitize and transform string to array
      *
-     * @param string $string
-     * @param bool $unique
+     * @param ?string $string
+     * @param mixed $return
      *
-     * @return array
+     * @return mixed
      */
-    public function strToArray(string $string, bool $unique = true): array
+    public function strToArray(?string $string, $return = null)
     {
-        $sanitizeString = str_replace(' ', '', $string);
-        $toArray = explode(',', $sanitizeString);
+        return $string ? explode(',', str_replace(' ', '', $string)) : $return;
+    }
 
-        return $unique ? array_unique($toArray, SORT_REGULAR) : $toArray;
+    /**
+     * Turn array to concatenated string
+     *
+     * @param string $string
+     * @param array $array
+     *
+     * @return string
+     */
+    public function strArrayConcat(string $string, array $array): string
+    {
+        return $string . implode(',', $array);
     }
 }
