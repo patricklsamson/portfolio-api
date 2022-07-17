@@ -63,12 +63,12 @@ class Message extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param string $order
+     * @param ?string $order
      *
      * @return Builder
      */
-    public function scopeSortCreatedAt(Builder $query, string $order = 'desc'): Builder
+    public function scopeSortCreatedAt(Builder $query, ?string $order): Builder
     {
-        return $query->orderBy('created_at', $order);
+        return $query->orderBy('created_at', $order ? $order : 'desc');
     }
 }
