@@ -16,7 +16,9 @@ class DeleteMessageRequest extends Request implements RequestInterface
      */
     public function data(Request $request): array
     {
-        return $request->all();
+        $data = $request->all();
+
+        return $data;
     }
 
     /**
