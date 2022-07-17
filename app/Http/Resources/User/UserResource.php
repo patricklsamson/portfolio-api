@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
+use App\Http\Resources\BaseResource;
 use App\Models\User;
 
 class UserResource extends BaseResource
