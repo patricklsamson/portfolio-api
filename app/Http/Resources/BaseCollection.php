@@ -6,6 +6,7 @@ use App\Traits\ArrayTrait;
 use App\Traits\ResourceTrait;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Resources\MissingValue;
+use Illuminate\Support\Arr;
 
 class BaseCollection extends ResourceCollection
 {
@@ -21,11 +22,11 @@ class BaseCollection extends ResourceCollection
      */
     public function with($request): array
     {
-        if (!$request->get('include')) {
-            return [];
-        }
-
         $includes = [];
+
+        if (!$request->get('include')) {
+            return $includes;
+        }
 
         $this->collection->each(
             function($model) use ($request, &$includes) {
@@ -41,14 +42,21 @@ class BaseCollection extends ResourceCollection
                     }
 
                     foreach ($resource as $single) {
-                        $includes[] = $single;
+                        if (
+                            !$single ||
+                            array_key_exists($single->only('id')['id'], $includes)
+                        ) {
+                            continue;
+                        }
+
+                        Arr::set($includes, 'included.' . $single->only('id')['id'], $single);
                     }
                 }
             }
         );
 
-        return empty(array_filter($includes)) ? [] : [
-            'included' => array_values(array_filter($includes))
-        ];
+        return empty($includes) ? $includes : Arr::set($includes, 'included', array_values(
+            Arr::get($includes, 'included', [])
+        ));
     }
 }

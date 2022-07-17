@@ -37,18 +37,12 @@ class BaseResource extends JsonResource
         $type = $this->type($type);
         $fields = Arr::get($request->get('fields'), $type);
 
-        $response = [
+        return array_filter(array_merge([
             'type' => $type,
             'id' => $id,
-            'attributes' => $fields ?
-                collect($attributes)->only($this->strtoarray($fields)) : $attributes
-        ];
-
-        if ($relationships) {
-            return array_merge($response, $relationships);
-        }
-
-        return $response;
+            'attributes' => $fields ? collect($attributes)->only($this->strtoarray($fields)) :
+                $attributes
+        ], $relationships));
     }
 
     /**
@@ -74,11 +68,11 @@ class BaseResource extends JsonResource
      */
     public function with($request): array
     {
-        if (!$request->get('include')) {
-            return [];
-        }
-
         $includes = [];
+
+        if (!$request->get('include')) {
+            return $includes;
+        }
 
         foreach ($this->strToArray($request->get('include')) as $include) {
             if ($this->whenLoaded($include) instanceof MissingValue) {
@@ -93,18 +87,20 @@ class BaseResource extends JsonResource
 
             if ($resource instanceof ResourceCollection) {
                 foreach ($resource as $single) {
-                    $includes[] = $single;
+                    if (!$single) {
+                        continue;
+                    }
+
+                    Arr::set($includes, 'included', $single);
                 }
 
                 continue;
             }
 
-            $includes[] = $resource;
+            Arr::set($includes, 'included', $resource);
         }
 
-        return empty(array_filter($includes)) ? [] : [
-            'included' => array_values(array_filter($includes))
-        ];
+        return $includes;
     }
 
     /**
@@ -112,15 +108,15 @@ class BaseResource extends JsonResource
      *
      * @param Request $request
      *
-     * @return mixed
+     * @return array
      */
-    public function relationships($request)
+    public function relationships($request): array
     {
-        if (!$request->get('include')) {
-            return [];
-        }
-
         $relationships = [];
+
+        if (!$request->get('include')) {
+            return $relationships;
+        }
 
         foreach ($this->strToArray($request->get('include')) as $include) {
             if ($this->whenLoaded($include) instanceof MissingValue) {
@@ -135,21 +131,25 @@ class BaseResource extends JsonResource
 
             if ($resource instanceof ResourceCollection) {
                 foreach ($resource as $single) {
-                    $relationships[$include]['data'][] = array_merge(
+                    if (!$single) {
+                        continue;
+                    }
+
+                    Arr::set($relationships, "relationships.$include.data", array_merge(
                         $single->only('id'),
                         ['type' => Str::plural($include)]
-                    );
+                    ));
                 }
 
                 continue;
             }
 
-            $relationships[$include]['data'][] = array_merge(
+            Arr::set($relationships, "relationships.$include.data", array_merge(
                 $resource->only('id'),
                 ['type' => Str::plural($include)]
-            );
+            ));
         }
 
-        return empty(array_filter($relationships)) ? null : ['relationships' => $relationships];
+        return $relationships;
     }
 }
