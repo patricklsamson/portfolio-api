@@ -2,7 +2,8 @@
 
 namespace App\Services;
 
-use App\Repositories\MessageRepository;
+use App\Exceptions\NotFoundException;
+use App\Repositories\Message\MessageRepository;
 
 class MessageService
 {
@@ -45,6 +46,45 @@ class MessageService
      */
     public function getOne(string $id, array $request)
     {
-        return $this->messageRepository->getOne($id, $request);
+        $message = $this->messageRepository->getOne($id, $request);
+
+        throw_if(!$message, NotFoundException::class);
+
+        return $message;
+    }
+
+    /**
+     * Create model
+     *
+     * @param array $request
+     *
+     * @return mixed
+     */
+    public function create(array $request)
+    {
+        return $this->messageRepository->create($request);
+    }
+
+    /**
+     * Update model
+     *
+     * @param string $id
+     * @param array $request
+     *
+     * @return mixed
+     */
+    public function updateType(string $id, array $request)
+    {
+        return $this->messageRepository->updateType($id, $request);
+    }
+
+    /**
+     * Delete model
+     *
+     * @param string $id
+     */
+    public function delete(string $id)
+    {
+        return $this->messageRepository->delete($id);
     }
 }
