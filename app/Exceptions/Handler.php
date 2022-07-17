@@ -50,13 +50,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        switch(get_class($exception)) {
-            case NotFoundException::class:
-                return $exception->render();
-            case UnprocessableEntityException::class:
-                return $exception->render();
-            default:
-                return parent::render($request, $exception);
-        }
+        return parent::render($request, $exception);
     }
 }
