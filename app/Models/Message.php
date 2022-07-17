@@ -46,17 +46,13 @@ class Message extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param mixed $type
+     * @param ?array $type
      *
      * @return Builder
      */
-    public function scopeWhereType(Builder $query, $type): Builder
+    public function scopeWhereType(Builder $query, ?array $type): Builder
     {
-        if (!$type) {
-            return $query;
-        }
-
-        return is_array($type) ? $query->whereIn('type', $type) : $query->where('type', $type);
+        return $type ? $query->whereIn('type', $type) : $query;
     }
 
     /**
