@@ -21,7 +21,7 @@ class GetUserRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-        Arr::set($data, 'include', self::strToArray($data['include'], []));
+        Arr::set($data, 'include', self::strToArray(Arr::get($data, 'include'), []));
 
         return $data;
     }
