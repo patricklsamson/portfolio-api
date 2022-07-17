@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Exceptions\UnprocessableEntityException;
 use Closure;
 use Illuminate\Support\Facades\Validator;
 
@@ -18,10 +19,15 @@ class ValidatorMiddleware
     {
         $validator = Validator::make(
             $customRequest::data($request),
-            $customRequest::rules($request)
+            $customRequest::rules()
         );
 
-        $validator->validated();
+        throw_if(
+            $validator->fails(),
+            env('APP_DEBUG', false) ?
+            new UnprocessableEntityException($validator->errors()) :
+            UnprocessableEntityException::class
+        );
 
         return $next($request);
     }
