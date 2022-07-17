@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Message\CreateMessageRequest;
+use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Traits\ResourceTrait;
@@ -83,9 +84,10 @@ class MessageController extends Controller
      * Delete model
      *
      * @param string $id
+     * @param DeleteMessageRequest $request
      */
-    public function delete(string $id)
+    public function delete(string $id, DeleteMessageRequest $request)
     {
-        $this->messageService->delete($id);
+        $this->messageService->delete($id, $request->data($request));
     }
 }
