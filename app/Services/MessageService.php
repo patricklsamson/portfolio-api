@@ -83,8 +83,8 @@ class MessageService
      *
      * @param string $id
      */
-    public function delete(string $id)
+    public function delete(string $id, array $request)
     {
-        return $this->messageRepository->delete($id);
+        return $this->messageRepository->delete($id, $request);
     }
 }
