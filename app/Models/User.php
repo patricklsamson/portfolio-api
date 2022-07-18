@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -100,5 +101,18 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'parentable');
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?string $order
+     *
+     * @return Builder
+     */
+    public function scopeSortCreatedAt(Builder $query, ?string $order): Builder
+    {
+        return $query->orderBy('created_at', $order ? $order : 'desc');
     }
 }
