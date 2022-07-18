@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Traits\ArrayTrait;
 use App\Traits\ResourceTrait;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -119,35 +120,29 @@ class BaseResource extends JsonResource
         }
 
         foreach ($this->strToArray($request->get('include')) as $include) {
-            if ($this->whenLoaded($include) instanceof MissingValue) {
+            if (!$this->$include) {
                 continue;
             }
 
-            $resource = $this->resource($this->whenLoaded($include));
-
-            if (!$resource) {
-                continue;
-            }
-
-            if ($resource instanceof ResourceCollection) {
-                foreach ($resource as $single) {
+            if ($this->$include instanceof Collection) {
+                foreach ($this->$include as $single) {
                     if (!$single) {
                         continue;
                     }
 
-                    $relationships['relationships'][$include]['data'][] = array_merge(
-                        $single->only('id'),
-                        ['type' => Str::plural($include)]
-                    );
+                    $relationships['relationships'][$include]['data'][] = [
+                        'id' => $single['id'],
+                        'type' => Str::plural($include)
+                    ];
                 }
 
                 continue;
             }
 
-            $relationships['relationships'][$include]['data'][] = array_merge(
-                $resource->only('id'),
-                ['type' => Str::plural($include)]
-            );
+            $relationships['relationships'][$include]['data'][] = [
+                'id' => $this->$include['id'],
+                'type' => Str::plural($include)
+            ];
         }
 
         return $relationships;
