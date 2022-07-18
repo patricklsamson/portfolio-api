@@ -19,63 +19,62 @@ $router->get('/', function () use ($router) {
     return 'Portfolio API v1 | ' . $router->app->version();
 });
 
+$router->group(['prefix' => 'v1/auth'], function () use ($router, $namespace) {
+    $router->post('login', [
+        'uses' => 'AuthController@login',
+        'middleware' => ["validate-request:$namespace\Auth\LoginRequest"]
+    ]);
+
+    $router->group(['middleware' => ['auth']], function () use ($router) {
+        $router->get('refresh', ['uses' => 'AuthController@refresh']);
+        $router->delete('logout', ['uses' => 'AuthController@logout']);
+    });
+});
+
 $router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
-    $router->get('messages', [
-        'uses' => 'MessageController@getAll',
-        'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
+    $router->post('users', [
+        'uses' => 'UserController@create',
+        'middleware' => ["validate-reqest:$namespace\User\CreateUserRequest"]
     ]);
 
-    $router->get('messages/{id}', [
-        'uses' => 'MessageController@getOne',
-        'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
-    ]);
+    $router->group(['middleware' => ['auth']], function () use ($router, $namespace) {
+        $router->get('users', [
+            'uses' => 'UserController@getAll',
+            'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
+        ]);
 
+        $router->get('users/{id}', [
+            'uses' => 'UserController@getOne',
+            'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
+        ]);
+    });
+});
+
+$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
     $router->post('messages', [
         'uses' => 'MessageController@create',
         'middleware' => ["validate-request:$namespace\Message\CreateMessageRequest"]
     ]);
 
-    $router->put('messages/{id}/type', [
-        'uses' => 'MessageController@updateType',
-        'middleware' => ["validate-request:$namespace\Message\UpdateMessageRequest"]
-    ]);
+    $router->group(['middleware' => ['auth']], function () use ($router, $namespace) {
+        $router->get('messages', [
+            'uses' => 'MessageController@getAll',
+            'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
+        ]);
 
-    $router->delete('messages', [
-        'uses' => 'MessageController@delete',
-        'middleware' => ["validate-request:$namespace\Message\DeleteMessageRequest"]
-    ]);
-});
+        $router->get('messages/{id}', [
+            'uses' => 'MessageController@getOne',
+            'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
+        ]);
 
-$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
-    $router->get('users', [
-        'uses' => 'UserController@getAll',
-        'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
-    ]);
+        $router->put('messages/{id}/type', [
+            'uses' => 'MessageController@updateType',
+            'middleware' => ["validate-request:$namespace\Message\UpdateMessageRequest"]
+        ]);
 
-    $router->get('users/{id}', [
-        'uses' => 'UserController@getOne',
-        'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
-    ]);
-
-    $router->post('users', [
-        'uses' => 'UserController@create',
-        'middleware' => ["validate-reqest:$namespace\User\CreateUserRequest"]
-    ]);
-});
-
-$router->group([
-    'prefix' => 'v1/auth'
-], function () use ($router, $namespace) {
-    $router->post('login', [
-        'uses' => 'AuthController@login',
-        'middleware' => ["validate-request:$namespace\Auth\LoginRequest"]
-    ]);
-});
-
-$router->group([
-    'prefix' => 'v1/auth',
-    'middleware' => ['auth']
-], function () use ($router, $namespace) {
-    $router->get('refresh', ['uses' => 'AuthController@refresh']);
-    $router->delete('logout', ['uses' => 'AuthController@logout']);
+        $router->delete('messages', [
+            'uses' => 'MessageController@delete',
+            'middleware' => ["validate-request:$namespace\Message\DeleteMessageRequest"]
+        ]);
+    });
 });
