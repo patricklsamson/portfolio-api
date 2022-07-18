@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\NotFoundException;
 use App\Repositories\Message\MessageRepository;
+use Illuminate\Support\Arr;
 
 class MessageService
 {
@@ -27,27 +28,30 @@ class MessageService
     /**
      * Get all models
      *
-     * @param array $request
+     * @param array $data
      *
      * @return mixed
      */
-    public function getAll(array $request)
+    public function getAll(array $data)
     {
-        return $this->messageRepository->getAll($request);
+        return $this->messageRepository->getAll(
+            Arr::get($data, 'include'),
+            Arr::get($data, 'filter.type'),
+            Arr::get($data, 'sort.created_at')
+        );
     }
 
     /**
      * Get one model
      *
      * @param string $id
-     * @param array $request
+     * @param array $data
      *
      * @return mixed
      */
-    public function getOne(string $id, array $request)
+    public function getOne(string $id, array $data)
     {
-        $message = $this->messageRepository->getOne($id, $request);
-
+        $message = $this->messageRepository->getOne($id, Arr::get($data, 'include'));
         throw_if(!$message, NotFoundException::class);
 
         return $message;
@@ -56,35 +60,47 @@ class MessageService
     /**
      * Create model
      *
-     * @param array $request
+     * @param array $data
      *
      * @return mixed
      */
-    public function create(array $request)
+    public function create(array $data)
     {
-        return $this->messageRepository->create($request);
+        return $this->messageRepository->create(Arr::get($data, 'data.attributes'));
     }
 
     /**
      * Update model
      *
      * @param string $id
-     * @param array $request
+     * @param array $data
      *
      * @return mixed
      */
-    public function updateType(string $id, array $request)
+    public function updateType(string $id, array $data)
     {
-        return $this->messageRepository->updateType($id, $request);
+        $message = $this->messageRepository->getOne($id);
+        throw_if(!$message, NotFoundException::class);
+        $this->messageRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        return $this->messageRepository->getOne($id);
     }
 
     /**
      * Delete model
      *
      * @param string $id
+     * @param array $data
+     *
+     * @return mixed
      */
-    public function delete(string $id, array $request)
+    public function delete(string $id, array $data)
     {
-        return $this->messageRepository->delete($id, $request);
+        $ids = Arr::get($data, 'ids');
+        $ids[] = $id;
+        $messages = $this->messageRepository->getAll([], null, null, $ids);
+        throw_if(!$messages, NotFoundException::class);
+
+        return $this->messageRepository->delete($ids);
     }
 }
