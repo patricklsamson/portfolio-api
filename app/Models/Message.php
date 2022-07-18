@@ -50,7 +50,7 @@ class Message extends Model
      *
      * @return Builder
      */
-    public function scopeWhereType(Builder $query, ?array $type): Builder
+    public function scopeFilterType(Builder $query, ?array $type): Builder
     {
         return $type ? $query->whereIn('type', $type) : $query;
     }
@@ -66,5 +66,18 @@ class Message extends Model
     public function scopeSortCreatedAt(Builder $query, ?string $order): Builder
     {
         return $query->orderBy('created_at', $order ? $order : 'desc');
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?array $ids
+     *
+     * @return Builder
+     */
+    public function scopeWhereIdIn(Builder $query, ?array $ids): Builder
+    {
+        return $ids ? $query->whereIn('id', $ids) : $query;
     }
 }
