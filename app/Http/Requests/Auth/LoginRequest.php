@@ -3,10 +3,14 @@
 namespace App\Http\Requests\Auth;
 
 use App\Http\Requests\Interfaces\RequestInterface;
+use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class LoginRequest extends Request implements RequestInterface
 {
+    use ArrayTrait;
+
     /**
      * Get data to be validated from the request.
      *
@@ -16,7 +20,10 @@ class LoginRequest extends Request implements RequestInterface
      */
     public function data(Request $request): array
     {
-        return $request->all();
+        $data = $request->all();
+        Arr::set($data, 'include', Arr::get($data, 'include'));
+
+        return $data;
     }
 
     /**
@@ -30,8 +37,8 @@ class LoginRequest extends Request implements RequestInterface
 
         return [
             'data' => 'required|array:attributes',
-            $attributes => 'required|array:email,password',
-            "$attributes.email" => 'required|string|min:1|max:50',
+            $attributes => 'required|array:username,password',
+            "$attributes.username" => 'required|string|min:1|max:50',
             "$attributes.password" => 'required|string|min:1|max:100'
         ];
     }
