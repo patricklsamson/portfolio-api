@@ -91,13 +91,13 @@ class BaseResource extends JsonResource
                         continue;
                     }
 
-                    Arr::set($includes, 'included', $single);
+                    $includes['included'][] = $single;
                 }
 
                 continue;
             }
 
-            Arr::set($includes, 'included', $resource);
+            $includes['included'][] = $resource;
         }
 
         return $includes;
@@ -135,19 +135,19 @@ class BaseResource extends JsonResource
                         continue;
                     }
 
-                    Arr::set($relationships, "relationships.$include.data", array_merge(
+                    $relationships['relationships'][$include]['data'][] = array_merge(
                         $single->only('id'),
                         ['type' => Str::plural($include)]
-                    ));
+                    );
                 }
 
                 continue;
             }
 
-            Arr::set($relationships, "relationships.$include.data", array_merge(
+            $relationships['relationships'][$include]['data'][] = array_merge(
                 $resource->only('id'),
                 ['type' => Str::plural($include)]
-            ));
+            );
         }
 
         return $relationships;

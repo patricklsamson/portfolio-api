@@ -41,16 +41,22 @@ class BaseCollection extends ResourceCollection
                         continue;
                     }
 
-                    foreach ($resource as $single) {
-                        if (
-                            !$single ||
-                            array_key_exists($single->only('id')['id'], $includes)
-                        ) {
-                            continue;
+                    if ($resource instanceof ResourceCollection) {
+                        foreach ($resource as $single) {
+                            if (
+                                !$single ||
+                                array_key_exists($single->only('id')['id'], $includes)
+                            ) {
+                                continue;
+                            }
+
+                            Arr::set($includes, 'included.' . $single->only('id')['id'], $single);
                         }
 
-                        Arr::set($includes, 'included.' . $single->only('id')['id'], $single);
+                        continue;
                     }
+
+                    $includes['included'][] = $resource;
                 }
             }
         );
