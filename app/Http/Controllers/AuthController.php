@@ -25,7 +25,17 @@ class AuthController extends Controller
             UnauthorizedException::class
         );
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, $request->data($request)['include']);
+    }
+
+    /**
+     * Refresh token
+     *
+     * @return mixed
+     */
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
     }
 
     /**
