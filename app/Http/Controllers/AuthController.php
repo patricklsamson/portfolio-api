@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\UnauthorizedException;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Controllers\Traits\TokenTrait;
-use Illuminate\Support\Facades\Auth;
+use App\Services\AuthService;
 
 class AuthController extends Controller
 {
-    use TokenTrait;
+    /**
+     * Auth service
+     *
+     * @var AuthService
+     */
+    private $authService;
+
+    /**
+     * Constructor
+     */
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
 
     /**
      * Login
@@ -20,12 +31,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        throw_if(
-            !$token = Auth::attempt($request->data($request)['data']['attributes']),
-            UnauthorizedException::class
-        );
-
-        return $this->respondWithToken($token, $request->data($request)['include']);
+        return $this->authService->login($request->data($request));
     }
 
     /**
@@ -35,7 +41,7 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->authService->refresh();
     }
 
     /**
@@ -45,14 +51,6 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        auth()->logout();
-
-        return response([
-            'data' => [
-                'attributes' => [
-                    'logout' => 'success'
-                ]
-            ]
-        ], 200);
+        return $this->authService->logout();
     }
 }
