@@ -7,45 +7,53 @@ interface MessageRepositoryInterface
     /**
      * Get all models
      *
-     * @param array $request
+     * @param array $include
+     * @param ?array $filterType
+     * @param ?string $sortCreatedAt
+     * @param ?array $ids
      *
      * @return mixed
      */
-    public function getAll(array $request);
+    public function getAll(
+        array $include = [],
+        ?array $filterType,
+        ?string $sortCreatedAt,
+        ?array $ids
+    );
 
     /**
      * Get one model
      *
      * @param string $id
-     * @param array $request
+     * @param array $includes
      *
      * @return mixed
      */
-    public function getOne(string $id, array $request);
+    public function getOne(string $id, array $includes = []);
 
     /**
      * Create model
      *
-     * @param array $request
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function create(array $request);
+    public function create(array $attributes);
 
     /**
      * Update model
      *
      * @param string $id
-     * @param array $request
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function updateType(string $id, array $request);
+    public function update(string $id, array $attributes);
 
     /**
      * Delete model
      *
-     * @param string $id
+     * @param array $ids
      */
-    public function delete(string $id, array $request);
+    public function delete(array $ids);
 }

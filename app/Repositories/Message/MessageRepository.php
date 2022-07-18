@@ -9,15 +9,23 @@ class MessageRepository implements MessageRepositoryInterface
     /**
      * Get all models
      *
-     * @param array $request
+     * @param array $include
+     * @param ?array $filterType
+     * @param ?string $sortCreatedAt
+     * @param ?array $ids
      *
      * @return mixed
      */
-    public function getAll(array $request)
-    {
-        return Message::with($request['include'])
-            ->whereType($request['filter']['type'])
-            ->sortCreatedAt($request['sort']['created_at'])
+    public function getAll(
+        array $includes = [],
+        ?array $filterType = null,
+        ?string $sortCreatedAt = null,
+        ?array $ids = null
+    ) {
+        return Message::with($includes)
+            ->whereIdIn($ids)
+            ->filterType($filterType)
+            ->sortCreatedAt($sortCreatedAt)
             ->get();
     }
 
@@ -25,48 +33,46 @@ class MessageRepository implements MessageRepositoryInterface
      * Get one model
      *
      * @param string $id
-     * @param array $request
+     * @param array $includes
      *
      * @return mixed
      */
-    public function getOne(string $id, array $request)
+    public function getOne(string $id, array $includes = [])
     {
-        return Message::with($request['include'])->find($id);
+        return Message::with($includes)->find($id);
     }
 
     /**
      * Create model
      *
-     * @param array $request
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function create(array $request)
+    public function create(array $attributes)
     {
-        return Message::create($request['data']['attributes']);
+        return Message::create($attributes);
     }
 
     /**
      * Update model
      *
      * @param string $id
-     * @param array $request
+     * @param array $attributes
      *
      * @return mixed
      */
-    public function updateType(string $id, array $request)
+    public function update(string $id, array $attributes)
     {
-        Message::where('id', $id)->update($request['data']['attributes']);
-
-        return Message::find($id);
+        return Message::where('id', $id)->update($attributes);
     }
 
     /**
      * Delete model
      *
-     * @param string $id
+     * @param array $ids
      */
-    public function delete(string $id, array $request) {
-        Message::destroy($id);
+    public function delete(array $ids) {
+        Message::destroy($ids);
     }
 }
