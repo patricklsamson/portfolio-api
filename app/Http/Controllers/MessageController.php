@@ -85,9 +85,11 @@ class MessageController extends Controller
      *
      * @param string $id
      * @param DeleteMessageRequest $request
+     *
+     * @return mixed
      */
     public function delete(string $id, DeleteMessageRequest $request)
     {
-        $this->messageService->delete($id, $request->data($request));
+        return $this->messageService->delete($id, $request->data($request));
     }
 }
