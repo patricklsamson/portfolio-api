@@ -19,6 +19,9 @@ $router->get('/', function () use ($router) {
     return 'Portfolio API v1 | ' . $router->app->version();
 });
 
+/**
+ * Auth routes
+ */
 $router->group(['prefix' => 'v1/auth'], function () use ($router, $namespace) {
     $router->post('login', [
         'uses' => 'AuthController@login',
@@ -31,6 +34,9 @@ $router->group(['prefix' => 'v1/auth'], function () use ($router, $namespace) {
     });
 });
 
+/**
+ * User routes
+ */
 $router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
     $router->post('users', [
         'uses' => 'UserController@create',
@@ -50,6 +56,9 @@ $router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
     });
 });
 
+/**
+ * Message routes
+ */
 $router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
     $router->post('messages', [
         'uses' => 'MessageController@create',
