@@ -36,7 +36,6 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        // dd(auth('api')->user(), $this->auth->guard($guard)->guest());
         throw_if(
             $this->auth->guard($guard)->guest(),
             UnauthorizedException::class
