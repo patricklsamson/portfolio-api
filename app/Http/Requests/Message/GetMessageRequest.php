@@ -51,6 +51,7 @@ class GetMessageRequest extends Request implements RequestInterface
             ),
             'filter' => 'nullable|array:type',
             'filter.type.*' => self::strArrayConcat('nullable|string|distinct|in:', Message::TYPES),
+            'include' => 'nullable|array',
             'include.*' => 'nullable|string|distinct|in:user',
             'page' => 'nullable|array:number,size',
             'page.number' => 'nullable|integer|min:1',

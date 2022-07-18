@@ -4,10 +4,13 @@ namespace App\Http\Requests\Message;
 
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Message;
+use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
 
 class CreateMessageRequest extends Request implements RequestInterface
 {
+    use ArrayTrait;
+
     /**
      * Get data to be validated from the request.
      *

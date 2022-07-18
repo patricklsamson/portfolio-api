@@ -3,10 +3,14 @@
 namespace App\Http\Requests\Message;
 
 use App\Http\Requests\Interfaces\RequestInterface;
+use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class DeleteMessageRequest extends Request implements RequestInterface
 {
+    use ArrayTrait;
+
     /**
      * Get data to be validated from the request.
      *
@@ -17,6 +21,7 @@ class DeleteMessageRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+        Arr::set($data, 'ids', self::strToArray(Arr::get($data, 'ids')));
 
         return $data;
     }
@@ -28,6 +33,9 @@ class DeleteMessageRequest extends Request implements RequestInterface
      */
     public function rules(): array
     {
-        return [];
+        return [
+            'ids' => 'required|array',
+            'ids.*'
+        ];
     }
 }
