@@ -34,7 +34,6 @@ class BaseException extends Exception
                 'status' => $this->code,
                 'title' => Response::$statusTexts[$this->code],
                 'detail' => $this->message
-
             ]
         ], $this->code);
     }
