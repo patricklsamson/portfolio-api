@@ -22,7 +22,6 @@ class BaseResource extends JsonResource
      *
      * @param Request $request
      * @param mixed $id
-     * @param mixed $relationships
      * @param array $attributes
      * @param ?string $type
      *
@@ -31,7 +30,6 @@ class BaseResource extends JsonResource
     public function formatResponse(
         Request $request,
         $id,
-        $relationships,
         array $attributes,
         ?string $type = null
     ): array {
@@ -41,9 +39,10 @@ class BaseResource extends JsonResource
         return array_filter(array_merge([
             'type' => $type,
             'id' => $id,
-            'attributes' => $fields ? collect($attributes)->only($this->strtoarray($fields)) :
+            'attributes' => $fields ?
+                collect($attributes)->only($this->strtoarray($fields)) :
                 $attributes
-        ], $relationships));
+        ], $this->relationships($request)));
     }
 
     /**
