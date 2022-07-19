@@ -16,9 +16,9 @@ interface MessageRepositoryInterface
      */
     public function getAll(
         array $include = [],
-        ?array $filterType,
-        ?string $sortCreatedAt,
-        ?array $ids
+        ?array $filterType = null,
+        ?string $sortCreatedAt = null,
+        ?array $ids = null
     );
 
     /**
@@ -54,6 +54,8 @@ interface MessageRepositoryInterface
      * Delete model
      *
      * @param array $ids
+     *
+     * @return mixed
      */
     public function delete(array $ids);
 }

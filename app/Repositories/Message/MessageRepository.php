@@ -71,8 +71,10 @@ class MessageRepository implements MessageRepositoryInterface
      * Delete model
      *
      * @param array $ids
+     *
+     * @return mixed
      */
     public function delete(array $ids) {
-        Message::destroy($ids);
+        return Message::destroy($ids);
     }
 }
