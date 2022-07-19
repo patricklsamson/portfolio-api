@@ -19,7 +19,6 @@ class UserResource extends BaseResource
         return $this->formatResponse(
             $request,
             $this->id,
-            $this->relationships($request),
             array_combine(User::ATTRIBUTES, [
                 $this->name,
                 $this->email,

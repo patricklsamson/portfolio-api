@@ -19,7 +19,6 @@ class MessageResource extends BaseResource
         return $this->formatResponse(
             $request,
             $this->id,
-            $this->relationships($request),
             array_combine(Message::ATTRIBUTES, [
                 $this->sender,
                 $this->email,
