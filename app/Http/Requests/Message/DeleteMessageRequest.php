@@ -21,7 +21,7 @@ class DeleteMessageRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-        Arr::set($data, 'ids', self::strToArray(Arr::get($data, 'ids')));
+        Arr::set($data, 'ids', self::strToArray(Arr::get($data, 'ids'), []));
 
         return $data;
     }
@@ -34,8 +34,8 @@ class DeleteMessageRequest extends Request implements RequestInterface
     public function rules(): array
     {
         return [
-            'ids' => 'required|array',
-            'ids.*'
+            'ids' => 'nullable|array',
+            'ids.*' => 'nullable|integer|min:1'
         ];
     }
 }
