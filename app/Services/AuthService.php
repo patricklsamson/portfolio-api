@@ -4,12 +4,13 @@ namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
 use App\Traits\ResourceTrait;
+use App\Traits\ResponseTrait;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 
 class AuthService
 {
+    use ResponseTrait;
     use ResourceTrait;
 
     /**
@@ -23,18 +24,20 @@ class AuthService
     {
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
         throw_if(!$token, UnauthorizedException::class);
-        $response = $this->response($token);
+        $content = $this->buildTokenContent($token);
 
         if (Arr::get($data, 'include') == 'user') {
-            Arr::set($response, 'data.relationships.user.data', [
+            Arr::set($content, 'data.relationships.user.data', [
                 'id' => auth()->user()['id'],
                 'type' => 'users'
             ]);
 
-            $response = array_merge($response, ['included' => [$this->resource(auth()->user())]]);
+            $content = array_merge($content, [
+                'included' => [$this->resource(auth()->user())]
+            ]);
         }
 
-        return response($response);
+        return response($content);
     }
 
     /**
@@ -47,7 +50,7 @@ class AuthService
         $token = Auth::fromUser(auth()->user());
         Auth::invalidate();
 
-        return response($this->response($token));
+        return response($this->buildTokenContent($token));
     }
 
     /**
@@ -60,19 +63,6 @@ class AuthService
         Auth::invalidate();
         auth()->logout();
 
-        return response($this->response(null, ['success' => true]));
-    }
-
-    private function response(?string $token = null, ?array $attributes = null): array
-    {
-        return [
-            'data' => [
-                'attributes' => $token ? [
-                    'token' => $token,
-                    'type' => 'bearer',
-                    'expires_in' => Auth::factory()->getTTL() * Config::get('auth.expires_in')
-                ] : $attributes
-            ]
-        ];
+        return response($this->buildContent(['success' => true]));
     }
 }
