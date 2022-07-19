@@ -3,11 +3,15 @@
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Models\Message;
 use App\Repositories\Message\MessageRepository;
+use App\Traits\ResponseTrait;
 use Illuminate\Support\Arr;
 
 class MessageService
 {
+    use ResponseTrait;
+
     /**
      * Model repository
      *
@@ -34,11 +38,15 @@ class MessageService
      */
     public function getAll(array $data)
     {
-        return $this->messageRepository->getAll(
+        $messages = $this->messageRepository->getAll(
             Arr::get($data, 'include'),
             Arr::get($data, 'filter.type'),
             Arr::get($data, 'sort.created_at')
         );
+
+        throw_if(!$messages->count(), NotFoundException::class);
+
+        return $messages;
     }
 
     /**
@@ -51,10 +59,24 @@ class MessageService
      */
     public function getOne(string $id, array $data)
     {
-        $message = $this->messageRepository->getOne($id, Arr::get($data, 'include'));
+        $message = $this->messageRepository
+            ->getOne($id, Arr::get($data, 'include'));
+
         throw_if(!$message, NotFoundException::class);
 
         return $message;
+    }
+
+    /**
+     * Get types
+     *
+     * @return mixed
+     */
+    public function getTypes()
+    {
+        return response(
+            $this->buildGroupContent(Message::TYPES, ['name'])
+        );
     }
 
     /**
@@ -66,7 +88,8 @@ class MessageService
      */
     public function create(array $data)
     {
-        return $this->messageRepository->create(Arr::get($data, 'data.attributes'));
+        return $this->messageRepository
+            ->create(Arr::get($data, 'data.attributes'));
     }
 
     /**
@@ -81,7 +104,9 @@ class MessageService
     {
         $message = $this->messageRepository->getOne($id);
         throw_if(!$message, NotFoundException::class);
-        $this->messageRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        $this->messageRepository
+            ->update($id, Arr::get($data, 'data.attributes'));
 
         return $this->messageRepository->getOne($id);
     }
@@ -98,9 +123,11 @@ class MessageService
     {
         $ids = Arr::get($data, 'ids');
         $ids[] = $id;
+        $ids = array_unique($ids, SORT_REGULAR);
         $messages = $this->messageRepository->getAll([], null, null, $ids);
-        throw_if(!$messages, NotFoundException::class);
+        throw_if(!$messages->count(), NotFoundException::class);
+        $this->messageRepository->delete($ids);
 
-        return $this->messageRepository->delete($ids);
+        return response($this->buildContent(['success' => true]));
     }
 }

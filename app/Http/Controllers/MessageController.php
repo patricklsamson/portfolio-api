@@ -39,7 +39,9 @@ class MessageController extends Controller
      */
     public function getAll(GetMessageRequest $request)
     {
-        return $this->resource($this->messageService->getAll($request->data($request)));
+        return $this->resource(
+            $this->messageService->getAll($request->data($request))
+        );
     }
 
     /**
@@ -52,7 +54,19 @@ class MessageController extends Controller
      */
     public function getOne(string $id, GetMessageRequest $request)
     {
-        return $this->resource($this->messageService->getOne($id, $request->data($request)));
+        return $this->resource(
+            $this->messageService->getOne($id, $request->data($request))
+        );
+    }
+
+    /**
+     * Get types
+     *
+     * @return mixed
+     */
+    public function getTypes()
+    {
+        return $this->messageService->getTypes();
     }
 
     /**
@@ -64,7 +78,9 @@ class MessageController extends Controller
      */
     public function create(CreateMessageRequest $request)
     {
-        return $this->resource($this->messageService->create($request->data($request)));
+        return $this->resource(
+            $this->messageService->create($request->data($request))
+        );
     }
 
     /**
@@ -77,7 +93,9 @@ class MessageController extends Controller
      */
     public function updateType(string $id, UpdateMessageRequest $request)
     {
-        return $this->resource($this->messageService->updateType($id, $request->data($request)));
+        return $this->resource(
+            $this->messageService->updateType($id, $request->data($request))
+        );
     }
 
     /**
