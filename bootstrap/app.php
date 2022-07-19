@@ -83,7 +83,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    'validate-request' => App\Http\Middleware\ValidatorMiddleware::class
+    'validate' => App\Http\Middleware\ValidatorMiddleware::class
 ]);
 
 /*
