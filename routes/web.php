@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -13,19 +15,23 @@
 |
 */
 
-$namespace = 'App\Http\Requests';
+$requests = 'App\Http\Requests';
 
 $router->get('/', function () use ($router) {
     return 'Portfolio API v1 | ' . $router->app->version();
 });
 
+$router->get('v1/username', function () {
+    return User::find(1)->only(['username']);
+});
+
 /**
  * Auth routes
  */
-$router->group(['prefix' => 'v1/auth'], function () use ($router, $namespace) {
+$router->group(['prefix' => 'v1/auth'], function () use ($router, $requests) {
     $router->post('login', [
         'uses' => 'AuthController@login',
-        'middleware' => ["validate-request:$namespace\Auth\LoginRequest"]
+        'middleware' => ["validate-request:$requests\Auth\LoginRequest"]
     ]);
 
     $router->group(['middleware' => ['auth']], function () use ($router) {
@@ -37,53 +43,75 @@ $router->group(['prefix' => 'v1/auth'], function () use ($router, $namespace) {
 /**
  * User routes
  */
-$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
+$router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     $router->post('users', [
         'uses' => 'UserController@create',
-        'middleware' => ["validate-reqest:$namespace\User\CreateUserRequest"]
+        'middleware' => ["validate-reqest:$requests\User\CreateUserRequest"]
     ]);
 
-    $router->group(['middleware' => ['auth']], function () use ($router, $namespace) {
-        $router->get('users', [
-            'uses' => 'UserController@getAll',
-            'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
-        ]);
+    $router->group(
+        ['middleware' => ['auth']],
+        function () use ($router, $requests) {
+            $router->get('users', [
+                'uses' => 'UserController@getAll',
+                'middleware' => [
+                    "validate-request:$requests\User\GetUserRequest"
+                ]
+            ]);
 
-        $router->get('users/{id}', [
-            'uses' => 'UserController@getOne',
-            'middleware' => ["validate-request:$namespace\User\GetUserRequest"]
-        ]);
-    });
+            $router->get('users/{id}', [
+                'uses' => 'UserController@getOne',
+                'middleware' => [
+                    "validate-request:$requests\User\GetUserRequest"
+                ]
+            ]);
+        }
+    );
 });
 
 /**
  * Message routes
  */
-$router->group(['prefix' => 'v1'], function () use ($router, $namespace) {
+$router->group(['prefix' => 'v1'], function () use ($router, $requests) {
+    $router->get('messages/types', ['uses' => 'MessageController@getTypes']);
+
     $router->post('messages', [
         'uses' => 'MessageController@create',
-        'middleware' => ["validate-request:$namespace\Message\CreateMessageRequest"]
+        'middleware' => [
+            "validate-request:$requests\Message\CreateMessageRequest"
+        ]
     ]);
 
-    $router->group(['middleware' => ['auth']], function () use ($router, $namespace) {
-        $router->get('messages', [
-            'uses' => 'MessageController@getAll',
-            'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
-        ]);
+    $router->group(
+        ['middleware' => ['auth']],
+        function () use ($router, $requests) {
+            $router->get('messages', [
+                'uses' => 'MessageController@getAll',
+                'middleware' => [
+                    "validate-request:$requests\Message\GetMessageRequest"
+                ]
+            ]);
 
-        $router->get('messages/{id}', [
-            'uses' => 'MessageController@getOne',
-            'middleware' => ["validate-request:$namespace\Message\GetMessageRequest"]
-        ]);
+            $router->get('messages/{id}', [
+                'uses' => 'MessageController@getOne',
+                'middleware' => [
+                    "validate-request:$requests\Message\GetMessageRequest"
+                ]
+            ]);
 
-        $router->put('messages/{id}/type', [
-            'uses' => 'MessageController@updateType',
-            'middleware' => ["validate-request:$namespace\Message\UpdateMessageRequest"]
-        ]);
+            $router->put('messages/{id}/type', [
+                'uses' => 'MessageController@updateType',
+                'middleware' => [
+                    "validate-request:$requests\Message\UpdateMessageRequest"
+                ]
+            ]);
 
-        $router->delete('messages', [
-            'uses' => 'MessageController@delete',
-            'middleware' => ["validate-request:$namespace\Message\DeleteMessageRequest"]
-        ]);
-    });
+            $router->delete('messages/{id}', [
+                'uses' => 'MessageController@delete',
+                'middleware' => [
+                    "validate-request:$requests\Message\DeleteMessageRequest"
+                ]
+            ]);
+        }
+    );
 });
