@@ -63,7 +63,8 @@ class UserService
      * @return mixed
      */
     public function create(array $data) {
-        return $this->userRepository->create(Arr::get($data, 'data.attributes'));
+        return $this->userRepository
+            ->create(Arr::get($data, 'data.attributes'));
     }
 
     /**

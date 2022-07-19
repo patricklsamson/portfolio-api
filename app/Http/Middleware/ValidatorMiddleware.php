@@ -25,8 +25,8 @@ class ValidatorMiddleware
         throw_if(
             $validator->fails(),
             env('APP_DEBUG', false) ?
-            new UnprocessableEntityException($validator->errors()) :
-            UnprocessableEntityException::class
+                new UnprocessableEntityException($validator->errors()) :
+                UnprocessableEntityException::class
         );
 
         return $next($request);

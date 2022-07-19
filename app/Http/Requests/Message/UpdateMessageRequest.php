@@ -32,7 +32,8 @@ class UpdateMessageRequest extends Request implements RequestInterface
         return [
             'data' => 'required|array:attributes',
             $attributes => 'required|array:type',
-            "$attributes.type" => 'required|string|in:' . implode(',', Message::TYPES)
+            "$attributes.type" => 'required|string|in:' .
+                implode(',', Message::TYPES)
         ];
     }
 }

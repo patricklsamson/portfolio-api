@@ -88,8 +88,10 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeWhereStarred(Builder $query, bool $starred = true): Builder
-    {
+    public function scopeWhereStarred(
+        Builder $query,
+        bool $starred = true
+    ): Builder {
         return $query->where('starred', $starred);
     }
 
@@ -101,8 +103,10 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeSortStartDate(Builder $query, string $order = 'DESC'): Builder
-    {
+    public function scopeSortStartDate(
+        Builder $query,
+        string $order = 'DESC'
+    ): Builder {
         return $query->orderBy('start_date', $order);
     }
 }

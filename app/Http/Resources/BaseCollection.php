@@ -30,7 +30,9 @@ class BaseCollection extends ResourceCollection
 
         $this->collection->each(
             function($model) use ($request, &$includes) {
-                foreach ($this->strToArray($request->get('include')) as $include) {
+                foreach (
+                    $this->strToArray($request->get('include')) as $include
+                ) {
                     if ($model->whenLoaded($include) instanceof MissingValue) {
                         continue;
                     }
@@ -44,13 +46,19 @@ class BaseCollection extends ResourceCollection
                     if ($resource instanceof ResourceCollection) {
                         foreach ($resource as $single) {
                             if (
-                                !$single ||
-                                array_key_exists($single->only('id')['id'], $includes)
+                                !$single || array_key_exists(
+                                    $single->only('id')['id'],
+                                    $includes
+                                )
                             ) {
                                 continue;
                             }
 
-                            Arr::set($includes, 'included.' . $single->only('id')['id'], $single);
+                            Arr::set(
+                                $includes,
+                                'included.' . $single->only('id')['id'],
+                                $single
+                            );
                         }
 
                         continue;
@@ -61,8 +69,10 @@ class BaseCollection extends ResourceCollection
             }
         );
 
-        return empty($includes) ? $includes : Arr::set($includes, 'included', array_values(
-            Arr::get($includes, 'included', [])
-        ));
+        return empty($includes) ? $includes : Arr::set(
+            $includes,
+            'included',
+            array_values(Arr::get($includes, 'included', []))
+        );
     }
 }

@@ -15,9 +15,12 @@ class AssetFactory extends Factory
     public function definition()
     {
         $name = $this->faker->words(2, true);
-        $type = $this->faker->randomElement(array_filter(Asset::TYPES, function ($type) {
-            return $type != 'project' && $type != 'soft_skill' && $type != 'tech_skill';
-        }));
+        $type = $this->faker->randomElement(
+            array_filter(Asset::TYPES, function ($type) {
+                return $type != 'project' && $type != 'soft_skill' &&
+                    $type != 'tech_skill';
+            })
+        );
 
         return [
             'name' => $name,
@@ -39,11 +42,16 @@ class AssetFactory extends Factory
                 'metadata' => [
                     'project' => [
                         'dates' => [
-                            'start' => json_encode($this->faker->dateTime->format('Y-m-d H:i:s')),
+                            'start' => json_encode(
+                                $this->faker->dateTime->format('Y-m-d H:i:s')
+                            ),
                             'end' => $this->faker->randomElement([
                                 json_encode(
                                     $this->faker
-                                        ->dateTimeBetween('+1 month', '+2 months')
+                                        ->dateTimeBetween(
+                                            '+1 month',
+                                            '+2 months'
+                                        )
                                         ->format('Y-m-d H:i:s')
                                 ),
                                 null
@@ -67,7 +75,12 @@ class AssetFactory extends Factory
     public function skill()
     {
         return $this->state(function () {
-            return ['type' => $this->faker->randomElement(['soft_skill', 'tech_skill'])];
+            return [
+                'type' => $this->faker->randomElement([
+                    'soft_skill',
+                    'tech_skill'
+                ])
+            ];
         });
     }
 }

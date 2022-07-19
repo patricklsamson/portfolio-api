@@ -16,9 +16,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getAll(array $includes = [], ?string $sortCreatedAt = null)
     {
-        return User::with($includes)
-            ->sortCreatedAt($sortCreatedAt)
-            ->get();
+        return User::with($includes)->sortCreatedAt($sortCreatedAt)->get();
     }
 
     /**
@@ -41,7 +39,8 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return mixed
      */
-    public function create(array $attributes) {
+    public function create(array $attributes)
+    {
         return User::create($attributes);
     }
 

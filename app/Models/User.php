@@ -13,7 +13,10 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
+class User extends Model implements
+    AuthenticatableContract,
+    AuthorizableContract,
+    JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
 
@@ -22,7 +25,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @var array
      */
-    const ATTRIBUTES = ['name', 'email', 'username', 'objective', 'about', 'metadata'];
+    const ATTRIBUTES = [
+        'name',
+        'email',
+        'username',
+        'objective',
+        'about',
+        'metadata'
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -64,7 +74,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
+     * Return a key value array, containing any custom claims to be added
+     * to the JWT.
      *
      * @return array
      */

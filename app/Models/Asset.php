@@ -83,8 +83,10 @@ class Asset extends Model
      *
      * @return Builder
      */
-    public function scopeSortStartDate(Builder $query, string $order = 'DESC'): Builder
-    {
+    public function scopeSortStartDate(
+        Builder $query,
+        string $order = 'DESC'
+    ): Builder {
         return $query->orderBy('metadata->project->dates->start', $order);
     }
 }

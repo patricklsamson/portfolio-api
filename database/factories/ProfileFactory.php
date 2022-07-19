@@ -21,7 +21,10 @@ class ProfileFactory extends Factory
                 null
             ]),
             'end_date' => $this->faker->randomElement([
-                $this->faker->dateTimeBetween('+1 month', '+2 months')->format('Y-m-d H:i:s'),
+                $this->faker->dateTimeBetween(
+                    '+1 month',
+                    '+2 months'
+                )->format('Y-m-d H:i:s'),
                 null
             ])
         ];
@@ -55,7 +58,11 @@ class ProfileFactory extends Factory
     public function skill()
     {
         return $this->state(function () {
-            return ['level' => $this->faker->randomElement(array_keys(Profile::LEVELS))];
+            return [
+                'level' => $this->faker->randomElement(
+                    array_keys(Profile::LEVELS)
+                )
+            ];
         });
     }
 }

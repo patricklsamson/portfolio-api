@@ -34,7 +34,10 @@ class CreateUserRequest extends Request implements RequestInterface
 
         return [
             'data' => 'required|array:attributes',
-            $attributes => self::strArrayConcat('required|array:', User::ATTRIBUTES),
+            $attributes => self::strArrayConcat(
+                'required|array:',
+                User::ATTRIBUTES
+            ),
             "$attributes.email" => 'required|string|min:1|max:50',
             "$attributes.username" => 'required|string|min:1|max:50',
             "$attributes.password" => 'required|string|min:1|max:100',

@@ -23,10 +23,23 @@ class GetMessageRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-        Arr::set($data, 'fields.messages', self::strToArray(Arr::get($data, 'fields.messages')));
-        Arr::set($data, 'fields.users', self::strToArray(Arr::get($data, 'fields.users')));
-        Arr::set($data, 'filter.type', self::strToArray(Arr::get($data, 'filter.type')));
-        Arr::set($data, 'include', self::strToArray(Arr::get($data, 'include'), []));
+
+        Arr::set($data, 'fields.messages', self::strToArray(
+            Arr::get($data, 'fields.messages')
+        ));
+
+        Arr::set($data, 'fields.users', self::strToArray(
+            Arr::get($data, 'fields.users')
+        ));
+
+        Arr::set($data, 'filter.type', self::strToArray(
+            Arr::get($data, 'filter.type')
+        ));
+
+        Arr::set($data, 'include', self::strToArray(
+            Arr::get($data, 'include'), [])
+        );
+
         Arr::set($data, 'sort.created_at', Arr::get($data, 'sort.created_at'));
 
         return $data;
@@ -50,7 +63,10 @@ class GetMessageRequest extends Request implements RequestInterface
                 User::ATTRIBUTES
             ),
             'filter' => 'nullable|array:type',
-            'filter.type.*' => self::strArrayConcat('nullable|string|distinct|in:', Message::TYPES),
+            'filter.type.*' => self::strArrayConcat(
+                'nullable|string|distinct|in:',
+                Message::TYPES
+            ),
             'include' => 'nullable|array',
             'include.*' => 'nullable|string|distinct|in:user',
             'page' => 'nullable|array:number,size',

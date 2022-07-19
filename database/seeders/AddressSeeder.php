@@ -16,12 +16,7 @@ class AddressSeeder extends Seeder
      */
     public function run()
     {
-        Address::factory()
-            ->for(User::factory(), 'parentable')
-            ->create();
-
-        Address::factory()
-            ->for(Asset::factory(), 'parentable')
-            ->create();
+        Address::factory()->for(User::factory(), 'parentable')->create();
+        Address::factory()->for(Asset::factory(), 'parentable')->create();
     }
 }

@@ -33,7 +33,11 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerRepositories()
     {
-        $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
+        $this->app->bind(
+            MessageRepositoryInterface::class,
+            MessageRepository::class
+        );
+
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
     }
 

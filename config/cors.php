@@ -9,11 +9,12 @@ return [
     |
     | The allowed_methods and allowed_headers options are case-insensitive.
     |
-    | You don't need to provide both allowed_origins and allowed_origins_patterns.
-    | If one of the strings passed matches, it is considered a valid origin.
+    | You don't need to provide both allowed_origins and
+    | allowed_origins_patterns. If one of the strings passed matches, it is
+    | considered a valid origin.
     |
-    | If ['*'] is provided to allowed_methods, allowed_origins or allowed_headers
-    | all methods / origins / headers are allowed.
+    | If ['*'] is provided to allowed_methods, allowed_origins or
+    | allowed_headers all methods / origins / headers are allowed.
     |
     */
 
@@ -29,22 +30,27 @@ return [
     'allowed_methods' => json_decode(env('CORS_ALLOWED_METHODS')),
 
     /*
-     * Matches the request origin. `['*']` allows all origins. Wildcards can be used, eg `*.mydomain.com`
+     * Matches the request origin. `['*']` allows all origins. Wildcards can be
+     * used, eg `*.mydomain.com`
      */
     'allowed_origins' => json_decode(env('CORS_ALLOWED_ORIGINS')),
 
     /*
      * Patterns that can be used with `preg_match` to match the origin.
      */
-    'allowed_origins_patterns' => json_decode(env('CORS_ALLOWED_ORIGINS_PATTERNS')),
+    'allowed_origins_patterns' => json_decode(
+        env('CORS_ALLOWED_ORIGINS_PATTERNS')
+    ),
 
     /*
-     * Sets the Access-Control-Allow-Headers response header. `['*']` allows all headers.
+     * Sets the Access-Control-Allow-Headers response header. `['*']` allows all
+     * headers.
      */
     'allowed_headers' => json_decode(env('CORS_ALLOWED_HEADERS')),
 
     /*
-     * Sets the Access-Control-Expose-Headers response header with these headers.
+     * Sets the Access-Control-Expose-Headers response header with these
+     * headers.
      */
     'exposed_headers' => json_decode(env('CORS_EXPOSED_HEADERS')),
 

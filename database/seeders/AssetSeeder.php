@@ -16,15 +16,8 @@ class AssetSeeder extends Seeder
      */
     public function run()
     {
-        Asset::factory()
-            ->create();
-
-        Asset::factory()
-            ->project()
-            ->create();
-
-        Asset::factory()
-            ->skill()
-            ->create();
+        Asset::factory()->create();
+        Asset::factory()->project()->create();
+        Asset::factory()->skill()->create();
     }
 }

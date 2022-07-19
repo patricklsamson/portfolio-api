@@ -34,8 +34,9 @@ class DBQueryLogMiddleware
             }
 
             Log::info(
-                PHP_EOL . 'DB: ' . DB::connection()->getDatabaseName() . PHP_EOL .
-                'QUERY:' . PHP_EOL . "$sql;" . str_repeat(PHP_EOL, 2) . str_repeat('-', 100)
+                'DB QUERY LOG: ' . DB::connection()->getDatabaseName() .
+                    PHP_EOL . 'QUERY:' . PHP_EOL . "$sql;" .
+                    str_repeat(PHP_EOL, 2) . str_repeat('-', 80)
             );
         }
 

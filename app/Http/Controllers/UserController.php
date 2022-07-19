@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
-use App\Models\User;
 use App\Services\UserService;
 use App\Traits\ResourceTrait;
 
@@ -38,7 +37,9 @@ class UserController extends Controller
      */
     public function getAll(GetUserRequest $request)
     {
-        return $this->resource($this->userService->getAll($request->data($request)));
+        return $this->resource(
+            $this->userService->getAll($request->data($request))
+        );
     }
 
     /**
@@ -51,7 +52,9 @@ class UserController extends Controller
      */
     public function getOne(string $id, GetUserRequest $request)
     {
-        return $this->resource($this->userService->getOne($id, $request->data($request)));
+        return $this->resource(
+            $this->userService->getOne($id, $request->data($request))
+        );
     }
 
     /**
@@ -62,6 +65,8 @@ class UserController extends Controller
      * @return mixed
      */
     public function create(CreateUserRequest $request) {
-        return $this->resource($this->userService->create($request->data($request)));
+        return $this->resource(
+            $this->userService->create($request->data($request))
+        );
     }
 }

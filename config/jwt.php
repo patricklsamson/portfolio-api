@@ -47,9 +47,9 @@ return [
     'keys' => [
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | Public Key
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | A path or resource to your public key.
         |
@@ -60,9 +60,9 @@ return [
         'public' => env('JWT_PUBLIC_KEY'),
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | Private Key
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | A path or resource to your private key.
         |
@@ -73,9 +73,9 @@ return [
         'private' => env('JWT_PRIVATE_KEY'),
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | Passphrase
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | The passphrase for your private key. Can be null if none set.
         |
@@ -97,7 +97,8 @@ return [
     | Some people may want this behaviour for e.g. a mobile app.
     | This is not particularly recommended, so make sure you have appropriate
     | systems in place to revoke the token if necessary.
-    | Notice: If you set this to null you should remove 'exp' element from 'required_claims' list.
+    | Notice: If you set this to null you should remove 'exp' element from
+    | 'required_claims' list.
     |
     */
 
@@ -129,7 +130,8 @@ return [
     |
     | Specify the hashing algorithm that will be used to sign the token.
     |
-    | See here: https://github.com/namshi/jose/tree/master/src/Namshi/JOSE/Signer/OpenSSL
+    | See here:
+    | https://github.com/namshi/jose/tree/master/src/Namshi/JOSE/Signer/OpenSSL
     | for possible values.
     |
     */
@@ -267,9 +269,9 @@ return [
     'providers' => [
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | JWT Provider
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | Specify the provider that is used to create and decode the tokens.
         |
@@ -278,9 +280,9 @@ return [
         'jwt' => Tymon\JWTAuth\Providers\JWT\Lcobucci::class,
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | Authentication Provider
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | Specify the provider that is used to authenticate users.
         |
@@ -289,9 +291,9 @@ return [
         'auth' => Tymon\JWTAuth\Providers\Auth\Illuminate::class,
 
         /*
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         | Storage Provider
-        |--------------------------------------------------------------------------
+        |----------------------------------------------------------------------
         |
         | Specify the provider that is used to store tokens in the blacklist.
         |
