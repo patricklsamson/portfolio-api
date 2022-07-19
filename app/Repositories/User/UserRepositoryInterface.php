@@ -12,7 +12,7 @@ interface UserRepositoryInterface
      *
      * @return mixed
      */
-    public function getAll(array $includes = [], ?string $sortCreatedAt);
+    public function getAll(array $includes = [], ?string $sortCreatedAt = null);
 
     /**
      * Get one model
