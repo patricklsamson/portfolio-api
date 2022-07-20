@@ -34,14 +34,12 @@ class CreateUserRequest extends Request implements RequestInterface
 
         return [
             'data' => 'required|array:attributes',
-            $attributes => self::strArrayConcat(
-                'required|array:',
-                User::ATTRIBUTES
-            ),
+            $attributes => 'required|
+                array:name,email,username,password,password_confirmation',
+            "$attributes.name" => 'required|string|min:1|max:100',
             "$attributes.email" => 'required|string|min:1|max:50',
             "$attributes.username" => 'required|string|min:1|max:50',
-            "$attributes.password" => 'required|string|min:1|max:100',
-            "$attributes.password_confirmation" => "same:$attributes.password"
+            "$attributes.password" => 'required|string|confirmed|min:1|max:100'
         ];
     }
 }
