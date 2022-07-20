@@ -36,11 +36,11 @@ class GetMessageRequest extends Request implements RequestInterface
             Arr::get($data, 'filter.type')
         ));
 
-        Arr::set($data, 'include', self::strToArray(
-            Arr::get($data, 'include'), [])
+        Arr::set(
+            $data,
+            'include',
+            self::strToArray(Arr::get($data, 'include'), [])
         );
-
-        Arr::set($data, 'sort.created_at', Arr::get($data, 'sort.created_at'));
 
         return $data;
     }
@@ -72,8 +72,6 @@ class GetMessageRequest extends Request implements RequestInterface
             'page' => 'nullable|array:number,size',
             'page.number' => 'nullable|integer|min:1',
             'page.size' => 'nullable|integer|min:1',
-            'sort' => 'nullable|array:created_at',
-            'sort.created_at' => 'nullable|string|in:desc,asc'
         ];
     }
 }
