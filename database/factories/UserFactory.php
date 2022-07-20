@@ -27,14 +27,14 @@ class UserFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'username' => $this->faker->unique()->userName,
             'password' => Hash::make('password'),
-            'objective' => $this->faker->paragraph,
-            'about' => $this->faker->paragraph,
             'metadata' => [
+                'about' => $this->faker->paragraph,
                 'contacts' => [
                     'email_1' => $this->faker->unique()->safeEmail,
                     'mobile_1' => $this->faker->unique()->phoneNumber,
                     'landline_1' => $this->faker->unique()->phoneNumber
                 ],
+                'objective' => $this->faker->paragraph,
                 'websites' => [
                     'website_1' => $this->faker->unique()->url
                 ]

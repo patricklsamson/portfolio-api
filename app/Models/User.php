@@ -29,8 +29,6 @@ class User extends Model implements
         'name',
         'email',
         'username',
-        'objective',
-        'about',
         'metadata'
     ];
 
@@ -44,8 +42,6 @@ class User extends Model implements
         'email',
         'username',
         'password',
-        'objective',
-        'about',
         'metadata'
     ];
 

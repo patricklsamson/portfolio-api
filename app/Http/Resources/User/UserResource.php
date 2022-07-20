@@ -23,8 +23,6 @@ class UserResource extends BaseResource
                 $this->name,
                 $this->email,
                 $this->username,
-                $this->objective,
-                $this->about,
                 $this->metadata
             ])
         );
