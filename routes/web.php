@@ -15,18 +15,18 @@ use App\Models\User;
 |
 */
 
-$router->get('/', function () use ($router) {
-    return 'Portfolio API v1 | ' . $router->app->version();
-});
 
 $requests = 'App\Http\Requests';
 
 // TEMPORARY
 $router->get('v1/username', function () {
-    return User::find(1)->only(['username']);
+    return User::all(['id', 'username'])->last();
+    return User::find(1)->only(['id', 'username']);
 });
 
 $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
+    $router->get('health', ['uses' => 'HealthController@check']);
+
     /**
      * Auth routes
      */
@@ -47,107 +47,117 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     /**
      * User routes
      */
-    $router->group([], function () use ($router, $requests) {
+    $router->group(['prefix' => 'users'], function () use ($router, $requests) {
         $requests = "$requests\User";
 
-        $router->post('users', [
+        $router->post('', [
             'uses' => 'UserController@create',
             'middleware' => ["validate:$requests\CreateUserRequest"]
         ]);
 
-        $router->group(
-            ['middleware' => ['auth']],
-            function () use ($router, $requests) {
-                $router->get('users', [
-                    'uses' => 'UserController@getAll',
-                    'middleware' => ["validate:$requests\GetUserRequest"]
-                ]);
+        $router->group([
+            'middleware' => ['auth']
+        ], function () use ($router, $requests) {
+            $router->get('', [
+                'uses' => 'UserController@getAll',
+                'middleware' => ["validate:$requests\GetUserRequest"]
+            ]);
 
-                $router->get('users/{id}', [
-                    'uses' => 'UserController@getOne',
-                    'middleware' => ["validate:$requests\GetUserRequest"]
-                ]);
-            }
-        );
+            $router->get('profile', [
+                'uses' => 'UserController@profile',
+                'middleware' => ["validate:$requests\GetUserRequest"]
+            ]);
+
+            $router->get('{id}', [
+                'uses' => 'UserController@getOne',
+                'middleware' => ["validate:$requests\GetUserRequest"]
+            ]);
+
+            $router->put('update', [
+                'uses' => 'UserController@update',
+                'middleware' => ["validate:$requests\UpdateUserRequest"]
+            ]);
+
+            $router->delete('terminate', ['uses' => 'UserController@delete']);
+        });
     });
 
     /**
      * Message routes
      */
-    $router->group([], function () use ($router, $requests) {
+    $router->group([
+        'prefix' => 'messages'
+    ], function () use ($router, $requests) {
         $requests = "$requests\Message";
+        $router->get('types', ['uses' => 'MessageController@getTypes']);
 
-        $router->get('messages/types', [
-            'uses' => 'MessageController@getTypes'
-        ]);
-
-        $router->post('messages', [
+        $router->post('', [
             'uses' => 'MessageController@create',
             'middleware' => ["validate:$requests\CreateMessageRequest"]
         ]);
 
-        $router->group(
-            ['middleware' => ['auth']],
-            function () use ($router, $requests) {
-                $router->get('messages', [
-                    'uses' => 'MessageController@getAll',
-                    'middleware' => ["validate:$requests\GetMessageRequest"]
-                ]);
+        $router->group([
+            'middleware' => ['auth']
+        ], function () use ($router, $requests) {
+            $router->get('', [
+                'uses' => 'MessageController@getAll',
+                'middleware' => ["validate:$requests\GetMessageRequest"]
+            ]);
 
-                $router->get('messages/{id}', [
-                    'uses' => 'MessageController@getOne',
-                    'middleware' => ["validate:$requests\GetMessageRequest"]
-                ]);
+            $router->get('{id}', [
+                'uses' => 'MessageController@getOne',
+                'middleware' => ["validate:$requests\GetMessageRequest"]
+            ]);
 
-                $router->put('messages/{id}/type', [
-                    'uses' => 'MessageController@updateType',
-                    'middleware' => ["validate:$requests\UpdateMessageRequest"]
-                ]);
+            $router->put('{id}/type', [
+                'uses' => 'MessageController@updateType',
+                'middleware' => ["validate:$requests\UpdateMessageRequest"]
+            ]);
 
-                $router->delete('messages/{id}', [
-                    'uses' => 'MessageController@delete',
-                    'middleware' => ["validate:$requests\DeleteMessageRequest"]
-                ]);
-            }
-        );
+            $router->delete('{id}', [
+                'uses' => 'MessageController@delete',
+                'middleware' => ["validate:$requests\DeleteMessageRequest"]
+            ]);
+        });
     });
 
     /**
      * Asset routes
      */
-    $router->group([], function () use ($router, $requests) {
+    $router->group([
+        'prefix' => 'assets'
+    ], function () use ($router, $requests) {
         $requests = "$requests\Asset";
 
-        $router->get('assets', [
+        $router->get('', [
             'uses' => 'AssetController@getAll',
             'middleware' => ["validate:$requests\GetAssetRequest"]
         ]);
 
-        $router->get('assets/{id}', [
+        $router->get('types', ['uses' => 'AssetController@getTypes']);
+
+        $router->get('{id}', [
             'uses' => 'AssetController@getOne',
             'middleware' => ["validate:$requests\GetAssetRequest"]
         ]);
 
-        $router->get('assets/types', ['uses' => 'AssetController@getTypes']);
+        $router->group([
+            'middleware' => ['auth']
+        ], function () use ($router, $requests) {
+            $router->post('', [
+                'uses' => 'AssetController@create',
+                'middleware' => ["validate:$requests\CreateAssetRequest"]
+            ]);
 
-        $router->group(
-            ['middleware' => ['auth']],
-            function () use ($router, $requests) {
-                $router->post('assets', [
-                    'uses' => 'AssetController@create',
-                    'middleware' => ["validate:$requests\CreateAssetRequest"]
-                ]);
+            $router->put('{$id}', [
+                'uses' => 'AssetController@update',
+                'middleware' => ["validate:$requests\UpdateAssetRequest"]
+            ]);
 
-                $router->put('assets/{$id}', [
-                    'uses' => 'AssetController@update',
-                    'middleware' => ["validate:$requests\UpdateAssetRequest"]
-                ]);
-
-                $router->delete('assets/{$id}', [
-                    'uses' => 'AssetController@delete',
-                    'middleware' => ["validate:$requests\DeleteAssetRequest"]
-                ]);
-            }
-        );
+            $router->delete('{$id}', [
+                'uses' => 'AssetController@delete',
+                'middleware' => ["validate:$requests\DeleteAssetRequest"]
+            ]);
+        });
     });
 });
