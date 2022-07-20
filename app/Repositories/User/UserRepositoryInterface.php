@@ -8,11 +8,10 @@ interface UserRepositoryInterface
      * Get all models
      *
      * @param array $includes
-     * @param ?string $sortCreatedAt
      *
      * @return mixed
      */
-    public function getAll(array $includes = [], ?string $sortCreatedAt = null);
+    public function getAll(array $includes = []);
 
     /**
      * Get one model

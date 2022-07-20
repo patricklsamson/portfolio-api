@@ -10,13 +10,11 @@ class UserRepository implements UserRepositoryInterface
      * Get all models
      *
      * @param array $includes
-     * @param ?string $sortCreatedAt
      *
      * @return mixed
      */
-    public function getAll(array $includes = [], ?string $sortCreatedAt = null)
-    {
-        return User::with($includes)->sortCreatedAt($sortCreatedAt)->get();
+    public function getAll(array $includes = []) {
+        return User::with($includes)->get();
     }
 
     /**
