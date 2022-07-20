@@ -7,17 +7,15 @@ interface MessageRepositoryInterface
     /**
      * Get all models
      *
-     * @param array $include
-     * @param ?array $filterType
-     * @param ?string $sortCreatedAt
+     * @param array $includes
+     * @param ?array $filterTypes
      * @param ?array $ids
      *
      * @return mixed
      */
     public function getAll(
-        array $include = [],
-        ?array $filterType = null,
-        ?string $sortCreatedAt = null,
+        array $includes = [],
+        ?array $filterTypes = null,
         ?array $ids = null
     );
 

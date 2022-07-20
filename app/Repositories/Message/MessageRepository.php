@@ -9,23 +9,20 @@ class MessageRepository implements MessageRepositoryInterface
     /**
      * Get all models
      *
-     * @param array $include
-     * @param ?array $filterType
-     * @param ?string $sortCreatedAt
+     * @param array $includes
+     * @param ?array $filterTypes
      * @param ?array $ids
      *
      * @return mixed
      */
     public function getAll(
         array $includes = [],
-        ?array $filterType = null,
-        ?string $sortCreatedAt = null,
+        ?array $filterTypes = null,
         ?array $ids = null
     ) {
         return Message::with($includes)
             ->whereIdIn($ids)
-            ->filterType($filterType)
-            ->sortCreatedAt($sortCreatedAt)
+            ->filterTypes($filterTypes)
             ->get();
     }
 
@@ -68,13 +65,14 @@ class MessageRepository implements MessageRepositoryInterface
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param array $ids
      *
      * @return mixed
      */
-    public function delete(array $ids) {
+    public function delete(array $ids)
+    {
         return Message::destroy($ids);
     }
 }
