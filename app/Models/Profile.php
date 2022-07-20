@@ -75,7 +75,7 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeWhereLevel(Builder $query, string $level): Builder
+    public function scopeFilterLevel(Builder $query, string $level): Builder
     {
         return $level ?? $query->where('level', $level);
     }
@@ -84,15 +84,28 @@ class Profile extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param bool $starred
+     * @param ?bool $starred
      *
      * @return Builder
      */
-    public function scopeWhereStarred(
+    public function scopeFilterStarred(
         Builder $query,
-        bool $starred = true
+        ?bool $starred = true
     ): Builder {
         return $query->where('starred', $starred);
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?string $role
+     *
+     * @return Builder
+     */
+    public function scopeFilterRole(Builder $query, ?string $role): Builder
+    {
+        return $role ? $query->where('metadata->project->role', $role) : $query;
     }
 
     /**
