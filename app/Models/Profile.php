@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Profile extends Model
+class Profile extends BaseModel
 {
     use HasFactory;
 
@@ -89,8 +88,10 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeFilterLevel(Builder $query, ?string $level): Builder
-    {
+    public function scopeFilterLevel(
+        Builder $query,
+        ?string $level = null
+    ): Builder {
         return $level ? $query->where('level', $level) : $query;
     }
 
@@ -102,8 +103,10 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeFilterStarred(Builder $query, ?bool $starred): Builder
-    {
+    public function scopeFilterStarred(
+        Builder $query,
+        ?bool $starred = false
+    ): Builder {
         return $query->where('starred', $starred ? $starred : false);
     }
 
@@ -115,21 +118,10 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeFilterRole(Builder $query, ?string $role): Builder
-    {
+    public function scopeFilterRole(
+        Builder $query,
+        ?string $role = null
+    ): Builder {
         return $role ? $query->where('metadata->project->role', $role) : $query;
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
-     * @param ?string $order
-     *
-     * @return Builder
-     */
-    public function scopeSortStartDate(Builder $query, ?string $order): Builder
-    {
-        return $query->orderBy('start_date', $order ? $order : 'desc');
     }
 }

@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Message extends Model
+class Message extends BaseModel
 {
     use HasFactory;
 
@@ -46,38 +45,27 @@ class Message extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param ?array $type
-     *
-     * @return Builder
-     */
-    public function scopeFilterType(Builder $query, ?array $type): Builder
-    {
-        return $type ? $query->whereIn('type', $type) : $query;
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
-     * @param ?string $order
-     *
-     * @return Builder
-     */
-    public function scopeSortCreatedAt(Builder $query, ?string $order): Builder
-    {
-        return $query->orderBy('created_at', $order ? $order : 'desc');
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
      * @param ?array $ids
      *
      * @return Builder
      */
-    public function scopeWhereIdIn(Builder $query, ?array $ids): Builder
+    public function scopeWhereIdIn(Builder $query, ?array $ids = null): Builder
     {
         return $ids ? $query->whereIn('id', $ids) : $query;
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?array $type
+     *
+     * @return Builder
+     */
+    public function scopeFilterTypes(
+        Builder $query,
+        ?array $type = null
+    ): Builder {
+        return $type ? $query->whereIn('type', $type) : $query;
     }
 }

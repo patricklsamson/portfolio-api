@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements
+class User extends BaseModel implements
     AuthenticatableContract,
     AuthorizableContract,
     JWTSubject
@@ -101,6 +100,23 @@ class User extends Model implements
     }
 
     /**
+     * Get associated models
+     *
+     * @return HasManyThrough
+     */
+    public function assets(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            Asset::class,
+            Profile::class,
+            'user_id',
+            'id',
+            'id',
+            'asset_id'
+        );
+    }
+
+    /**
      * Get associated model
      *
      * @return MorphOne
@@ -108,18 +124,5 @@ class User extends Model implements
     public function address(): MorphOne
     {
         return $this->morphOne(Address::class, 'parentable');
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
-     * @param ?string $order
-     *
-     * @return Builder
-     */
-    public function scopeSortCreatedAt(Builder $query, ?string $order): Builder
-    {
-        return $query->orderBy('created_at', $order ? $order : 'desc');
     }
 }

@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
-class Asset extends Model
+class Asset extends BaseModel
 {
     use HasFactory;
 
@@ -70,6 +70,23 @@ class Asset extends Model
     }
 
     /**
+     * Get associated models
+     *
+     * @return HasManyThrough
+     */
+    public function users(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            User::class,
+            Profile::class,
+            'asset_id',
+            'id',
+            'id',
+            'user_id'
+        );
+    }
+
+    /**
      * Scope query
      *
      * @param Builder $query
@@ -77,24 +94,10 @@ class Asset extends Model
      *
      * @return Builder
      */
-    public function scopeFilterType(Builder $query, ?array $type): Builder
-    {
+    public function scopeFilterTypes(
+        Builder $query,
+        ?array $type = null
+    ): Builder {
         return $type ? $query->whereIn('type', $type) : $query;
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
-     * @param ?string $order
-     *
-     * @return Builder
-     */
-    public function scopeSortStartDate(Builder $query, ?string $order): Builder
-    {
-        return $query->orderBy(
-            'metadata->project->dates->start',
-            $order ? $order : 'desc'
-        );
     }
 }
