@@ -47,13 +47,25 @@ class UserRepository implements UserRepositoryInterface
     /**
      * Update model
      *
-     * @param string $id
+     * @param int $id
      * @param array $attributes
      *
      * @return mixed
      */
-    public function update(string $id, array $attributes)
+    public function update(int $id, array $attributes)
     {
         return User::where('id', $id)->update($attributes);
+    }
+
+    /**
+     * Delete model
+     *
+     * @param int $id
+     *
+     * @return mixed
+     */
+    public function delete(int $id)
+    {
+        return User::destroy($id);
     }
 }
