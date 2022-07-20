@@ -66,27 +66,28 @@ class Asset extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param string $type
+     * @param ?array $type
      *
      * @return Builder
      */
-    public function scopeWhereType(Builder $query, string $type): Builder
+    public function scopeFilterType(Builder $query, ?array $type): Builder
     {
-        return $type ?? $query->where('type', $type);
+        return $type ? $query->whereIn('type', $type) : $query;
     }
 
     /**
      * Scope query
      *
      * @param Builder $query
-     * @param string $order
+     * @param ?string $order
      *
      * @return Builder
      */
-    public function scopeSortStartDate(
-        Builder $query,
-        string $order = 'DESC'
-    ): Builder {
-        return $query->orderBy('metadata->project->dates->start', $order);
+    public function scopeSortStartDate(Builder $query, ?string $order): Builder
+    {
+        return $query->orderBy(
+            'metadata->project->dates->start',
+            $order ? $order : 'desc'
+        );
     }
 }
