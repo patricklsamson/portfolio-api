@@ -24,6 +24,10 @@ $router->get('v1/username', function () {
     return User::find(1)->only(['id', 'username']);
 });
 
+$router->get('v1/test', function () {
+    return User::find(1)->assets()->get();
+});
+
 $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     $router->get('health', ['uses' => 'HealthController@check']);
 
@@ -50,6 +54,11 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     $router->group(['prefix' => 'users'], function () use ($router, $requests) {
         $requests = "$requests\User";
 
+        $router->get('{id}', [
+            'uses' => 'UserController@getOne',
+            'middleware' => ["validate:$requests\GetUserRequest"]
+        ]);
+
         $router->post('', [
             'uses' => 'UserController@create',
             'middleware' => ["validate:$requests\CreateUserRequest"]
@@ -68,12 +77,7 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
                 'middleware' => ["validate:$requests\GetUserRequest"]
             ]);
 
-            $router->get('{id}', [
-                'uses' => 'UserController@getOne',
-                'middleware' => ["validate:$requests\GetUserRequest"]
-            ]);
-
-            $router->put('update', [
+            $router->put('profile', [
                 'uses' => 'UserController@update',
                 'middleware' => ["validate:$requests\UpdateUserRequest"]
             ]);
@@ -89,7 +93,6 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
         'prefix' => 'messages'
     ], function () use ($router, $requests) {
         $requests = "$requests\Message";
-        $router->get('types', ['uses' => 'MessageController@getTypes']);
 
         $router->post('', [
             'uses' => 'MessageController@create',
@@ -103,6 +106,8 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
                 'uses' => 'MessageController@getAll',
                 'middleware' => ["validate:$requests\GetMessageRequest"]
             ]);
+
+            $router->get('types', ['uses' => 'MessageController@getTypes']);
 
             $router->get('{id}', [
                 'uses' => 'MessageController@getOne',
@@ -134,8 +139,6 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\GetAssetRequest"]
         ]);
 
-        $router->get('types', ['uses' => 'AssetController@getTypes']);
-
         $router->get('{id}', [
             'uses' => 'AssetController@getOne',
             'middleware' => ["validate:$requests\GetAssetRequest"]
@@ -144,6 +147,8 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
         $router->group([
             'middleware' => ['auth']
         ], function () use ($router, $requests) {
+            $router->get('types', ['uses' => 'AssetController@getTypes']);
+
             $router->post('', [
                 'uses' => 'AssetController@create',
                 'middleware' => ["validate:$requests\CreateAssetRequest"]
