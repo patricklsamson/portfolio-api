@@ -5,11 +5,13 @@ namespace App\Services;
 use App\Exceptions\NotFoundException;
 use App\Models\Message;
 use App\Repositories\Message\MessageRepository;
+use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Support\Arr;
 
 class MessageService
 {
+    use ResourceTrait;
     use ResponseTrait;
 
     /**
@@ -46,7 +48,7 @@ class MessageService
 
         throw_if(!$messages->count(), NotFoundException::class);
 
-        return $messages;
+        return $this->resource($messages);
     }
 
     /**
@@ -64,7 +66,7 @@ class MessageService
 
         throw_if(!$message, NotFoundException::class);
 
-        return $message;
+        return $this->resource($message);
     }
 
     /**
@@ -88,8 +90,9 @@ class MessageService
      */
     public function create(array $data)
     {
-        return $this->messageRepository
-            ->create(Arr::get($data, 'data.attributes'));
+        return $this->resource(
+            $this->messageRepository->create(Arr::get($data, 'data.attributes'))
+        );
     }
 
     /**
@@ -108,7 +111,7 @@ class MessageService
         $this->messageRepository
             ->update($id, Arr::get($data, 'data.attributes'));
 
-        return $this->messageRepository->getOne($id);
+        return $this->resource($this->messageRepository->getOne($id));
     }
 
     /**
