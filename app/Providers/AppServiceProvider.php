@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Asset\Repositories\AssetRepository;
-use App\Asset\Repositories\AssetRepositoryInterface;
 use App\Http\Requests\Asset\CreateAssetRequest;
 use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
@@ -16,6 +14,8 @@ use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Repositories\Asset\AssetRepository;
+use App\Repositories\Asset\AssetRepositoryInterface;
 use App\Repositories\Message\MessageRepository;
 use App\Repositories\Message\MessageRepositoryInterface;
 use App\Repositories\User\UserRepository;
