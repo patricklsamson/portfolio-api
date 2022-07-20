@@ -4,6 +4,7 @@ namespace App\Http\Requests\User;
 
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Address;
+use App\Models\Asset;
 use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
@@ -34,11 +35,11 @@ class GetUserRequest extends Request implements RequestInterface
             Arr::get($data, 'fields.users')
         ));
 
-        Arr::set($data, 'include', self::strToArray(
-            Arr::get($data, 'include'), [])
+        Arr::set(
+            $data,
+            'include',
+            self::strToArray(Arr::get($data, 'include'), [])
         );
-
-        Arr::set($data, 'sort.created_at', Arr::get($data, 'sort.created_at'));
 
         return $data;
     }
@@ -51,10 +52,15 @@ class GetUserRequest extends Request implements RequestInterface
     public function rules(): array
     {
         return [
-            'fields' => 'nullable|array:addresses,messages,profiles,users',
-            'fields.addresses' => self::strArrayConcat(
+            'fields' => 'nullable|
+                array:addresses,assets,messages,profiles,users',
+            'fields.addresses.*' => self::strArrayConcat(
                 'nullable|string|distinct|in:',
                 Address::ATTRIBUTES
+            ),
+            'fields.assets.*' => self::strArrayConcat(
+                'nullable|string|distinct|in:',
+                Asset::ATTRIBUTES
             ),
             'fields.messages.*' => self::strArrayConcat(
                 'nullable|string|distinct|in:',
@@ -70,12 +76,10 @@ class GetUserRequest extends Request implements RequestInterface
             ),
             'include' => 'nullable|array',
             'include.*' =>
-                'nullable|string|distinct|in:address,messages,profiles',
+                'nullable|string|distinct|in:address,assets,messages,profiles',
             'page' => 'nullable|array:number,size',
             'page.number' => 'nullable|integer|min:1',
-            'page.size' => 'nullable|integer|min:1',
-            'sort' => 'nullable|array:created_at',
-            'sort.created_at' => 'nullable|string|in:desc,asc'
+            'page.size' => 'nullable|integer|min:1'
         ];
     }
 }
