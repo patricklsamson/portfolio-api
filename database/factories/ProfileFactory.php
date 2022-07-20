@@ -42,8 +42,14 @@ class ProfileFactory extends Factory
                 'starred' => $this->faker->boolean,
                 'metadata' => [
                     'project' => [
-                        'contribution_1' => $this->faker->sentence,
-                        'contribution_2' => $this->faker->sentence
+                        'role' => $this->faker->randomElement([
+                            'owner',
+                            'contributor'
+                        ]),
+                        'contributions' => [
+                            'contribution_1' => $this->faker->sentence,
+                            'contribution_2' => $this->faker->sentence
+                        ]
                     ]
                 ]
             ];
