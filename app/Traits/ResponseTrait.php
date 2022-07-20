@@ -15,7 +15,7 @@ trait ResponseTrait
      *
      * @return array
      */
-    public function buildContent(array $attributes): array
+    public function content(array $attributes): array
     {
         return [
             'data' => [
@@ -32,7 +32,7 @@ trait ResponseTrait
      *
      * @return array
      */
-    public function buildGroupContent(array $group, array $attributes): array
+    public function groupContent(array $group, array $attributes): array
     {
         $content = [];
 
@@ -56,9 +56,9 @@ trait ResponseTrait
      *
      * @return mixed
      */
-    public function buildTokenContent($token)
+    public function tokenContent($token)
     {
-        return $this->buildContent([
+        return $this->content([
             'token' => $token,
             'type' => 'bearer',
             'expires_in' => Auth::factory()->getTTL() *
