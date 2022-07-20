@@ -42,6 +42,8 @@ class CreateProfilesTable extends Migration
                 ->onDelete('cascade')
                 ->onUpdate('cascade');
 
+            $table->unique(['user_id', 'asset_id']);
+
             $table->timestamps();
         });
     }
