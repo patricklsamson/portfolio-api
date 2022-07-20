@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Asset\Repositories\AssetRepository;
+use App\Asset\Repositories\AssetRepositoryInterface;
+use App\Http\Requests\Asset\CreateAssetRequest;
+use App\Http\Requests\Asset\DeleteAssetRequest;
+use App\Http\Requests\Asset\GetAssetRequest;
+use App\Http\Requests\Asset\UpdateAssetRequest;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Message\CreateMessageRequest;
 use App\Http\Requests\Message\DeleteMessageRequest;
@@ -9,6 +15,7 @@ use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Repositories\Message\MessageRepository;
 use App\Repositories\Message\MessageRepositoryInterface;
 use App\Repositories\User\UserRepository;
@@ -33,12 +40,17 @@ class AppServiceProvider extends ServiceProvider
      */
     private function registerRepositories()
     {
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+
         $this->app->bind(
             MessageRepositoryInterface::class,
             MessageRepository::class
         );
 
-        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(
+            AssetRepositoryInterface::class,
+            AssetRepository::class
+        );
     }
 
     /**
@@ -58,6 +70,10 @@ class AppServiceProvider extends ServiceProvider
             return CreateUserRequest::capture();
         });
 
+        $this->app->singleton(UpdateUserRequest::class, function () {
+            return UpdateUserRequest::capture();
+        });
+
         $this->app->singleton(GetMessageRequest::class, function () {
             return GetMessageRequest::capture();
         });
@@ -72,6 +88,22 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(DeleteMessageRequest::class, function () {
             return DeleteMessageRequest::capture();
+        });
+
+        $this->app->singleton(GetAssetRequest::class, function () {
+            return GetAssetRequest::capture();
+        });
+
+        $this->app->singleton(CreateAssetRequest::class, function () {
+            return CreateAssetRequest::capture();
+        });
+
+        $this->app->singleton(UpdateAssetRequest::class, function () {
+            return UpdateAssetRequest::capture();
+        });
+
+        $this->app->singleton(DeleteAssetRequest::class, function () {
+            return DeleteAssetRequest::capture();
         });
     }
 }
