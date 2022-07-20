@@ -71,7 +71,7 @@ class GetMessageRequest extends Request implements RequestInterface
             'include.*' => 'nullable|string|distinct|in:user',
             'page' => 'nullable|array:number,size',
             'page.number' => 'nullable|integer|min:1',
-            'page.size' => 'same:page.number',
+            'page.size' => 'nullable|integer|min:1',
             'sort' => 'nullable|array:created_at',
             'sort.created_at' => 'nullable|string|in:desc,asc'
         ];
