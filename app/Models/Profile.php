@@ -25,6 +25,20 @@ class Profile extends Model
     ];
 
     /**
+     * Resource attributes
+     *
+     * @var array
+     */
+    const ATTRIBUTES = [
+        'description',
+        'level',
+        'starred',
+        'start_date',
+        'end_date',
+        'metadata'
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -71,13 +85,13 @@ class Profile extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param string $level
+     * @param ?string $level
      *
      * @return Builder
      */
-    public function scopeFilterLevel(Builder $query, string $level): Builder
+    public function scopeFilterLevel(Builder $query, ?string $level): Builder
     {
-        return $level ?? $query->where('level', $level);
+        return $level ? $query->where('level', $level) : $query;
     }
 
     /**
@@ -88,11 +102,9 @@ class Profile extends Model
      *
      * @return Builder
      */
-    public function scopeFilterStarred(
-        Builder $query,
-        ?bool $starred = true
-    ): Builder {
-        return $query->where('starred', $starred);
+    public function scopeFilterStarred(Builder $query, ?bool $starred): Builder
+    {
+        return $query->where('starred', $starred ? $starred : false);
     }
 
     /**
@@ -112,14 +124,12 @@ class Profile extends Model
      * Scope query
      *
      * @param Builder $query
-     * @param string $order
+     * @param ?string $order
      *
      * @return Builder
      */
-    public function scopeSortStartDate(
-        Builder $query,
-        string $order = 'DESC'
-    ): Builder {
-        return $query->orderBy('start_date', $order);
+    public function scopeSortStartDate(Builder $query, ?string $order): Builder
+    {
+        return $query->orderBy('start_date', $order ? $order : 'desc');
     }
 }
