@@ -29,6 +29,13 @@ class Asset extends Model
     ];
 
     /**
+     * Resource attributes
+     *
+     * @var array
+     */
+    const ATTRIBUTES = ['name', 'slug', 'type', 'metadata'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

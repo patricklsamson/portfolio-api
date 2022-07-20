@@ -11,6 +11,21 @@ class Address extends Model
     use HasFactory;
 
     /**
+     * Resource attributes
+     *
+     * @var array
+     */
+    const ATTRIBUTES = [
+        'line_1',
+        'line_2',
+        'district',
+        'city',
+        'state',
+        'country',
+        'zip_code'
+    ];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
