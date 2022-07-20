@@ -47,7 +47,7 @@ class BaseCollection extends ResourceCollection
                         foreach ($resource as $single) {
                             if (
                                 !$single || array_key_exists(
-                                    $single->only('id')['id'],
+                                    $single->id,
                                     $includes
                                 )
                             ) {
@@ -56,7 +56,7 @@ class BaseCollection extends ResourceCollection
 
                             Arr::set(
                                 $includes,
-                                'included.' . $single->only('id')['id'],
+                                'included.' . $single->id,
                                 $single
                             );
                         }

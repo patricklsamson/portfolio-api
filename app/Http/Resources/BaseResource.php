@@ -130,7 +130,7 @@ class BaseResource extends JsonResource
                     }
 
                     $relationships['relationships'][$include]['data'][] = [
-                        'id' => $single['id'],
+                        'id' => $single->id,
                         'type' => Str::plural($include)
                     ];
                 }
@@ -139,7 +139,7 @@ class BaseResource extends JsonResource
             }
 
             $relationships['relationships'][$include]['data'][] = [
-                'id' => $this->$include['id'],
+                'id' => $this->$include->id,
                 'type' => Str::plural($include)
             ];
         }
