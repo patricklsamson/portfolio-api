@@ -6,13 +6,10 @@ use App\Http\Requests\Message\CreateMessageRequest;
 use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
-use App\Traits\ResourceTrait;
 use App\Services\MessageService;
 
 class MessageController extends Controller
 {
-    use ResourceTrait;
-
     /**
      * Model service
      *
@@ -39,24 +36,7 @@ class MessageController extends Controller
      */
     public function getAll(GetMessageRequest $request)
     {
-        return $this->resource(
-            $this->messageService->getAll($request->data($request))
-        );
-    }
-
-    /**
-     * Get one model
-     *
-     * @param string $id
-     * @param GetMessageRequest $request
-     *
-     * @return mixed
-     */
-    public function getOne(string $id, GetMessageRequest $request)
-    {
-        return $this->resource(
-            $this->messageService->getOne($id, $request->data($request))
-        );
+        return $this->messageService->getAll($request->data($request));
     }
 
     /**
@@ -70,6 +50,19 @@ class MessageController extends Controller
     }
 
     /**
+     * Get one model
+     *
+     * @param string $id
+     * @param GetMessageRequest $request
+     *
+     * @return mixed
+     */
+    public function getOne(string $id, GetMessageRequest $request)
+    {
+        return $this->messageService->getOne($id, $request->data($request));
+    }
+
+    /**
      * Create model
      *
      * @param CreateMessageRequest $request
@@ -78,9 +71,7 @@ class MessageController extends Controller
      */
     public function create(CreateMessageRequest $request)
     {
-        return $this->resource(
-            $this->messageService->create($request->data($request))
-        );
+        return $this->messageService->create($request->data($request));
     }
 
     /**
@@ -93,9 +84,7 @@ class MessageController extends Controller
      */
     public function updateType(string $id, UpdateMessageRequest $request)
     {
-        return $this->resource(
-            $this->messageService->updateType($id, $request->data($request))
-        );
+        return $this->messageService->updateType($id, $request->data($request));
     }
 
     /**
