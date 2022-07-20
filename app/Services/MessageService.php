@@ -42,8 +42,7 @@ class MessageService
     {
         $messages = $this->messageRepository->getAll(
             Arr::get($data, 'include'),
-            Arr::get($data, 'filter.type'),
-            Arr::get($data, 'sort.created_at')
+            Arr::get($data, 'filter.type')
         );
 
         throw_if(!$messages->count(), NotFoundException::class);
@@ -76,9 +75,7 @@ class MessageService
      */
     public function getTypes()
     {
-        return response(
-            $this->buildGroupContent(Message::TYPES, ['name'])
-        );
+        return response($this->groupContent(Message::TYPES, ['name']));
     }
 
     /**
@@ -124,13 +121,13 @@ class MessageService
      */
     public function delete(string $id, array $data)
     {
-        $ids = Arr::get($data, 'ids');
+        $ids = Arr::get($data, 'include');
         $ids[] = $id;
         $ids = array_unique($ids, SORT_REGULAR);
-        $messages = $this->messageRepository->getAll([], null, null, $ids);
+        $messages = $this->messageRepository->getAll([], null, $ids);
         throw_if(!$messages->count(), NotFoundException::class);
         $this->messageRepository->delete($ids);
 
-        return response($this->buildContent(['success' => true]));
+        return response($this->content(['success' => true]));
     }
 }

@@ -24,11 +24,11 @@ class AuthService
     {
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
         throw_if(!$token, UnauthorizedException::class);
-        $content = $this->buildTokenContent($token);
+        $content = $this->tokenContent($token);
 
         if (Arr::get($data, 'include') == 'user') {
             Arr::set($content, 'data.relationships.user.data', [
-                'id' => auth()->user()['id'],
+                'id' => auth()->user()->id,
                 'type' => 'users'
             ]);
 
@@ -50,7 +50,7 @@ class AuthService
         $token = Auth::fromUser(auth()->user());
         Auth::invalidate();
 
-        return response($this->buildTokenContent($token));
+        return response($this->tokenContent($token));
     }
 
     /**
@@ -63,6 +63,6 @@ class AuthService
         Auth::invalidate();
         auth()->logout();
 
-        return response($this->buildContent(['success' => true]));
+        return response($this->content(['success' => true]));
     }
 }

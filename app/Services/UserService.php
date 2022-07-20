@@ -40,11 +40,7 @@ class UserService
      */
     public function getAll(array $data)
     {
-        $users = $this->userRepository->getAll(
-            Arr::get($data, 'include'),
-            Arr::get($data, 'sort.created_at')
-        );
-
+        $users = $this->userRepository->getAll(Arr::get($data, 'include'));
         throw_if(!$users->count(), NotFoundException::class);
 
         return $this->resource($users);
@@ -124,6 +120,6 @@ class UserService
     {
         $this->userRepository->delete(auth()->user()->id);
 
-        return response($this->buildContent(['success' => true]));
+        return response($this->content(['success' => true]));
     }
 }
