@@ -2,11 +2,18 @@
 
 namespace App\Services;
 
+use App\Exceptions\Address\NotFoundException;
 use App\Repositories\User\UserRepository;
+use App\Traits\ResourceTrait;
+use App\Traits\ResponseTrait;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+    use ResourceTrait;
+    use ResponseTrait;
+
     /**
      * Model repository
      *
@@ -33,10 +40,29 @@ class UserService
      */
     public function getAll(array $data)
     {
-        return $this->userRepository->getAll(
+        $users = $this->userRepository->getAll(
             Arr::get($data, 'include'),
             Arr::get($data, 'sort.created_at')
         );
+
+        throw_if(!$users->count(), NotFoundException::class);
+
+        return $this->resource($users);
+    }
+
+    /**
+     * Profile
+     *
+     * @param array $data
+     *
+     * @return mixed
+     */
+    public function profile(array $data)
+    {
+        return $this->resource($this->userRepository->getOne(
+            auth()->user()->id,
+            Arr::get($data, 'include')
+        ));
     }
 
     /**
@@ -52,7 +78,7 @@ class UserService
         $user = $this->userRepository->getOne($id, Arr::get($data, 'include'));
         throw_if(!$user, NotFoundException::class);
 
-        return $user;
+        return $this->resource($user);
     }
 
     /**
@@ -63,24 +89,41 @@ class UserService
      * @return mixed
      */
     public function create(array $data) {
-        return $this->userRepository
-            ->create(Arr::get($data, 'data.attributes'));
+        Arr::set($data, 'data.attributes.password', Hash::make(
+            Arr::get($data, 'data.attributes.password')
+        ));
+
+        unset($data['data']['attributes']['password_confirmation']);
+
+        return $this->resource(
+            $this->userRepository->create(Arr::get($data, 'data.attributes'))
+        );
     }
 
     /**
      * Update model
      *
-     * @param string $id
      * @param array $data
      *
      * @return mixed
      */
-    public function update(string $id, array $data)
+    public function update(array $data)
     {
-        $user = $this->userRepository->getOne($id);
-        throw_if(!$user, NotFoundException::class);
+        $id = auth()->user()->id;
         $this->userRepository->update($id, Arr::get($data, 'data.attributes'));
 
-        return $this->userRepository->getOne($id);
+        return $this->resource($this->userRepository->getOne($id));
+    }
+
+    /**
+     * Delete model
+     *
+     * @return mixed
+     */
+    public function delete()
+    {
+        $this->userRepository->delete(auth()->user()->id);
+
+        return response($this->buildContent(['success' => true]));
     }
 }
