@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->registerRepositories();
         $this->registerRequests();
@@ -37,8 +37,10 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register requests
+     *
+     * @return void
      */
-    private function registerRepositories()
+    private function registerRepositories(): void
     {
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
 
@@ -55,8 +57,10 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register requests
+     *
+     * @return void
      */
-    private function registerRequests()
+    private function registerRequests(): void
     {
         $this->app->singleton(LoginRequest::class, function () {
             return LoginRequest::capture();
