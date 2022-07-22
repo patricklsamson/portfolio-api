@@ -24,12 +24,16 @@ class BaseModel extends Model
      * Scope query
      *
      * @param Builder $query
+     * @param array $sorts
      *
      * @return Builder
      */
-    public function scopeSort(
-        Builder $query
-    ): Builder {
-        return $query;
+    public function scopeSort(Builder $query, array $sorts = []): Builder
+    {
+        return $query->when(!empty($sorts), function ($query) use ($sorts) {
+            foreach (array_chunk($sorts, 2) as $sort) {
+                $query->orderBy(...$sort);
+            }
+        });
     }
 }
