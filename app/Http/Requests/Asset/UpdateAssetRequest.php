@@ -2,10 +2,11 @@
 
 namespace App\Http\Requests\Asset;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use Illuminate\Http\Request;
 
-class UpdateAssetRequest extends Request implements RequestInterface
+class UpdateAssetRequest extends BaseRequest implements RequestInterface
 {
     /**
      * Get data to be validated from the request.
