@@ -11,6 +11,8 @@ class UnauthorizedException extends BaseException
      *
      * @param ?string $message
      * @param ?int $code
+     *
+     * @return void
      */
     public function __construct(?string $message = null, ?int $code = null)
     {

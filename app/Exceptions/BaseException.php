@@ -12,9 +12,10 @@ class BaseException extends Exception
      *
      * @param ?string $message
      * @param ?int $code
+     *
+     * @return void
      */
-    public function __construct(?string $message = null, ?int $code = null)
-    {
+    public function __construct(?string $message = null, ?int $code = null) {
         parent::__construct($message, $code);
     }
 
@@ -27,7 +28,7 @@ class BaseException extends Exception
      *
      * @throws \Throwable
      */
-    public function render()
+    public function render(): Response
     {
         return response([
             'errors' => [
