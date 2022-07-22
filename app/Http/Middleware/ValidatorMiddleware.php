@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Exceptions\UnprocessableEntityException;
 use Closure;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ValidatorMiddleware
@@ -13,9 +14,10 @@ class ValidatorMiddleware
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     *
      * @return mixed
      */
-    public function handle($request, Closure $next, string $customRequest)
+    public function handle(Request $request, Closure $next, string $customRequest)
     {
         $validator = Validator::make(
             $customRequest::data($request),
