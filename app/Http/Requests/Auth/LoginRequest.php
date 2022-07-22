@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class LoginRequest extends Request implements RequestInterface
+class LoginRequest extends BaseRequest implements RequestInterface
 {
-    use ArrayTrait;
-
     /**
      * Get data to be validated from the request.
      *
@@ -35,11 +33,13 @@ class LoginRequest extends Request implements RequestInterface
     {
         $attributes = 'data.attributes';
 
-        return [
-            'data' => 'required|array:attributes',
-            $attributes => 'required|array:username,password',
-            "$attributes.username" => 'required|string|min:1|max:50',
-            "$attributes.password" => 'required|string|min:1|max:100'
-        ];
+        return array_merge(
+            self::dataAttributesRules(['username', 'password']),
+            self::includeRules(['user']),
+            [
+                "$attributes.username" => 'required|string|min:1|max:50',
+                "$attributes.password" => 'required|string|min:1|max:100'
+            ]
+        );
     }
 }
