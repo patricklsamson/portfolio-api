@@ -6,6 +6,9 @@ use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Services\UserService;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class UserController extends Controller
 {
@@ -31,9 +34,9 @@ class UserController extends Controller
      *
      * @param GetUserRequest $request
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(GetUserRequest $request)
+    public function getAll(GetUserRequest $request): ResourceCollection
     {
         return $this->userService->getAll($request->data($request));
     }
@@ -43,9 +46,9 @@ class UserController extends Controller
      *
      * @param GetUserRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function profile(GetUserRequest $request)
+    public function profile(GetUserRequest $request): JsonResource
     {
         return $this->userService->profile($request->data($request));
     }
@@ -56,9 +59,9 @@ class UserController extends Controller
      * @param string $id
      * @param GetUserRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, GetUserRequest $request)
+    public function getOne(string $id, GetUserRequest $request): JsonResource
     {
         return $this->userService->getOne($id, $request->data($request));
     }
@@ -68,9 +71,10 @@ class UserController extends Controller
      *
      * @param CreateUserRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function create(CreateUserRequest $request) {
+    public function create(CreateUserRequest $request): JsonResource
+    {
         return $this->userService->create($request->data($request));
     }
 
@@ -79,9 +83,9 @@ class UserController extends Controller
      *
      * @param UpdateUserRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function update(UpdateUserRequest $request)
+    public function update(UpdateUserRequest $request): JsonResource
     {
         return $this->userService->update($request->data($request));
     }
@@ -89,9 +93,9 @@ class UserController extends Controller
     /**
      * Delete model
      *
-     * @return mixed
+     * @return Response
      */
-    public function delete()
+    public function delete(): Response
     {
         return $this->userService->delete();
     }

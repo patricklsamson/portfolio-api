@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Services\AuthService;
+use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
@@ -16,6 +17,10 @@ class AuthController extends Controller
 
     /**
      * Constructor
+     *
+     * @param AuthService $authService
+     *
+     * @return void
      */
     public function __construct(AuthService $authService)
     {
@@ -27,9 +32,9 @@ class AuthController extends Controller
      *
      * @param LoginRequest $request
      *
-     * @return mixed
+     * @return Response
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequest $request): Response
     {
         return $this->authService->login($request->data($request));
     }
@@ -37,9 +42,9 @@ class AuthController extends Controller
     /**
      * Refresh token
      *
-     * @return mixed
+     * @return Response
      */
-    public function refresh()
+    public function refresh(): Response
     {
         return $this->authService->refresh();
     }
@@ -47,9 +52,9 @@ class AuthController extends Controller
     /**
      * Logout
      *
-     * @return mixed
+     * @return Response
      */
-    public function logout()
+    public function logout(): Response
     {
         return $this->authService->logout();
     }

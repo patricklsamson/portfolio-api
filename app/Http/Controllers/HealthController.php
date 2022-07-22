@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InternalServerException;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
 class HealthController extends Controller
@@ -13,9 +14,9 @@ class HealthController extends Controller
     /**
      * Health check
      *
-     * @return mixed
+     * @return Response
      */
-    public function check()
+    public function check(): Response
     {
         throw_if(!DB::getPdo(), InternalServerException::class);
 

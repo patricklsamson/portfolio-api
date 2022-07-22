@@ -7,6 +7,9 @@ use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Services\MessageService;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class MessageController extends Controller
 {
@@ -21,6 +24,8 @@ class MessageController extends Controller
      * Constructor
      *
      * @param MessageService $messageService
+     *
+     * @return void
      */
     public function __construct(MessageService $messageService)
     {
@@ -32,9 +37,9 @@ class MessageController extends Controller
      *
      * @param GetMessageRequest $request
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(GetMessageRequest $request)
+    public function getAll(GetMessageRequest $request): ResourceCollection
     {
         return $this->messageService->getAll($request->data($request));
     }
@@ -42,9 +47,9 @@ class MessageController extends Controller
     /**
      * Get types
      *
-     * @return mixed
+     * @return Response
      */
-    public function getTypes()
+    public function getTypes(): Response
     {
         return $this->messageService->getTypes();
     }
@@ -55,9 +60,9 @@ class MessageController extends Controller
      * @param string $id
      * @param GetMessageRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, GetMessageRequest $request)
+    public function getOne(string $id, GetMessageRequest $request): JsonResource
     {
         return $this->messageService->getOne($id, $request->data($request));
     }
@@ -67,9 +72,9 @@ class MessageController extends Controller
      *
      * @param CreateMessageRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function create(CreateMessageRequest $request)
+    public function create(CreateMessageRequest $request): JsonResource
     {
         return $this->messageService->create($request->data($request));
     }
@@ -80,10 +85,12 @@ class MessageController extends Controller
      * @param string $id
      * @param UpdateMessageRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function updateType(string $id, UpdateMessageRequest $request)
-    {
+    public function updateType(
+        string $id,
+        UpdateMessageRequest $request
+    ): JsonResource {
         return $this->messageService->updateType($id, $request->data($request));
     }
 
@@ -93,9 +100,9 @@ class MessageController extends Controller
      * @param string $id
      * @param DeleteMessageRequest $request
      *
-     * @return mixed
+     * @return Response
      */
-    public function delete(string $id, DeleteMessageRequest $request)
+    public function delete(string $id, DeleteMessageRequest $request): Response
     {
         return $this->messageService->delete($id, $request->data($request));
     }
