@@ -12,7 +12,7 @@ class AssetFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         $name = $this->faker->words(2, true);
         $type = $this->faker->randomElement(
@@ -34,7 +34,7 @@ class AssetFactory extends Factory
      *
      * @return Factory
      */
-    public function project()
+    public function project(): Factory
     {
         return $this->state(function () {
             return [
@@ -72,7 +72,7 @@ class AssetFactory extends Factory
      *
      * @return Factory
      */
-    public function skill()
+    public function skill(): Factory
     {
         return $this->state(function () {
             return [

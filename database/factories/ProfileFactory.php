@@ -12,7 +12,7 @@ class ProfileFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'description' => $this->faker->sentence,
@@ -35,7 +35,7 @@ class ProfileFactory extends Factory
      *
      * @return Factory
      */
-    public function project()
+    public function project(): Factory
     {
         return $this->state(function () {
             return [
@@ -61,7 +61,7 @@ class ProfileFactory extends Factory
      *
      * @return Factory
      */
-    public function skill()
+    public function skill(): Factory
     {
         return $this->state(function () {
             return [

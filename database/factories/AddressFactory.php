@@ -11,7 +11,7 @@ class AddressFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'line_1' => $this->faker->streetAddress,
