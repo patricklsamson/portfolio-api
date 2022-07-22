@@ -3,6 +3,7 @@
 namespace App\Repositories\User;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -10,11 +11,15 @@ class UserRepository implements UserRepositoryInterface
      * Get all models
      *
      * @param array $includes
+     * @param array $sorts
      *
-     * @return mixed
+     * @return Collection
      */
-    public function getAll(array $includes = []) {
-        return User::with($includes)->get();
+    public function getAll(array $includes = [], array $sorts = []): Collection
+    {
+        return User::with($includes)
+            ->sort($sorts)
+            ->get();
     }
 
     /**
@@ -23,9 +28,9 @@ class UserRepository implements UserRepositoryInterface
      * @param string $id
      * @param array $includes
      *
-     * @return mixed
+     * @return User
      */
-    public function getOne(string $id, array $includes = [])
+    public function getOne(string $id, array $includes = []): User
     {
         return User::with($includes)->find($id);
     }
@@ -35,9 +40,9 @@ class UserRepository implements UserRepositoryInterface
      *
      * @param array $attributes
      *
-     * @return mixed
+     * @return User
      */
-    public function create(array $attributes)
+    public function create(array $attributes): User
     {
         return User::create($attributes);
     }
@@ -48,21 +53,21 @@ class UserRepository implements UserRepositoryInterface
      * @param int $id
      * @param array $attributes
      *
-     * @return mixed
+     * @return User
      */
-    public function update(int $id, array $attributes)
+    public function update(int $id, array $attributes): User
     {
         return User::where('id', $id)->update($attributes);
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param int $id
      *
-     * @return mixed
+     * @return int
      */
-    public function delete(int $id)
+    public function delete(int $id): int
     {
         return User::destroy($id);
     }

@@ -2,6 +2,9 @@
 
 namespace App\Repositories\User;
 
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
+
 interface UserRepositoryInterface
 {
     /**
@@ -9,9 +12,9 @@ interface UserRepositoryInterface
      *
      * @param array $includes
      *
-     * @return mixed
+     * @return Collection
      */
-    public function getAll(array $includes = []);
+    public function getAll(array $includes = []): Collection;
 
     /**
      * Get one model
@@ -19,18 +22,18 @@ interface UserRepositoryInterface
      * @param string $id
      * @param array $includes
      *
-     * @return mixed
+     * @return User
      */
-    public function getOne(string $id, array $includes = []);
+    public function getOne(string $id, array $includes = []): User;
 
     /**
      * Create model
      *
      * @param array $attributes
      *
-     * @return mixed
+     * @return User
      */
-    public function create(array $attributes);
+    public function create(array $attributes): User;
 
     /**
      * Update model
@@ -38,16 +41,16 @@ interface UserRepositoryInterface
      * @param int $id
      * @param array $attributes
      *
-     * @return mixed
+     * @return User
      */
-    public function update(int $id, array $attributes);
+    public function update(int $id, array $attributes): User;
 
     /**
      * Delete model
      *
      * @param int $id
      *
-     * @return mixed
+     * @return int
      */
-    public function delete(int $id);
+    public function delete(int $id): int;
 }
