@@ -52,11 +52,11 @@ trait ResponseTrait
     /**
      * Build token content
      *
-     * @param mixed $token
+     * @param string $token
      *
-     * @return mixed
+     * @return array
      */
-    public function tokenContent($token)
+    public function tokenContent(string $token): array
     {
         return $this->content([
             'token' => $token,

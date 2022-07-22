@@ -7,11 +7,11 @@ trait ResourceTrait
     /**
      * Make resource/collection from model
      *
-     * @param mixed $model
+     * @param object $model
      *
-     * @return mixed
+     * @return object
      */
-    public function resource($model)
+    public function resource(object $model): object
     {
         if (!$model || !$model->count()) {
             return null;
