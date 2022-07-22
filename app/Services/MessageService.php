@@ -7,6 +7,9 @@ use App\Models\Message;
 use App\Repositories\Message\MessageRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
 class MessageService
@@ -25,6 +28,8 @@ class MessageService
      * Constructor
      *
      * @param MessageRepository $messageRepository
+     *
+     * @return void
      */
     public function __construct(MessageRepository $messageRepository)
     {
@@ -36,9 +41,9 @@ class MessageService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(array $data)
+    public function getAll(array $data): ResourceCollection
     {
         $messages = $this->messageRepository->getAll(
             Arr::get($data, 'include'),
@@ -56,9 +61,9 @@ class MessageService
      * @param string $id
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, array $data)
+    public function getOne(string $id, array $data): JsonResource
     {
         $message = $this->messageRepository
             ->getOne($id, Arr::get($data, 'include'));
@@ -71,9 +76,9 @@ class MessageService
     /**
      * Get types
      *
-     * @return mixed
+     * @return Response
      */
-    public function getTypes()
+    public function getTypes(): Response
     {
         return response($this->groupContent(Message::TYPES, ['name']));
     }
@@ -83,9 +88,9 @@ class MessageService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function create(array $data)
+    public function create(array $data): JsonResource
     {
         return $this->resource(
             $this->messageRepository->create(Arr::get($data, 'data.attributes'))
@@ -98,9 +103,9 @@ class MessageService
      * @param string $id
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function updateType(string $id, array $data)
+    public function updateType(string $id, array $data): JsonResource
     {
         $message = $this->messageRepository->getOne($id);
         throw_if(!$message, NotFoundException::class);
@@ -117,9 +122,9 @@ class MessageService
      * @param string $id
      * @param array $data
      *
-     * @return mixed
+     * @return Response
      */
-    public function delete(string $id, array $data)
+    public function delete(string $id, array $data): Response
     {
         $ids = Arr::get($data, 'include');
         $ids[] = $id;

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\UnauthorizedException;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,9 +19,9 @@ class AuthService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return Response
      */
-    public function login(array $data)
+    public function login(array $data): Response
     {
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
         throw_if(!$token, UnauthorizedException::class);
@@ -43,9 +44,9 @@ class AuthService
     /**
      * Refresh token
      *
-     * @return mixed
+     * @return Response
      */
-    public function refresh()
+    public function refresh(): Response
     {
         $token = Auth::fromUser(auth()->user());
         Auth::invalidate();
@@ -56,9 +57,9 @@ class AuthService
     /**
      * Logout
      *
-     * @return mixed
+     * @return Response
      */
-    public function logout()
+    public function logout(): Response
     {
         Auth::invalidate();
         auth()->logout();

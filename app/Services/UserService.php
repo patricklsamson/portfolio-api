@@ -6,6 +6,9 @@ use App\Exceptions\Address\NotFoundException;
 use App\Repositories\User\UserRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
@@ -25,6 +28,8 @@ class UserService
      * Constructor
      *
      * @param UserRepository $userRepository
+     *
+     * @return void
      */
     public function __construct(UserRepository $userRepository)
     {
@@ -36,11 +41,15 @@ class UserService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(array $data)
+    public function getAll(array $data): ResourceCollection
     {
-        $users = $this->userRepository->getAll(Arr::get($data, 'include'));
+        $users = $this->userRepository->getAll(
+            Arr::get($data, 'include'),
+            Arr::get($data, 'sort')
+        );
+
         throw_if(!$users->count(), NotFoundException::class);
 
         return $this->resource($users);
@@ -51,9 +60,9 @@ class UserService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function profile(array $data)
+    public function profile(array $data): JsonResource
     {
         return $this->resource($this->userRepository->getOne(
             auth()->user()->id,
@@ -67,9 +76,9 @@ class UserService
      * @param string $id
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, array $data)
+    public function getOne(string $id, array $data): JsonResource
     {
         $user = $this->userRepository->getOne($id, Arr::get($data, 'include'));
         throw_if(!$user, NotFoundException::class);
@@ -82,9 +91,10 @@ class UserService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function create(array $data) {
+    public function create(array $data): JsonResource
+    {
         Arr::set($data, 'data.attributes.password', Hash::make(
             Arr::get($data, 'data.attributes.password')
         ));
@@ -101,9 +111,9 @@ class UserService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function update(array $data)
+    public function update(array $data): JsonResource
     {
         $id = auth()->user()->id;
         $this->userRepository->update($id, Arr::get($data, 'data.attributes'));
@@ -114,9 +124,9 @@ class UserService
     /**
      * Delete model
      *
-     * @return mixed
+     * @return Response
      */
-    public function delete()
+    public function delete(): Response
     {
         $this->userRepository->delete(auth()->user()->id);
 
