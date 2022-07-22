@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Address;
 use App\Models\Asset;
 use App\Models\Profile;
 use App\Models\User;
@@ -15,7 +14,7 @@ class UserSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         User::factory()
             ->hasMessages(2)

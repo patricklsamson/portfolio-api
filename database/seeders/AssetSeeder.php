@@ -3,8 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Asset;
-use App\Models\Address;
-use App\Models\Profile;
 use Illuminate\Database\Seeder;
 
 class AssetSeeder extends Seeder
@@ -14,7 +12,7 @@ class AssetSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Asset::factory()->create();
         Asset::factory()->project()->create();

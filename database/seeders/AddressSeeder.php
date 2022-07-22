@@ -14,7 +14,7 @@ class AddressSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Address::factory()->for(User::factory(), 'parentable')->create();
         Address::factory()->for(Asset::factory(), 'parentable')->create();

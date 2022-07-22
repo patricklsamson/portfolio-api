@@ -13,7 +13,7 @@ class ProfileSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Profile::factory()->forUser()->forAsset()->create();
 

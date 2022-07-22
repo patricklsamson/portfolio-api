@@ -12,7 +12,7 @@ class MessageSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
         Message::factory()->forUser()->create();
     }
