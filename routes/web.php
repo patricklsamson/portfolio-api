@@ -54,11 +54,6 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     $router->group(['prefix' => 'users'], function () use ($router, $requests) {
         $requests = "$requests\User";
 
-        $router->get('{id}', [
-            'uses' => 'UserController@getOne',
-            'middleware' => ["validate:$requests\GetUserRequest"]
-        ]);
-
         $router->post('', [
             'uses' => 'UserController@create',
             'middleware' => ["validate:$requests\CreateUserRequest"]
@@ -74,6 +69,11 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
 
             $router->get('profile', [
                 'uses' => 'UserController@profile',
+                'middleware' => ["validate:$requests\GetUserRequest"]
+            ]);
+
+            $router->get('{id}', [
+                'uses' => 'UserController@getOne',
                 'middleware' => ["validate:$requests\GetUserRequest"]
             ]);
 
@@ -139,6 +139,11 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\GetAssetRequest"]
         ]);
 
+        $router->get('types', [
+            'uses' => 'AssetController@getTypes',
+            'middleware' => ['auth']
+        ]);
+
         $router->get('{id}', [
             'uses' => 'AssetController@getOne',
             'middleware' => ["validate:$requests\GetAssetRequest"]
@@ -147,8 +152,6 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
         $router->group([
             'middleware' => ['auth']
         ], function () use ($router, $requests) {
-            $router->get('types', ['uses' => 'AssetController@getTypes']);
-
             $router->post('', [
                 'uses' => 'AssetController@create',
                 'middleware' => ["validate:$requests\CreateAssetRequest"]
