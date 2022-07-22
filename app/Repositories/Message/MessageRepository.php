@@ -3,6 +3,7 @@
 namespace App\Repositories\Message;
 
 use App\Models\Message;
+use Illuminate\Database\Eloquent\Collection;
 
 class MessageRepository implements MessageRepositoryInterface
 {
@@ -13,13 +14,13 @@ class MessageRepository implements MessageRepositoryInterface
      * @param ?array $filterTypes
      * @param ?array $ids
      *
-     * @return mixed
+     * @return Collection
      */
     public function getAll(
         array $includes = [],
         ?array $filterTypes = null,
         ?array $ids = null
-    ) {
+    ): Collection {
         return Message::with($includes)
             ->whereIdIn($ids)
             ->filterTypes($filterTypes)
@@ -32,9 +33,9 @@ class MessageRepository implements MessageRepositoryInterface
      * @param string $id
      * @param array $includes
      *
-     * @return mixed
+     * @return Message
      */
-    public function getOne(string $id, array $includes = [])
+    public function getOne(string $id, array $includes = []): Message
     {
         return Message::with($includes)->find($id);
     }
@@ -44,9 +45,9 @@ class MessageRepository implements MessageRepositoryInterface
      *
      * @param array $attributes
      *
-     * @return mixed
+     * @return Message
      */
-    public function create(array $attributes)
+    public function create(array $attributes): Message
     {
         return Message::create($attributes);
     }
@@ -57,9 +58,9 @@ class MessageRepository implements MessageRepositoryInterface
      * @param string $id
      * @param array $attributes
      *
-     * @return mixed
+     * @return Message
      */
-    public function update(string $id, array $attributes)
+    public function update(string $id, array $attributes): Message
     {
         return Message::where('id', $id)->update($attributes);
     }
@@ -69,9 +70,9 @@ class MessageRepository implements MessageRepositoryInterface
      *
      * @param array $ids
      *
-     * @return mixed
+     * @return int
      */
-    public function delete(array $ids)
+    public function delete(array $ids): int
     {
         return Message::destroy($ids);
     }
