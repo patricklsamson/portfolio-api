@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests\User;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\User;
-use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
 
-class UpdateUserRequest extends Request implements RequestInterface
+class UpdateUserRequest extends BaseRequest implements RequestInterface
 {
-    use ArrayTrait;
-
     /**
      * Get data to be validated from the request.
      *
@@ -32,24 +30,22 @@ class UpdateUserRequest extends Request implements RequestInterface
     {
         $attributes = 'data.attributes';
 
-        return [
-            'data' => 'required|array:attributes',
-            $attributes => self::strArrayConcat(
-                'required|array:',
+        return array_merge(
+            self::dataAttributesRules(
                 array_merge(User::ATTRIBUTES, ['password'])
-            ),
-            "$attributes.name" => 'nullable|string|min:1|max:100',
-            "$attributes.email" => 'nullable|string|min:1|max:50',
-            "$attributes.username" => 'nullable|string|min:1|max:50',
-            "$attributes.metadata" =>
-                'nullable|array:about,contacts,objective,websites',
-            "$attributes.metadata.about" => 'nullable|string|min:1',
-            "$attributes.metadata.contacts" => 'nullable|array',
-            "$attributes.metadata.contacts.*" => 'nullable|string|distinct',
-            "$attributes.metadata.objective" =>
-                "same:$attributes.metadata.about",
-            "$attributes.metadata.websites" => 'nullable|array',
-            "$attributes.metadata.websites.*" => 'nullable|string|distinct'
-        ];
+            ), [
+                "$attributes.name" => 'nullable|string|min:1|max:100',
+                "$attributes.email" => 'nullable|string|min:1|max:50',
+                "$attributes.username" => 'nullable|string|min:1|max:50',
+                "$attributes.metadata" =>
+                    'nullable|array:about,contacts,objective,websites',
+                "$attributes.metadata.about" => 'nullable|string|min:1',
+                "$attributes.metadata.contacts" => 'nullable|array',
+                "$attributes.metadata.contacts.*" => 'nullable|string|distinct',
+                "$attributes.metadata.objective" => 'nullable|string|min:1',
+                "$attributes.metadata.websites" => 'nullable|array',
+                "$attributes.metadata.websites.*" => 'nullable|string|distinct'
+            ]
+        );
     }
 }
