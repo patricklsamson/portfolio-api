@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests\Message;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class DeleteMessageRequest extends Request implements RequestInterface
+class DeleteMessageRequest extends BaseRequest implements RequestInterface
 {
-    use ArrayTrait;
-
     /**
      * Get data to be validated from the request.
      *
@@ -21,12 +19,7 @@ class DeleteMessageRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-
-        Arr::set(
-            $data,
-            'include',
-            self::strToArray(Arr::get($data, 'include'), [])
-        );
+        self::includeData($data);
 
         return $data;
     }
@@ -38,9 +31,6 @@ class DeleteMessageRequest extends Request implements RequestInterface
      */
     public function rules(): array
     {
-        return [
-            'include' => 'nullable|array',
-            'include.*' => 'nullable|integer|min:1'
-        ];
+        return self::includeRules('nullable|integer|min:1');
     }
 }

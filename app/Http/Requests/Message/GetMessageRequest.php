@@ -2,17 +2,15 @@
 
 namespace App\Http\Requests\Message;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Message;
 use App\Models\User;
-use App\Traits\ArrayTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class GetMessageRequest extends Request implements RequestInterface
+class GetMessageRequest extends BaseRequest implements RequestInterface
 {
-    use ArrayTrait;
-
     /**
      * Get data to be validated from the request.
      *
@@ -23,24 +21,9 @@ class GetMessageRequest extends Request implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-
-        Arr::set($data, 'fields.messages', self::strToArray(
-            Arr::get($data, 'fields.messages')
-        ));
-
-        Arr::set($data, 'fields.users', self::strToArray(
-            Arr::get($data, 'fields.users')
-        ));
-
-        Arr::set($data, 'filter.type', self::strToArray(
-            Arr::get($data, 'filter.type')
-        ));
-
-        Arr::set(
-            $data,
-            'include',
-            self::strToArray(Arr::get($data, 'include'), [])
-        );
+        self::fieldsData($data, ['messages', 'users']);
+        self::filterData($data, ['type']);
+        self::includeData($data);
 
         return $data;
     }
@@ -52,26 +35,17 @@ class GetMessageRequest extends Request implements RequestInterface
      */
     public function rules(): array
     {
-        return [
-            'fields' => 'nullable|array:messages,users',
-            'fields.messages.*' => self::strArrayConcat(
-                'nullable|string|distinct|in:',
-                Message::ATTRIBUTES
-            ),
-            'fields.users.*' => self::strArrayConcat(
-                'nullable|string|distinct|in:',
-                User::ATTRIBUTES
-            ),
-            'filter' => 'nullable|array:type',
-            'filter.type.*' => self::strArrayConcat(
-                'nullable|string|distinct|in:',
-                Message::TYPES
-            ),
-            'include' => 'nullable|array',
-            'include.*' => 'nullable|string|distinct|in:user',
-            'page' => 'nullable|array:number,size',
-            'page.number' => 'nullable|integer|min:1',
-            'page.size' => 'nullable|integer|min:1',
-        ];
+        return array_merge(
+            self::fieldsAllowed(['messages', 'users']),
+            self::fieldsMessagesRules(),
+            self::fieldsUsersRules(),
+            self::filterRules('type', Message::TYPES),
+            self::includeRules(['user']),
+            [
+                'page' => 'nullable|array:number,size',
+                'page.number' => 'nullable|integer|min:1',
+                'page.size' => 'nullable|integer|min:1',
+            ]
+        );
     }
 }

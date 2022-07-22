@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests\Message;
 
+use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
-class UpdateMessageRequest extends Request implements RequestInterface
+class UpdateMessageRequest extends BaseRequest implements RequestInterface
 {
     /**
      * Get data to be validated from the request.
@@ -29,11 +30,14 @@ class UpdateMessageRequest extends Request implements RequestInterface
     {
         $attributes = 'data.attributes';
 
-        return [
-            'data' => 'required|array:attributes',
-            $attributes => 'required|array:type',
-            "$attributes.type" => 'required|string|in:' .
-                implode(',', Message::TYPES)
-        ];
+        return array_merge(
+            self::dataAttributesRules(['type']),
+            [
+                "$attributes.type" => self::strArrayConcat(
+                    'required|string|in:',
+                    Message::TYPES
+                )
+            ]
+        );
     }
 }
