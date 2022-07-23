@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -26,17 +25,23 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      *
      * @param ?array $includes
      * @param ?array $sorts
+     * @param ?int $pageSize
+     * @param ?int $pageNumber
+     * @param ?string $pageCursor
      *
-     * @return ?Collection
+     * @return mixed
      */
     public function getAll(
         ?array $includes = null,
-        ?array $sorts = null
-    ): ?Collection {
+        ?array $sorts = null,
+        ?int $pageSize = null,
+        ?int $pageNumber = null,
+        ?string $pageCursor = null
+    ) {
         return $this->model
             ->include($includes)
             ->sort($sorts)
-            ->get();
+            ->page($pageSize, $pageNumber, $pageCursor);
     }
 
     /**

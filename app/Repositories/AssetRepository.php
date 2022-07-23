@@ -24,15 +24,18 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $includes
      * @param ?array $filterTypes
+     * @param ?array $includes
      *
-     * @return ?Collection
+     * @return mixed
      */
     public function getAll(
+        ?array $filterTypes = null,
         ?array $includes = null,
-        ?array $filterTypes = null
-    ): ?Collection {
+        ?int $pageSize = null,
+        ?int $pageNumber = null,
+        ?string $pageCursor = null
+    ) {
         return $this->model
             ->filterTypes($filterTypes)
             ->include($includes)

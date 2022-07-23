@@ -25,22 +25,28 @@ class MessageRepository extends BaseRepository implements
     /**
      * Get all models
      *
-     * @param ?array $includes
      * @param ?array $filterTypes
+     * @param ?array $includes
      * @param ?array $sorts
+     * @param ?int $pageSize
+     * @param ?int $pageNumber
+     * @param ?string $pageCursor
      *
-     * @return ?Collection
+     * @return mixed
      */
     public function getAll(
-        ?array $includes = null,
         ?array $filterTypes = null,
-        ?array $sorts = null
-    ): ?Collection {
+        ?array $includes = null,
+        ?array $sorts = null,
+        ?int $pageSize = null,
+        ?int $pageNumber = null,
+        ?string $pageCursor = null
+    ) {
         return $this->model
             ->filterTypes($filterTypes)
-            ->sort($sorts)
             ->include($includes)
-            ->get();
+            ->sort($sorts)
+            ->page($pageSize, $pageNumber, $pageCursor);
     }
 
     /**

@@ -44,8 +44,11 @@ class AssetService
     public function getAll(array $data): ResourceCollection
     {
         $assets = $this->assetRepository->getAll(
+            Arr::get($data, 'filter.type'),
             Arr::get($data, 'include'),
-            Arr::get($data, 'filter.type')
+            Arr::get($data, 'page.size'),
+            Arr::get($data, 'page.number'),
+            Arr::get($data, 'page.cursor')
         );
 
         throw_if(!$assets, NotFoundException::class);

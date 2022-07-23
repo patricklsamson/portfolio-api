@@ -46,8 +46,12 @@ class MessageService
     public function getAll(array $data): ResourceCollection
     {
         $messages = $this->messageRepository->getAll(
+            Arr::get($data, 'filter.type'),
             Arr::get($data, 'include'),
-            Arr::get($data, 'filter.type')
+            Arr::get($data, 'sort'),
+            Arr::get($data, 'page.size'),
+            Arr::get($data, 'page.number'),
+            Arr::get($data, 'page.cursor')
         );
 
         throw_if(!$messages->count(), NotFoundException::class);

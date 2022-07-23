@@ -47,7 +47,10 @@ class UserService
     {
         $users = $this->userRepository->getAll(
             Arr::get($data, 'include'),
-            Arr::get($data, 'sort')
+            Arr::get($data, 'sort'),
+            Arr::get($data, 'page.size'),
+            Arr::get($data, 'page.number'),
+            Arr::get($data, 'page.cursor')
         );
 
         throw_if(!$users->count(), NotFoundException::class);
