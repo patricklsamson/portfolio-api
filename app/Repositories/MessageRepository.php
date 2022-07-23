@@ -32,7 +32,7 @@ class MessageRepository extends BaseRepository implements
      * @param ?int $pageNumber
      * @param ?string $pageCursor
      *
-     * @return mixed
+     * @return ?object
      */
     public function getAll(
         ?array $filterTypes = null,
@@ -41,7 +41,7 @@ class MessageRepository extends BaseRepository implements
         ?int $pageSize = null,
         ?int $pageNumber = null,
         ?string $pageCursor = null
-    ) {
+    ): ?object {
         return $this->model
             ->filterTypes($filterTypes)
             ->include($includes)

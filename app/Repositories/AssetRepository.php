@@ -27,7 +27,7 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
      * @param ?array $filterTypes
      * @param ?array $includes
      *
-     * @return mixed
+     * @return ?object
      */
     public function getAll(
         ?array $filterTypes = null,
@@ -35,7 +35,7 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
         ?int $pageSize = null,
         ?int $pageNumber = null,
         ?string $pageCursor = null
-    ) {
+    ): ?object {
         return $this->model
             ->filterTypes($filterTypes)
             ->include($includes)

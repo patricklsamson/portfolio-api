@@ -29,7 +29,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param ?int $pageNumber
      * @param ?string $pageCursor
      *
-     * @return mixed
+     * @return ?object
      */
     public function getAll(
         ?array $includes = null,
@@ -37,7 +37,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         ?int $pageSize = null,
         ?int $pageNumber = null,
         ?string $pageCursor = null
-    ) {
+    ): ?object {
         return $this->model
             ->include($includes)
             ->sort($sorts)

@@ -15,7 +15,7 @@ interface UserRepositoryInterface
      * @param ?int $pageNumber
      * @param ?string $pageCursor
      *
-     * @return mixed
+     * @return ?object
      */
     public function getAll(
         ?array $includes = null,
@@ -23,7 +23,7 @@ interface UserRepositoryInterface
         ?int $pageSize = null,
         ?int $pageNumber = null,
         ?string $pageCursor = null
-    );
+    ): ?object;
 
     /**
      * Get one model
