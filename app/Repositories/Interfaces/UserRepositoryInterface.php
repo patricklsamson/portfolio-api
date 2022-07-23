@@ -3,7 +3,6 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 interface UserRepositoryInterface
 {
@@ -11,10 +10,20 @@ interface UserRepositoryInterface
      * Get all models
      *
      * @param ?array $includes
+     * @param ?array $sorts
+     * @param ?int $pageSize
+     * @param ?int $pageNumber
+     * @param ?string $pageCursor
      *
-     * @return ?Collection
+     * @return mixed
      */
-    public function getAll(?array $includes = null): ?Collection;
+    public function getAll(
+        ?array $includes = null,
+        ?array $sorts = null,
+        ?int $pageSize = null,
+        ?int $pageNumber = null,
+        ?string $pageCursor = null
+    );
 
     /**
      * Get one model

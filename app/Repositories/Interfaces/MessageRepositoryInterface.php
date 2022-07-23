@@ -10,15 +10,23 @@ interface MessageRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $includes
      * @param ?array $filterTypes
+     * @param ?array $includes
+     * @param ?array $sorts
+     * @param ?int $pageSize
+     * @param ?int $pageNumber
+     * @param ?string $pageCursor
      *
-     * @return ?Collection
+     * @return mixed
      */
     public function getAll(
+        ?array $filterTypes = null,
         ?array $includes = null,
-        ?array $filterTypes = null
-    ): ?Collection;
+        ?array $sorts = null,
+        ?int $pageSize = null,
+        ?int $pageNumber = null,
+        ?string $pageCursor = null
+    );
 
     /**
      * Get one model
