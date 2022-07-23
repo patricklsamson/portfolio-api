@@ -4,6 +4,7 @@ namespace App\Http\Requests\Asset;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
+use App\Models\Asset;
 use Illuminate\Http\Request;
 
 class GetAssetRequest extends BaseRequest implements RequestInterface
@@ -18,6 +19,10 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+        self::fieldsData($data, ['addresses', 'assets', 'profiles', 'users']);
+        self::filterData($data, ['type']);
+        self::includeData($data);
+        self::sortData($data);
 
         return $data;
     }
@@ -29,6 +34,17 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        return [];
+        return array_merge(
+            self::fieldsAllowedRule([
+                'addresses',
+                'assets',
+                'profiles',
+                'users'
+            ]),
+            self::fieldsAssetsRule(),
+            self::filterableAttributesRule(['type']),
+            self::filterValuesRule('type', Asset::TYPES),
+            self::includeRule(['profiles', 'address', 'users'])
+        );
     }
 }
