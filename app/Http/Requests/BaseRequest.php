@@ -26,9 +26,11 @@ class BaseRequest extends Request
     public function fieldsData(array &$data, array $fields): void
     {
         foreach ($fields as $field) {
-            Arr::set($data, "fields.$field", self::strToArray(
-                Arr::get($data, "fields.$field")
-            ));
+            if (Arr::has($data, "fields.$field")) {
+                Arr::set($data, "fields.$field", self::strToArray(
+                    Arr::get($data, "fields.$field")
+                ));
+            }
         }
     }
 
@@ -45,9 +47,11 @@ class BaseRequest extends Request
         array $filterableAttributes
     ): void {
         foreach ($filterableAttributes as $attribute) {
-            Arr::set($data, "filter.$attribute", self::strToArray(
-                Arr::get($data, "filter.$attribute")
-            ));
+            if (Arr::has($data, "filter.$attribute")) {
+                Arr::set($data, "filter.$attribute", self::strToArray(
+                    Arr::get($data, "filter.$attribute")
+                ));
+            }
         }
     }
 
@@ -60,11 +64,13 @@ class BaseRequest extends Request
      */
     public function includeData(array &$data): void
     {
-        Arr::set(
-            $data,
-            'include',
-            self::strToArray(Arr::get($data, 'include'), [])
-        );
+        if (Arr::has($data, 'include')) {
+            Arr::set(
+                $data,
+                'include',
+                self::strToArray(Arr::get($data, 'include'))
+            );
+        }
     }
 
     /**
@@ -76,10 +82,10 @@ class BaseRequest extends Request
      */
     public function sortData(array &$data): void
     {
-        $sorts = self::strToArray(Arr::get($data, 'sort'), []);
-        $formattedSorts = [];
+        if (Arr::has($data, 'sort')) {
+            $sorts = self::strToArray(Arr::get($data, 'sort'));
+            $formattedSorts = [];
 
-        if (!empty($sorts)) {
             foreach ($sorts as $sort) {
                 if ($sort[0] == '-') {
                     $formattedSorts[] = str_replace('-', '', $sort);
@@ -89,33 +95,34 @@ class BaseRequest extends Request
                     $formattedSorts[] = 'asc';
                 }
             }
-        }
 
-        Arr::set($data, 'sort', $formattedSorts);
+            Arr::set($data, 'sort', $formattedSorts);
+        }
     }
 
     /**
-     * Set fields allowed
+     * Set fields allowed rule
      *
      * @param array $fieldsAllowed
      *
      * @return array
      */
-    public function fieldsAllowed(array $fieldsAllowed): array
+    public function fieldsAllowedRule(array $fieldsAllowed): array
     {
         return [
-            'fields' => self::strArrayConcat('nullable|array:', $fieldsAllowed)
+            'fields' => self::strArrayConcat('filled|array:', $fieldsAllowed)
         ];
     }
 
     /**
-     * Set fields addresses rules
+     * Set fields addresses rule
      *
      * @return array
      */
-    public function fieldsAddressesRules(): array
+    public function fieldsAddressesRule(): array
     {
         return [
+            'fields.addresses' => 'filled|array',
             'fields.addresses.*' => self::strArrayConcat(
                 'required_with:fields.addresses|string|distinct|in:',
                 Address::ATTRIBUTES
@@ -124,13 +131,14 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields assets rules
+     * Set fields assets rule
      *
      * @return array
      */
-    public function fieldsAssetsRules(): array
+    public function fieldsAssetsRule(): array
     {
         return [
+            'fields.assets' => 'filled|array',
             'fields.assets.*' => self::strArrayConcat(
                 'required_with:fields.assets|string|distinct|in:',
                 Asset::ATTRIBUTES
@@ -139,13 +147,14 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields messages rules
+     * Set fields messages rule
      *
      * @return array
      */
-    public function fieldsMessagesRules(): array
+    public function fieldsMessagesRule(): array
     {
         return [
+            'fields.messages' => 'filled|array',
             'fields.messages.*' => self::strArrayConcat(
                 'required_with:fields.messages|string|distinct|in:',
                 Message::ATTRIBUTES
@@ -154,13 +163,14 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields profiles rules
+     * Set fields profiles rule
      *
      * @return array
      */
-    public function fieldsProfilesRules(): array
+    public function fieldsProfilesRule(): array
     {
         return [
+            'fields.profiles' => 'filled|array',
             'fields.profiles.*' => self::strArrayConcat(
                 'required_with:fields.profiles|string|distinct|in:',
                 Profile::ATTRIBUTES
@@ -169,13 +179,14 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields users rules
+     * Set fields users rule
      *
      * @return array
      */
-    public function fieldsUsersRules(): array
+    public function fieldsUsersRule(): array
     {
         return [
+            'fields.users' => 'filled|array',
             'fields.users.*' => self::strArrayConcat(
                 'required_with:fields.users|string|distinct|in:',
                 User::ATTRIBUTES
@@ -183,12 +194,34 @@ class BaseRequest extends Request
         ];
     }
 
-    public function filterRules(
+    /**
+     * Set filterable attributes rule
+     *
+     * @param array $filterableAttributes
+     *
+     * @return array
+     */
+    public function filterableAttributesRule(array $filterableAttributes): array
+    {
+        return [
+            'filter' => self::strArrayConcat(
+                'filled|array:',
+                $filterableAttributes
+            )
+        ];
+    }
+
+    /**
+     * Set filter values rule
+     *
+     * @return array
+     */
+    public function filterValuesRule(
         string $filterableAttribute,
         array $enumValues
     ): array {
         return [
-            'filter' => "nullable|array:$filterableAttribute",
+            "filter.$filterableAttribute" => 'filled|array',
             "filter.$filterableAttribute.*" => self::strArrayConcat(
                 "required_with:filter.$filterableAttribute|string|distinct|in:",
                 $enumValues
@@ -197,49 +230,49 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set include rules
+     * Set include rule
      *
      * @param mixed $rule
      *
      * @return array
      */
-    public function includeRules($rule): array
+    public function includeRule($rule): array
     {
         return [
-            'include' => 'nullable|array',
+            'include' => 'filled|array',
             'include.*' => is_array($rule) ? self::strArrayConcat(
                 'required_with:include|string|distinct|in:',
                 $rule
-            ) : $rule
+            ) : "required_with:include|$rule"
         ];
     }
 
     /**
-     * Set sort rules
+     * Set sort rule
      *
      * @param array $sortableAttributes
      *
      * @return array
      */
-    public function sortRules(array $sortableAttributes): array
+    public function sortRule(array $sortableAttributes): array
     {
         return [
-            'sort' => 'nullable|array',
+            'sort' => 'filled|array',
             'sort.*' => self::strArrayConcat(
-                'nullable|string|in:asc,desc,',
+                'required_with:sort|string|in:asc,desc,',
                 $sortableAttributes
             )
         ];
     }
 
     /**
-     * Set data attributes rules
+     * Set data attributes rule
      *
      * @param array $attributes
      *
      * @return array
      */
-    public function dataAttributesRules(array $attributes): array
+    public function dataAttributesRule(array $attributes): array
     {
         return [
             'data' => 'required|array:attributes',
