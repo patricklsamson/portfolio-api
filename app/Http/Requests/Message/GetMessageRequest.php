@@ -22,6 +22,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
         self::fieldsData($data, ['messages', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
+        self::sortData($data);
 
         return $data;
     }
@@ -40,7 +41,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
             self::filterableAttributesRule(['type']),
             self::filterValuesRule('type', Message::TYPES),
             self::includeRule(['user']),
-            self::sortData(Message::ATTRIBUTES),
+            self::sortRule(Message::ATTRIBUTES),
             self::pageRule()
         );
     }
