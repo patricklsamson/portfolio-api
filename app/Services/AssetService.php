@@ -4,9 +4,12 @@ namespace App\Services;
 
 use App\Exceptions\NotFoundException;
 use App\Models\Asset;
-use App\Repositories\Asset\AssetRepository;
+use App\Repositories\AssetRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
 class AssetService
@@ -36,9 +39,9 @@ class AssetService
      *
      * @param array $data
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(array $data)
+    public function getAll(array $data): ResourceCollection
     {
         $assets = $this->assetRepository->getAll(
             Arr::get($data, 'include'),
@@ -53,9 +56,9 @@ class AssetService
     /**
      * Get types
      *
-     * @return mixed
+     * @return Response
      */
-    public function getTypes()
+    public function getTypes(): Response
     {
         return response($this->groupContent(Asset::TYPES, ['name']));
     }
@@ -66,9 +69,9 @@ class AssetService
      * @param string $id
      * @param array $data
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, array $data)
+    public function getOne(string $id, array $data): JsonResource
     {
         $asset = $this->assetRepository
             ->getOne($id, Arr::get($data, 'include'));
@@ -82,8 +85,10 @@ class AssetService
      * Create model
      *
      * @param array $data
+     *
+     * @return JsonResource
      */
-    public function create(array $data)
+    public function create(array $data): JsonResource
     {
         return $this->resource(
             $this->assetRepository->create(Arr::get($data, 'data.attributes'))
@@ -95,14 +100,15 @@ class AssetService
      *
      * @param string $id
      * @param array $data
+     *
+     * @return JsonResource
      */
-    public function update(string $id, array $data)
+    public function update(string $id, array $data): JsonResource
     {
-        $asset = $this->assetRepository->getOne($id);
-        throw_if(!$asset, NotFoundException::class);
-        $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
+        $assetId = $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
+        throw_if(!$assetId, NotFoundException::class);
 
-        return $this->resource($this->assetRepository->getOne($id));
+        return $this->resource($this->assetRepository->getOne($assetId));
     }
 
     /**
@@ -110,15 +116,20 @@ class AssetService
      *
      * @param string $id
      * @param array $data
+     *
+     * @return Response
      */
-    public function delete(string $id, array $data)
+    public function delete(string $id, array $data): Response
     {
         $ids = Arr::get($data, 'include');
         $ids[] = $id;
         $ids = array_unique($ids, SORT_REGULAR);
-        $assets = $this->assetRepository->getAll([], null, null, $ids);
-        throw_if(!$assets, NotFoundException::class);
-        $this->assetRepository->delete($ids);
+
+        throw_if(!$this->assetRepository->get, NotFoundException::class);
+        $assetIds = $this->assetRepository->delete(
+            array_unique($ids, SORT_REGULAR)
+        );
+
 
         return response($this->content(['success' => true]));
     }

@@ -27,7 +27,7 @@ class AuthService
         throw_if(!$token, UnauthorizedException::class);
         $content = $this->tokenContent($token);
 
-        if (Arr::get($data, 'include') == 'user') {
+        if (Arr::get($data, 'include.0') == 'user') {
             Arr::set($content, 'data.relationships.user.data', [
                 'id' => auth()->user()->id,
                 'type' => 'users'

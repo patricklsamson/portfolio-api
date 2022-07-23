@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\NotFoundException;
 use App\Models\Message;
-use App\Repositories\Message\MessageRepository;
+use App\Repositories\MessageRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -107,13 +107,15 @@ class MessageService
      */
     public function updateType(string $id, array $data): JsonResource
     {
-        $message = $this->messageRepository->getOne($id);
-        throw_if(!$message, NotFoundException::class);
+        throw_if(
+            !$message = $this->messageRepository->getOne($id),
+            NotFoundException::class
+        );
 
         $this->messageRepository
             ->update($id, Arr::get($data, 'data.attributes'));
 
-        return $this->resource($this->messageRepository->getOne($id));
+        return $this->resource($message);
     }
 
     /**
@@ -129,8 +131,12 @@ class MessageService
         $ids = Arr::get($data, 'include');
         $ids[] = $id;
         $ids = array_unique($ids, SORT_REGULAR);
-        $messages = $this->messageRepository->getAll([], null, $ids);
-        throw_if(!$messages->count(), NotFoundException::class);
+
+        throw_if(
+            !$this->messageRepository->getAllByIdIn($ids),
+            NotFoundException::class
+        );
+
         $this->messageRepository->delete($ids);
 
         return response($this->content(['success' => true]));

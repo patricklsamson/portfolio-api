@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\Address\NotFoundException;
-use App\Repositories\User\UserRepository;
+use App\Repositories\UserRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
