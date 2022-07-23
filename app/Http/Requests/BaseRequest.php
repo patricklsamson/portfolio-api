@@ -274,7 +274,7 @@ class BaseRequest extends Request
         return [
             'sort' => 'filled|array',
             'sort.*' => self::strArrayConcat(
-                'required_with:sort|string|in:asc,desc,created_at',
+                'required_with:sort|string|in:asc,desc,created_at,',
                 $sortableAttributes
             )
         ];
