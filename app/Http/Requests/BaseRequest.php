@@ -248,6 +248,21 @@ class BaseRequest extends Request
     }
 
     /**
+     * Set page rule
+     *
+     * @return array
+     */
+    public function pageRule(): array
+    {
+        return [
+            'page' => 'filled|array:cursor,number,size',
+            'page.cursor' => 'filled|integer|min:1',
+            'page.number' => 'filled|integer|min:1',
+            'page.size' => 'filled|integer|min:1'
+        ];
+    }
+
+    /**
      * Set sort rule
      *
      * @param array $sortableAttributes
@@ -259,7 +274,7 @@ class BaseRequest extends Request
         return [
             'sort' => 'filled|array',
             'sort.*' => self::strArrayConcat(
-                'required_with:sort|string|in:asc,desc,',
+                'required_with:sort|string|in:asc,desc,created_at',
                 $sortableAttributes
             )
         ];

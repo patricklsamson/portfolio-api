@@ -40,11 +40,8 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
             self::filterableAttributesRule(['type']),
             self::filterValuesRule('type', Message::TYPES),
             self::includeRule(['user']),
-            [
-                'page' => 'nullable|array:number,size',
-                'page.number' => 'nullable|integer|min:1',
-                'page.size' => 'nullable|integer|min:1',
-            ]
+            self::sortData(Message::ATTRIBUTES),
+            self::pageRule()
         );
     }
 }

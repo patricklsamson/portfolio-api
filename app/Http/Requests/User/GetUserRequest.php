@@ -53,11 +53,7 @@ class GetUserRequest extends BaseRequest implements RequestInterface
                 'profiles'
             ]),
             self::sortRule(User::ATTRIBUTES),
-            [
-                'page' => 'nullable|array:number,size',
-                'page.number' => 'nullable|integer|min:1',
-                'page.size' => 'nullable|integer|min:1'
-            ]
+            self::pageRule()
         );
     }
 }
