@@ -10,11 +10,11 @@ trait ResourceTrait
     /**
      * Make resource/collection from model
      *
-     * @param object $model
+     * @param ?object $model
      *
-     * @return object
+     * @return ?object
      */
-    public function resource(object $model): object
+    public function resource(?object $model): ?object
     {
         if (!$model || !$model->count()) {
             return null;
