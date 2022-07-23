@@ -19,7 +19,15 @@ class GetUserRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
-        self::fieldsData($data, ['messages', 'users']);
+
+        self::fieldsData($data, [
+            'addresses',
+            'assets',
+            'messages',
+            'profiles',
+            'users'
+        ]);
+
         self::includeData($data);
         self::sortData($data);
 
