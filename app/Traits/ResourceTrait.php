@@ -2,6 +2,9 @@
 
 namespace App\Traits;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+
 trait ResourceTrait
 {
     /**
@@ -17,7 +20,11 @@ trait ResourceTrait
             return null;
         }
 
-        $resource = class_basename($model) == 'Collection' ?
+        $isCollection = class_basename($model) == 'Collection' ||
+            class_basename($model) == 'LengthAwarePaginator' ||
+            class_basename($model) == 'CursorPaginator';
+
+        $resource = $isCollection ?
             'App\Http\Resources\\' . class_basename($model[0]) . '\\' .
                 class_basename($model[0]) . 'Collection' :
             'App\Http\Resources\\' . class_basename($model) . '\\' .
