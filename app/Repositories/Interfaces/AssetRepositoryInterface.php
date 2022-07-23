@@ -3,7 +3,6 @@
 namespace App\Repositories\Interfaces;
 
 use App\Models\Asset;
-use Illuminate\Database\Eloquent\Collection;
 
 interface AssetRepositoryInterface
 {
