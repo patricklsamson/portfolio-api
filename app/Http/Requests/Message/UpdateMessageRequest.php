@@ -31,7 +31,7 @@ class UpdateMessageRequest extends BaseRequest implements RequestInterface
         $attributes = 'data.attributes';
 
         return array_merge(
-            self::dataAttributesRules(['type']),
+            self::dataAttributesRule(['type']),
             [
                 "$attributes.type" => self::strArrayConcat(
                     'required|string|in:',

@@ -5,9 +5,7 @@ namespace App\Http\Requests\Message;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Message;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class GetMessageRequest extends BaseRequest implements RequestInterface
 {
@@ -36,11 +34,12 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         return array_merge(
-            self::fieldsAllowed(['messages', 'users']),
-            self::fieldsMessagesRules(),
-            self::fieldsUsersRules(),
-            self::filterRules('type', Message::TYPES),
-            self::includeRules(['user']),
+            self::fieldsAllowedRule(['messages', 'users']),
+            self::fieldsMessagesRule(),
+            self::fieldsUsersRule(),
+            self::filterableAttributesRule(['type']),
+            self::filterValuesRule('type', Message::TYPES),
+            self::includeRule(['user']),
             [
                 'page' => 'nullable|array:number,size',
                 'page.number' => 'nullable|integer|min:1',

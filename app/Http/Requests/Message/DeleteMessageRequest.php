@@ -5,7 +5,6 @@ namespace App\Http\Requests\Message;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class DeleteMessageRequest extends BaseRequest implements RequestInterface
 {
@@ -31,6 +30,6 @@ class DeleteMessageRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        return self::includeRules('nullable|integer|min:1');
+        return self::includeRule('integer|min:1');
     }
 }

@@ -31,7 +31,7 @@ class CreateMessageRequest extends BaseRequest implements RequestInterface
         $attributes = 'data.attributes';
 
         return array_merge(
-            self::dataAttributesRules(Message::ATTRIBUTES),
+            self::dataAttributesRule(Message::ATTRIBUTES),
             [
                 "$attributes.sender" => 'required|string|min:1|max:100',
                 "$attributes.email" => 'required|string|min:1|max:50',
