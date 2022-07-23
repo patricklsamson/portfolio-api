@@ -40,7 +40,7 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
                 "$attributes.password" =>
                     'nullable|string|confirmed|min:1|max:100',
                 "$attributes.metadata" =>
-                    'nullable|array:about,contacts,objective,websites',
+                    'filled|array:about,contacts,objective,websites',
                 "$attributes.metadata.about" => 'nullable|string|min:1',
                 "$attributes.metadata.contacts" => 'nullable|array',
                 "$attributes.metadata.contacts.*" => 'nullable|string|distinct',
