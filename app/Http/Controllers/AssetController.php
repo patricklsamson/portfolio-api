@@ -7,6 +7,9 @@ use App\Http\Requests\Asset\GetAssetRequest;
 use App\Http\Requests\Asset\UpdateAssetRequest;
 use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Services\AssetService;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class AssetController extends Controller
 {
@@ -32,9 +35,9 @@ class AssetController extends Controller
      *
      * @param GetAssetRequest $request
      *
-     * @return mixed
+     * @return ResourceCollection
      */
-    public function getAll(GetAssetRequest $request)
+    public function getAll(GetAssetRequest $request): ResourceCollection
     {
         return $this->assetService->getAll($request->data($request));
     }
@@ -42,9 +45,9 @@ class AssetController extends Controller
     /**
      * Get types
      *
-     * @return mixed
+     * @return Response
      */
-    public function getTypes()
+    public function getTypes(): Response
     {
         return $this->assetService->getTypes();
     }
@@ -55,9 +58,9 @@ class AssetController extends Controller
      * @param string $id
      * @param GetAssetRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function getOne(string $id, GetAssetRequest $request)
+    public function getOne(string $id, GetAssetRequest $request): JsonResource
     {
         return $this->assetService->getOne($id, $request->data($request));
     }
@@ -67,9 +70,9 @@ class AssetController extends Controller
      *
      * @param CreateAssetRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function create(CreateAssetRequest $request)
+    public function create(CreateAssetRequest $request): JsonResource
     {
         return $this->assetService->create($request->data($request));
     }
@@ -80,10 +83,12 @@ class AssetController extends Controller
      * @param string $id
      * @param UpdateAssetRequest $request
      *
-     * @return mixed
+     * @return JsonResource
      */
-    public function update(string $id, UpdateAssetRequest $request)
-    {
+    public function update(
+        string $id,
+        UpdateAssetRequest $request
+    ): JsonResource {
         return $this->assetService->update($id, $request->data($request));
     }
 
@@ -93,9 +98,9 @@ class AssetController extends Controller
      * @param string $id
      * @param DeleteMessageRequest $request
      *
-     * @return mixed
+     * @return Response
      */
-    public function delete(string $id, DeleteMessageRequest $request)
+    public function delete(string $id, DeleteMessageRequest $request): Response
     {
         return $this->assetService->delete($id, $request->data($request));
     }
