@@ -30,7 +30,7 @@ class CreateUserRequest extends BaseRequest implements RequestInterface
         $attributes = 'data.attributes';
 
         return array_merge(
-            self::dataAttributesRules([
+            self::dataAttributesRule([
                 'name',
                 'email',
                 'username',

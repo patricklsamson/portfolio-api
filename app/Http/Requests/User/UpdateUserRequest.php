@@ -31,12 +31,14 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
         $attributes = 'data.attributes';
 
         return array_merge(
-            self::dataAttributesRules(
+            self::dataAttributesRule(
                 array_merge(User::ATTRIBUTES, ['password'])
             ), [
                 "$attributes.name" => 'nullable|string|min:1|max:100',
                 "$attributes.email" => 'nullable|string|min:1|max:50',
                 "$attributes.username" => 'nullable|string|min:1|max:50',
+                "$attributes.password" =>
+                    'nullable|string|confirmed|min:1|max:100',
                 "$attributes.metadata" =>
                     'nullable|array:about,contacts,objective,websites',
                 "$attributes.metadata.about" => 'nullable|string|min:1',

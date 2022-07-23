@@ -4,10 +4,6 @@ namespace App\Http\Requests\User;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Models\Address;
-use App\Models\Asset;
-use App\Models\Message;
-use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -38,25 +34,25 @@ class GetUserRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         return array_merge(
-            self::fieldsAllowed([
+            self::fieldsAllowedRule([
                 'addresses',
                 'assets',
                 'messages',
                 'profiles',
                 'users'
             ]),
-            self::fieldsAddressesRules(),
-            self::fieldsAssetsRules(),
-            self::fieldsMessagesRules(),
-            self::fieldsProfilesRules(),
-            self::fieldsUsersRules(),
-            self::includeRules([
+            self::fieldsAddressesRule(),
+            self::fieldsAssetsRule(),
+            self::fieldsMessagesRule(),
+            self::fieldsProfilesRule(),
+            self::fieldsUsersRule(),
+            self::includeRule([
                 'address',
                 'assets',
                 'messages',
                 'profiles'
             ]),
-            self::sortRules(User::ATTRIBUTES),
+            self::sortRule(User::ATTRIBUTES),
             [
                 'page' => 'nullable|array:number,size',
                 'page.number' => 'nullable|integer|min:1',
