@@ -24,11 +24,14 @@ trait ResourceTrait
             class_basename($model) == 'LengthAwarePaginator' ||
             class_basename($model) == 'CursorPaginator';
 
-        $resource = $isCollection ?
-            'App\Http\Resources\\' . class_basename($model[0]) . '\\' .
-                class_basename($model[0]) . 'Collection' :
-            'App\Http\Resources\\' . class_basename($model) . '\\' .
-                class_basename($model) . 'Resource';
+        $resourceCollection = 'App\Http\Resources\\' .
+            class_basename($model[0]) . '\\' . class_basename($model[0]) .
+            'Collection';
+
+        $jsonResource = 'App\Http\Resources\\' . class_basename($model) . '\\' .
+            class_basename($model) . 'Resource';
+
+        $resource = $isCollection ? $resourceCollection : $jsonResource;
 
         return new $resource($model);
     }
