@@ -108,10 +108,14 @@ class AssetService
      */
     public function update(string $id, array $data): JsonResource
     {
-        $assetId = $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
-        throw_if(!$assetId, NotFoundException::class);
+        throw_if(
+            !$asset = $this->assetRepository->getOne($id),
+            NotFoundException::class
+        );
 
-        return $this->resource($this->assetRepository->getOne($assetId));
+        $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        return $this->resource($asset);
     }
 
     /**
@@ -128,11 +132,12 @@ class AssetService
         $ids[] = $id;
         $ids = array_unique($ids, SORT_REGULAR);
 
-        throw_if(!$this->assetRepository->get, NotFoundException::class);
-        $assetIds = $this->assetRepository->delete(
-            array_unique($ids, SORT_REGULAR)
+        throw_if(
+            !$this->assetRepository->getAllByIdIn($ids),
+            NotFoundException::class
         );
 
+        $this->assetRepository->delete($ids);
 
         return response($this->content(['success' => true]));
     }
