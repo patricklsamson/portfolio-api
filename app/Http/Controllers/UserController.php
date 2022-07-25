@@ -38,7 +38,7 @@ class UserController extends Controller
      */
     public function getAll(GetUserRequest $request): ResourceCollection
     {
-        return $this->userService->getAll($request->data($request));
+        return $this->userService->getAll($request);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserController extends Controller
      */
     public function profile(GetUserRequest $request): JsonResource
     {
-        return $this->userService->profile($request->data($request));
+        return $this->userService->profile($request);
     }
 
     /**
@@ -63,7 +63,7 @@ class UserController extends Controller
      */
     public function getOne(string $id, GetUserRequest $request): JsonResource
     {
-        return $this->userService->getOne($id, $request->data($request));
+        return $this->userService->getOne($id, $request);
     }
 
     /**
@@ -75,7 +75,7 @@ class UserController extends Controller
      */
     public function create(CreateUserRequest $request): JsonResource
     {
-        return $this->userService->create($request->data($request));
+        return $this->userService->create($request);
     }
 
     /**
@@ -87,7 +87,7 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request): JsonResource
     {
-        return $this->userService->update($request->data($request));
+        return $this->userService->update($request);
     }
 
     /**

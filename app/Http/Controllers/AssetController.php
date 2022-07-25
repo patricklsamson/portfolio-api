@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Asset\CreateAssetRequest;
+use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
 use App\Http\Requests\Asset\UpdateAssetRequest;
-use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Services\AssetService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -39,7 +39,7 @@ class AssetController extends Controller
      */
     public function getAll(GetAssetRequest $request): ResourceCollection
     {
-        return $this->assetService->getAll($request->data($request));
+        return $this->assetService->getAll($request);
     }
 
     /**
@@ -62,7 +62,7 @@ class AssetController extends Controller
      */
     public function getOne(string $id, GetAssetRequest $request): JsonResource
     {
-        return $this->assetService->getOne($id, $request->data($request));
+        return $this->assetService->getOne($id, $request);
     }
 
     /**
@@ -74,7 +74,7 @@ class AssetController extends Controller
      */
     public function create(CreateAssetRequest $request): JsonResource
     {
-        return $this->assetService->create($request->data($request));
+        return $this->assetService->create($request);
     }
 
     /**
@@ -89,19 +89,19 @@ class AssetController extends Controller
         string $id,
         UpdateAssetRequest $request
     ): JsonResource {
-        return $this->assetService->update($id, $request->data($request));
+        return $this->assetService->update($id, $request);
     }
 
     /**
      * Delete model
      *
      * @param string $id
-     * @param DeleteMessageRequest $request
+     * @param DeleteAssetRequest $request
      *
      * @return Response
      */
-    public function delete(string $id, DeleteMessageRequest $request): Response
+    public function delete(string $id, DeleteAssetRequest $request): Response
     {
-        return $this->assetService->delete($id, $request->data($request));
+        return $this->assetService->delete($id, $request);
     }
 }

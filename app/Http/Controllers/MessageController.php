@@ -41,7 +41,7 @@ class MessageController extends Controller
      */
     public function getAll(GetMessageRequest $request): ResourceCollection
     {
-        return $this->messageService->getAll($request->data($request));
+        return $this->messageService->getAll($request);
     }
 
     /**
@@ -64,7 +64,7 @@ class MessageController extends Controller
      */
     public function getOne(string $id, GetMessageRequest $request): JsonResource
     {
-        return $this->messageService->getOne($id, $request->data($request));
+        return $this->messageService->getOne($id, $request);
     }
 
     /**
@@ -76,7 +76,7 @@ class MessageController extends Controller
      */
     public function create(CreateMessageRequest $request): JsonResource
     {
-        return $this->messageService->create($request->data($request));
+        return $this->messageService->create($request);
     }
 
     /**
@@ -91,7 +91,7 @@ class MessageController extends Controller
         string $id,
         UpdateMessageRequest $request
     ): JsonResource {
-        return $this->messageService->updateType($id, $request->data($request));
+        return $this->messageService->updateType($id, $request);
     }
 
     /**
@@ -104,6 +104,6 @@ class MessageController extends Controller
      */
     public function delete(string $id, DeleteMessageRequest $request): Response
     {
-        return $this->messageService->delete($id, $request->data($request));
+        return $this->messageService->delete($id, $request);
     }
 }
