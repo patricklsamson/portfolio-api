@@ -46,6 +46,7 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
             self::dataAttributesRule(Asset::ATTRIBUTES),
             [
                 "$attributes.name" => 'required|string|min:1|max:100',
+                "$attributes.slug" => 'required|string|min:1|max:100',
                 "$attributes.type" => self::strArrayConcat(
                     'required|string|in:',
                     Asset::TYPES
