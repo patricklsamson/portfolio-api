@@ -29,6 +29,7 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         $attributes = 'data.attributes';
+        $metadata = "$attributes.metadata";
 
         return array_merge(
             self::dataAttributesRule(
@@ -39,14 +40,15 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
                 "$attributes.username" => 'nullable|string|min:1|max:50',
                 "$attributes.password" =>
                     'nullable|string|confirmed|min:1|max:100',
-                "$attributes.metadata" =>
-                    'filled|array:about,contacts,objective,websites',
-                "$attributes.metadata.about" => 'nullable|string|min:1',
-                "$attributes.metadata.contacts" => 'nullable|array',
-                "$attributes.metadata.contacts.*" => 'nullable|string|distinct',
-                "$attributes.metadata.objective" => 'nullable|string|min:1',
-                "$attributes.metadata.websites" => 'nullable|array',
-                "$attributes.metadata.websites.*" => 'nullable|string|distinct'
+                $metadata => 'filled|array:about,contacts,objective,websites',
+                "$metadata.about" => 'nullable|string|min:1',
+                "$metadata.contacts" => 'filled|array',
+                "$metadata.contacts.*" =>
+                    "required_with:$metadata.contacts|string|distinct",
+                "$metadata.objective" => 'nullable|string|min:1',
+                "$metadata.websites" => 'filled|array',
+                "$metadata.websites.*" =>
+                    "required_with:$metadata.websites|string|distinct"
             ]
         );
     }
