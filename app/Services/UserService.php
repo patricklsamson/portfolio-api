@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Exceptions\Address\NotFoundException;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\GetUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
 use App\Repositories\UserRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
@@ -39,12 +42,14 @@ class UserService
     /**
      * Get all models
      *
-     * @param array $data
+     * @param GetUserRequest $request
      *
      * @return ResourceCollection
      */
-    public function getAll(array $data): ResourceCollection
+    public function getAll(GetUserRequest $request): ResourceCollection
     {
+        $data = $request->data($request);
+
         $users = $this->userRepository->getAll(
             Arr::get($data, 'include'),
             Arr::get($data, 'sort'),
@@ -61,12 +66,14 @@ class UserService
     /**
      * Profile
      *
-     * @param array $data
+     * @param GetUserRequest $request
      *
      * @return JsonResource
      */
-    public function profile(array $data): JsonResource
+    public function profile(GetUserRequest $request): JsonResource
     {
+        $data = $request->data($request);
+
         return $this->resource($this->userRepository->getOne(
             auth()->user()->id,
             Arr::get($data, 'include')
@@ -77,13 +84,17 @@ class UserService
      * Get one model
      *
      * @param string $id
-     * @param array $data
+     * @param GetUserRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, array $data): JsonResource
+    public function getOne(string $id, GetUserRequest $request): JsonResource
     {
-        $user = $this->userRepository->getOne($id, Arr::get($data, 'include'));
+        $user = $this->userRepository->getOne($id, Arr::get(
+            $request->data($request),
+            'include'
+        ));
+
         throw_if(!$user, NotFoundException::class);
 
         return $this->resource($user);
@@ -92,12 +103,14 @@ class UserService
     /**
      * Create model
      *
-     * @param array $data
+     * @param CreateUserRequest $request
      *
      * @return JsonResource
      */
-    public function create(array $data): JsonResource
+    public function create(CreateUserRequest $request): JsonResource
     {
+        $data = $request->data($request);
+
         Arr::set($data, 'data.attributes.password', Hash::make(
             Arr::get($data, 'data.attributes.password')
         ));
@@ -112,14 +125,18 @@ class UserService
     /**
      * Update model
      *
-     * @param array $data
+     * @param UpdateUserRequest $request
      *
      * @return JsonResource
      */
-    public function update(array $data): JsonResource
+    public function update(UpdateUserRequest $request): JsonResource
     {
         $id = auth()->user()->id;
-        $this->userRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        $this->userRepository->update($id, Arr::get(
+            $request->data($request),
+            'data.attributes'
+        ));
 
         return $this->resource($this->userRepository->getOne($id));
     }

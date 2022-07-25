@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\UnauthorizedException;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Response;
@@ -17,12 +18,13 @@ class AuthService
     /**
      * Login
      *
-     * @param array $data
+     * @param LoginRequest $request
      *
      * @return Response
      */
-    public function login(array $data): Response
+    public function login(LoginRequest $request): Response
     {
+        $data = $request->data($request);
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
         throw_if(!$token, UnauthorizedException::class);
         $content = $this->tokenContent($token);
