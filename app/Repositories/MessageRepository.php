@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Models\Message;
 use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\MessageRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class MessageRepository extends BaseRepository implements
     MessageRepositoryInterface
