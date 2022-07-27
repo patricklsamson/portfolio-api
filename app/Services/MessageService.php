@@ -8,7 +8,6 @@ use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
 use App\Models\Message;
-use App\Repositories\MessageRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,29 +15,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class MessageService
+class MessageService extends BaseService
 {
     use ResourceTrait;
     use ResponseTrait;
-
-    /**
-     * Model repository
-     *
-     * @var MessageRepository
-     */
-    private $messageRepository;
-
-    /**
-     * Constructor
-     *
-     * @param MessageRepository $messageRepository
-     *
-     * @return void
-     */
-    public function __construct(MessageRepository $messageRepository)
-    {
-        $this->messageRepository = $messageRepository;
-    }
 
     /**
      * Get all models

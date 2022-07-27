@@ -8,7 +8,6 @@ use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
 use App\Http\Requests\Asset\UpdateAssetRequest;
 use App\Models\Asset;
-use App\Repositories\AssetRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,27 +15,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class AssetService
+class AssetService extends BaseService
 {
     use ResourceTrait;
     use ResponseTrait;
-
-    /**
-     * Asset repository
-     *
-     * @var AssetRepository
-     */
-    private $assetRepository;
-
-    /**
-     * Constructor
-     *
-     * @param AssetRepository $assetRepository
-     */
-    public function __construct(AssetRepository $assetRepository)
-    {
-        $this->assetRepository = $assetRepository;
-    }
 
     /**
      * Get all models
@@ -99,9 +81,25 @@ class AssetService
      */
     public function create(CreateAssetRequest $request): JsonResource
     {
-        return $this->resource($this->assetRepository->create(
+        $data = $request->data($request);
+        $asset = $this->assetRepository->create(
             Arr::get($request->data($request), 'data.attributes')
-        ));
+        );
+
+        if (Arr::has($data, 'data.relationships.address')) {
+            $address = 'data.relationships.address.data.attributes';
+            $type = get_class($this->assetRepository->model);
+
+            Arr::set($data, "$address.parentable_id", $asset->id);
+            Arr::set($data, "$address.parentable_type", $type);
+
+            $this->addressRepository->updateOrCreate(
+                ['parentable_id' => $asset->id, 'parentable_type' => $type],
+                Arr::get($data, $address)
+            );
+        }
+
+        return $this->resource($asset);
     }
 
     /**
@@ -121,10 +119,22 @@ class AssetService
             NotFoundException::class
         );
 
-        $this->assetRepository->update($id, Arr::get(
-            $request->data($request),
-            'data.attributes'
-        ));
+        $data = $request->data($request);
+
+        $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        if (Arr::has($data, 'data.relationships.address')) {
+            $address = 'data.relationships.address.data.attributes';
+            $type = get_class($this->assetRepository->model);
+
+            Arr::set($data, "$address.parentable_id", $id);
+            Arr::set($data, "$address.parentable_type", $type);
+
+            $this->addressRepository->updateOrCreate(
+                ['parentable_id' => $id, 'parentable_type' => $type],
+                Arr::get($data, $address)
+            );
+        }
 
         return $this->resource($asset);
     }

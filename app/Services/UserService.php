@@ -6,8 +6,6 @@ use App\Exceptions\Address\NotFoundException;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use App\Repositories\AddressRepository;
-use App\Repositories\UserRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,40 +14,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
-class UserService
+class UserService extends BaseService
 {
     use ResourceTrait;
     use ResponseTrait;
-
-    /**
-     * Model repository
-     *
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * Associated model repository
-     *
-     * @var AddressRepository
-     */
-    private $addressRepository;
-
-    /**
-     * Constructor
-     *
-     * @param UserRepository $userRepository
-     * @param AddressRepository $addressRepository
-     *
-     * @return void
-     */
-    public function __construct(
-        UserRepository $userRepository,
-        AddressRepository $addressRepository
-    ) {
-        $this->userRepository = $userRepository;
-        $this->addressRepository = $addressRepository;
-    }
 
     /**
      * Get all models
@@ -158,10 +126,6 @@ class UserService
             $this->addressRepository->updateOrCreate(
                 ['parentable_id' => $id, 'parentable_type' => $type],
                 Arr::get($data, $address)
-            );
-
-            return $this->resource(
-                $this->userRepository->getOne($id)
             );
         }
 
