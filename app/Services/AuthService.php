@@ -26,7 +26,9 @@ class AuthService
     {
         $data = $request->data($request);
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
+
         throw_if(!$token, UnauthorizedException::class);
+
         $content = $this->tokenContent($token);
 
         if (Arr::get($data, 'include.0') == 'user') {
@@ -51,6 +53,7 @@ class AuthService
     public function refresh(): Response
     {
         $token = Auth::fromUser(auth()->user());
+
         Auth::invalidate();
 
         return response($this->tokenContent($token));
