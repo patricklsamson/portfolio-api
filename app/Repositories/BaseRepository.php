@@ -13,7 +13,7 @@ class BaseRepository implements BaseRepositoryInterface
      *
      * @var Model
      */
-    protected $model;
+    public $model;
 
     /**
      * Constructor
@@ -40,6 +40,18 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     /**
+     * Get one model
+     *
+     * @param string $id
+     *
+     * @return ?Model
+     */
+    public function getOne(string $id): ?Model
+    {
+        return $this->model->find($id);
+    }
+
+    /**
      * Create model
      *
      * @param array $attributes
@@ -62,6 +74,18 @@ class BaseRepository implements BaseRepositoryInterface
     public function update(string $id, array $attributes): int
     {
         return $this->model->where('id', $id)->update($attributes);
+    }
+
+    /**
+     * Update or create model
+     *
+     * @param array $identifiersMap
+     * @param array $attributes
+     *
+     * @return
+     */
+    public function updateOrCreate(array $identifiersMap, array $attributes) {
+        return $this->model->updateOrCreate($identifiersMap, $attributes);
     }
 
     /**

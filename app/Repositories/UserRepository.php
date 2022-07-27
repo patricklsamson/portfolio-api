@@ -23,7 +23,6 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $includes
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
@@ -32,28 +31,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @return ?object
      */
     public function getAll(
-        ?array $includes = null,
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
         ?string $pageCursor = null
     ): ?object {
         return $this->model
-            ->include($includes)
             ->sort($sorts)
             ->page($pageSize, $pageNumber, $pageCursor);
-    }
-
-    /**
-     * Get one model
-     *
-     * @param string $id
-     * @param ?array $includes
-     *
-     * @return ?User
-     */
-    public function getOne(string $id, ?array $includes = null): ?User
-    {
-        return $this->model->include($includes)->find($id);
     }
 }
