@@ -4,6 +4,7 @@ namespace App\Http\Requests\Asset;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
+use App\Models\Address;
 use App\Models\Asset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -43,9 +44,11 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
     {
         $attributes = 'data.attributes';
         $metadata = "$attributes.metadata";
+        $relationships = 'data.relationships';
 
         return array_merge(
             self::dataAttributesRule(Asset::ATTRIBUTES),
+            self::relationshipsRule(['address' => Address::ATTRIBUTES]),
             [
                 "$attributes.name" => 'nullable|string|min:1|max:100',
                 "$attributes.slug" => 'nullable|string|min:1|max:100',
@@ -60,8 +63,21 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
                 "$metadata.project.dates.end" => 'nullable|string',
                 "$metadata.urls" => 'filled|array:code,live',
                 "$metadata.urls.code" => 'nullable|string',
-                "$metadata.urls.live" => 'nullable|string'
-
+                "$metadata.urls.live" => 'nullable|string',
+                "$relationships.address.$attributes.line_1" =>
+                    "required_with:$relationships.address|string|min:1|max:255",
+                "$relationships.address.$attributes.line_2" =>
+                    'nullable|string|min:1|max:255',
+                "$relationships.address.$attributes.district" =>
+                    'nullable|string|min:1|max:50',
+                "$relationships.address.$attributes.city" =>
+                    "required_with:$relationships.address|string|min:1|max:50",
+                "$relationships.address.$attributes.state" =>
+                    'nullable|string|min:1|max:50',
+                "$relationships.address.$attributes.country" =>
+                    "required_with:$relationships.address|string|min:1|max:50",
+                "$relationships.address.$attributes.zip_code" =>
+                    'nullable|string|min:1|max:50'
             ]
         );
     }
