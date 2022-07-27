@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class BaseModel extends Model
 {
@@ -20,19 +18,6 @@ class BaseModel extends Model
     public function scopeWhereIdIn(Builder $query, ?array $ids = null): Builder
     {
         return $ids ? $query->whereIn('id', $ids) : $query;
-    }
-
-    /**
-     * Scope query
-     *
-     * @param Builder $query
-     * @param ?array $includes
-     *
-     * @return Builder
-     */
-    public function scopeInclude(Builder $query, ?array $includes): Builder
-    {
-        return $includes ? $query->with($includes) : $query;
     }
 
     /**
