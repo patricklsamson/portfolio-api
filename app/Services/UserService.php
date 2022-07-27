@@ -6,6 +6,7 @@ use App\Exceptions\Address\NotFoundException;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Repositories\AddressRepository;
 use App\Repositories\UserRepository;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
@@ -28,15 +29,26 @@ class UserService
     private $userRepository;
 
     /**
+     * Associated model repository
+     *
+     * @var AddressRepository
+     */
+    private $addressRepository;
+
+    /**
      * Constructor
      *
      * @param UserRepository $userRepository
+     * @param AddressRepository $addressRepository
      *
      * @return void
      */
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        AddressRepository $addressRepository
+    ) {
         $this->userRepository = $userRepository;
+        $this->addressRepository = $addressRepository;
     }
 
     /**
@@ -131,12 +143,27 @@ class UserService
      */
     public function update(UpdateUserRequest $request): JsonResource
     {
+        $data = $request->data($request);
         $id = auth()->user()->id;
 
-        $this->userRepository->update($id, Arr::get(
-            $request->data($request),
-            'data.attributes'
-        ));
+        $this->userRepository->update($id, Arr::get($data, 'data.attributes'));
+
+        if (Arr::has($data, 'data.relationships.address')) {
+            $address = 'data.relationships.address.data.attributes';
+            $type = get_class($this->userRepository->model);
+
+            Arr::set($data, "$address.parentable_id", $id);
+            Arr::set($data, "$address.parentable_type", $type);
+
+            $this->addressRepository->updateOrCreate(
+                ['parentable_id' => $id, 'parentable_type' => $type],
+                Arr::get($data, 'data.relationships.address.data.attributes')
+            );
+
+            return $this->resource(
+                $this->userRepository->getOne($id)
+            );
+        }
 
         return $this->resource($this->userRepository->getOne($id));
     }
