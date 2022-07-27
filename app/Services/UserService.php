@@ -157,7 +157,7 @@ class UserService
 
             $this->addressRepository->updateOrCreate(
                 ['parentable_id' => $id, 'parentable_type' => $type],
-                Arr::get($data, 'data.relationships.address.data.attributes')
+                Arr::get($data, $address)
             );
 
             return $this->resource(
