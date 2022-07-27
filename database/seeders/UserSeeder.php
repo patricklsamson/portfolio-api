@@ -38,5 +38,7 @@ class UserSeeder extends Seeder
             ))
             ->hasAddress()
             ->create();
+
+        User::factory()->create();
     }
 }
