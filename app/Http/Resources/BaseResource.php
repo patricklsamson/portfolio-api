@@ -70,11 +70,17 @@ class BaseResource extends JsonResource
     {
         $includes = [];
 
-        if (!$request->get('include')) {
+        if (
+            !$request->get('include') && !$request->input('data.relationships')
+        ) {
             return $includes;
         }
 
-        foreach ($this->strToArray($request->get('include')) as $include) {
+        $getIncludes = !$request->get('include') ?
+            array_keys($request->input('data.relationships')) :
+            $this->strToArray($request->get('include'));
+
+        foreach ($getIncludes as $include) {
             if ($this->whenLoaded($include) instanceof MissingValue) {
                 continue;
             }
@@ -114,11 +120,17 @@ class BaseResource extends JsonResource
     {
         $relationships = [];
 
-        if (!$request->get('include')) {
+        if (
+            !$request->get('include') && !$request->input('data.relationships')
+        ) {
             return $relationships;
         }
 
-        foreach ($this->strToArray($request->get('include')) as $include) {
+        $getIncludes = !$request->get('include') ?
+            array_keys($request->input('data.relationships')) :
+            $this->strToArray($request->get('include'));
+
+        foreach ($getIncludes as $include) {
             if (!$this->$include) {
                 continue;
             }
