@@ -297,4 +297,48 @@ class BaseRequest extends Request
             )
         ];
     }
+
+    /**
+     * Set relationships rule
+     *
+     * @param array $relationshipsMap
+     *
+     * @return array
+     */
+    public function relationshipsRule(array $relationshipsMap): array
+    {
+        $data = 'data.relationships';
+
+        $rule = [
+            $data => self::strArrayConcat(
+                'filled|array:',
+                array_keys($relationshipsMap)
+            )
+        ];
+
+        foreach ($relationshipsMap as $relationship => $attributes) {
+            Arr::set(
+                $rule,
+                "$data.$relationship",
+                "required_with:$data|array:data"
+            );
+
+            Arr::set(
+                $rule,
+                "$data.$relationship.data",
+                "required_with:$data.$relationship.data|array:attributes"
+            );
+
+            Arr::set(
+                $rule,
+                "$data.$relationship.data.attributes",
+                self::strArrayConcat(
+                    "required_with:$data.$relationship.data|array:",
+                    $attributes
+                )
+            );
+        }
+
+        return $rule;
+    }
 }
