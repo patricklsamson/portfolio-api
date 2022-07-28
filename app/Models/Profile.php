@@ -45,6 +45,7 @@ class Profile extends BaseModel
      * @var array
      */
     const ATTRIBUTES = [
+        'type',
         'description',
         'level',
         'starred',
@@ -59,6 +60,7 @@ class Profile extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'type',
         'description',
         'level',
         'starred',
