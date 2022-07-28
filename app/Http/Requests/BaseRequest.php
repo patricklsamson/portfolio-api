@@ -240,10 +240,11 @@ class BaseRequest extends Request
     {
         return [
             'include' => 'filled|array',
-            'include.*' => is_array($rule) ? self::strArrayConcat(
-                'required_with:include|string|distinct|in:',
-                $rule
-            ) : "required_with:include|$rule"
+            'include.*' => 'required_with:include|' .
+                (is_array($rule) ? self::strArrayConcat(
+                    'string|distinct|in:',
+                    $rule
+                ) : $rule)
         ];
     }
 
@@ -284,15 +285,18 @@ class BaseRequest extends Request
      * Set data attributes rule
      *
      * @param array $attributes
+     * @param bool $required
      *
      * @return array
      */
-    public function dataAttributesRule(array $attributes): array
-    {
+    public function dataAttributesRule(
+        array $attributes,
+        bool $required = true
+    ): array {
         return [
             'data' => 'required|array:attributes',
             'data.attributes' => self::strArrayConcat(
-                'required|array:',
+                ($required ? 'required' : 'nullable') . '|array:',
                 $attributes
             )
         ];
