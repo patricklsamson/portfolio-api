@@ -93,7 +93,7 @@ class AssetController extends Controller
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param string $id
      * @param DeleteAssetRequest $request

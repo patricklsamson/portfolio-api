@@ -95,7 +95,7 @@ class MessageController extends Controller
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param string $id
      * @param DeleteMessageRequest $request

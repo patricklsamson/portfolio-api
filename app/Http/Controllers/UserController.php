@@ -91,7 +91,7 @@ class UserController extends Controller
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @return Response
      */
