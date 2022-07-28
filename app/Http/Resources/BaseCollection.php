@@ -56,7 +56,7 @@ class BaseCollection extends ResourceCollection
 
                             Arr::set(
                                 $includes,
-                                'included.' . $single->id,
+                                'included.' . $single->type . $single->id,
                                 $single
                             );
                         }
@@ -64,7 +64,11 @@ class BaseCollection extends ResourceCollection
                         continue;
                     }
 
-                    $includes['included'][] = $resource;
+                    Arr::set(
+                        $includes,
+                        'included.' . $resource->type . $resource->id,
+                        $resource
+                    );
                 }
             }
         );
