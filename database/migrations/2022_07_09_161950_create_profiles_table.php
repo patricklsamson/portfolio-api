@@ -25,7 +25,7 @@ class CreateProfilesTable extends Migration
                 'project',
                 'soft_skill',
                 'tech_skill'
-            ])->index()->nullable();
+            ])->index();
 
             $table->text('description')->nullable();
 

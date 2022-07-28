@@ -27,7 +27,7 @@ class CreateAssetsTable extends Migration
                 'project',
                 'soft_skill',
                 'tech_skill'
-            ])->index()->nullable();
+            ])->index();
 
             $table->jsonb('metadata')->nullable();
             $table->timestamps();
