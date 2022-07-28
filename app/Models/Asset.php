@@ -90,14 +90,14 @@ class Asset extends BaseModel
      * Scope query
      *
      * @param Builder $query
-     * @param ?array $type
+     * @param ?array $types
      *
      * @return Builder
      */
     public function scopeFilterTypes(
         Builder $query,
-        ?array $type = null
+        ?array $types = null
     ): Builder {
-        return $type ? $query->whereIn('type', $type) : $query;
+        return $types ? $query->whereIn('type', $types) : $query;
     }
 }

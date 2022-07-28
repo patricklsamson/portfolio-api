@@ -15,6 +15,22 @@ class Profile extends BaseModel
      *
      * @var array
      */
+    const TYPES = [
+        'education',
+        'training',
+        'certification',
+        'experience',
+        'affiliation',
+        'project',
+        'soft_skill',
+        'tech_skill'
+    ];
+
+    /**
+     * Enum attribute
+     *
+     * @var array
+     */
     const LEVELS = [
         'beginner' => 1,
         'advanced' => 2,
@@ -58,7 +74,11 @@ class Profile extends BaseModel
      *
      * @var array
      */
-    protected $casts = ['metadata' => 'array'];
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'metadata' => 'array'
+    ];
 
     /**
      * Get parent model
@@ -84,44 +104,77 @@ class Profile extends BaseModel
      * Scope query
      *
      * @param Builder $query
-     * @param ?string $level
      *
      * @return Builder
      */
-    public function scopeFilterLevel(
-        Builder $query,
-        ?string $level = null
-    ): Builder {
-        return $level ? $query->where('level', $level) : $query;
+    public function scopeByOwner(Builder $query): Builder
+    {
+        return $query->where('user_id', auth()->user()->id);
     }
 
     /**
      * Scope query
      *
      * @param Builder $query
-     * @param ?bool $starred
+     * @param ?array $types
      *
      * @return Builder
      */
-    public function scopeFilterStarred(
+    public function scopeFilterTypes(
         Builder $query,
-        ?bool $starred = false
+        ?array $types = null
     ): Builder {
-        return $query->where('starred', $starred ? $starred : false);
+        return $types ? $query->whereIn('type', $types) : $query;
     }
 
     /**
      * Scope query
      *
      * @param Builder $query
-     * @param ?string $role
+     * @param ?array $levels
      *
      * @return Builder
      */
-    public function scopeFilterRole(
+    public function scopeFilterLevels(
         Builder $query,
-        ?string $role = null
+        ?array $levels = null
     ): Builder {
-        return $role ? $query->where('metadata->project->role', $role) : $query;
+        return $levels ? $query->whereIn('level', $levels) : $query;
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?array $starred
+     *
+     * @return Builder
+     */
+    public function scopeFilterStarreds(
+        Builder $query,
+        ?array $starreds = null
+    ): Builder {
+        return $starreds == null ? $query : $query->whereIn(
+            'starred',
+            $starreds
+        );
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
+     * @param ?array $roles
+     *
+     * @return Builder
+     */
+    public function scopeFilterRoles(
+        Builder $query,
+        ?array $roles = null
+    ): Builder {
+        return $roles ? $query->whereIn(
+            'metadata->project->role',
+            $roles
+        ) : $query;
     }
 }
