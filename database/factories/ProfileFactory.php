@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Asset;
 use App\Models\Profile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,6 +16,10 @@ class ProfileFactory extends Factory
     public function definition(): array
     {
         return [
+            'asset_id' => Asset::factory()->hasAddress(),
+            'type' => function (array $attributes) {
+                return Asset::find($attributes['asset_id'])->type;
+            },
             'description' => $this->faker->sentence,
             'start_date' => $this->faker->randomElement([
                 $this->faker->dateTime->format('Y-m-d H:i:s'),
@@ -39,6 +44,10 @@ class ProfileFactory extends Factory
     {
         return $this->state(function () {
             return [
+                'asset_id' => Asset::factory()->project()->hasAddress(),
+                'type' => function (array $attributes) {
+                    return Asset::find($attributes['asset_id'])->type;
+                },
                 'starred' => $this->faker->boolean,
                 'metadata' => [
                     'project' => [
@@ -65,6 +74,10 @@ class ProfileFactory extends Factory
     {
         return $this->state(function () {
             return [
+                'asset_id' => Asset::factory()->skill()->hasAddress(),
+                'type' => function (array $attributes) {
+                    return Asset::find($attributes['asset_id'])->type;
+                },
                 'level' => $this->faker->randomElement(
                     array_keys(Profile::LEVELS)
                 )
