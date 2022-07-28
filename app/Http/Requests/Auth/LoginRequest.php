@@ -19,6 +19,7 @@ class LoginRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+
         self::fieldsData($data, ['users']);
         self::includeData($data);
 
@@ -36,8 +37,7 @@ class LoginRequest extends BaseRequest implements RequestInterface
 
         return array_merge(
             self::dataAttributesRule(['username', 'password']),
-            self::fieldsAllowedRule(['users']),
-            self::fieldsUsersRule(),
+            self::fieldsRule(['users']),
             self::includeRule(['user']),
             [
                 "$attributes.username" => 'required|string|min:1|max:50',
