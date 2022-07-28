@@ -18,6 +18,7 @@ class DeleteAssetRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+
         self::includeData($data);
 
         return $data;

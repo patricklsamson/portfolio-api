@@ -19,6 +19,7 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+
         self::fieldsData($data, ['addresses', 'assets', 'profiles', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
@@ -35,15 +36,8 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         return array_merge(
-            self::fieldsAllowedRule([
-                'addresses',
-                'assets',
-                'profiles',
-                'users'
-            ]),
-            self::fieldsAssetsRule(),
-            self::filterableAttributesRule(['type']),
-            self::filterValuesRule('type', Asset::TYPES),
+            self::fieldsRule(['addresses', 'assets', 'profiles', 'users']),
+            self::filterRule(['type' => Asset::TYPES]),
             self::includeRule(['address', 'profiles', 'users'])
         );
     }
