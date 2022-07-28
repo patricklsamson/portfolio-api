@@ -2,6 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Models\Profile;
 use App\Models\User;
 
 /*
@@ -20,12 +21,12 @@ $requests = 'App\Http\Requests';
 
 // TEMPORARY
 $router->get('v1/username', function () {
-    return User::all(['id', 'username'])->last();
     return User::find(1)->only(['id', 'username']);
+    return User::all(['id', 'username'])->last();
 });
 
 $router->get('v1/test', function () {
-    return User::find(1)->assets()->get();
+    return Profile::all();
 });
 
 $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
@@ -176,6 +177,26 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
         $router->delete('{$id}', [
             'uses' => 'AssetController@delete',
             'middleware' => ["validate:$requests\DeleteAssetRequest"]
+        ]);
+    });
+
+    /**
+     * Profile routes
+     */
+    $router->group([
+        'prefix' => 'profiles',
+        'middleware' => ['auth']
+    ], function () use ($router, $requests) {
+        $requests = "$requests\Profile";
+
+        $router->get('', [
+            'uses' => 'ProfileController@getAll',
+            'middleware' => ["validate:$requests\GetProfileRequest"]
+        ]);
+
+        $router->delete('{$id}', [
+            'uses' => 'ProfileController@delete',
+            'middleware' => ["validate:$requests\DeleteProfileRequest"]
         ]);
     });
 });
