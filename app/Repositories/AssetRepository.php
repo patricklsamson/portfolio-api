@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Asset;
-use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\AssetRepositoryInterface;
 
 class AssetRepository extends BaseRepository implements AssetRepositoryInterface

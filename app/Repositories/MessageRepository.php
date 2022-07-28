@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Message;
-use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\MessageRepositoryInterface;
 
 class MessageRepository extends BaseRepository implements
