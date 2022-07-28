@@ -41,41 +41,14 @@ class GetUserRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        dd(array_merge(
-            self::fieldsAllowedRule([
-                'addresses',
-                'assets',
-                'messages',
-                'profiles',
-                'users'
-            ]),
-            self::fieldsAddressesRule(),
-            self::fieldsAssetsRule(),
-            self::fieldsMessagesRule(),
-            self::fieldsProfilesRule(),
-            self::fieldsUsersRule(),
-            self::includeRule([
-                'address',
-                'assets',
-                'messages',
-                'profiles'
-            ]),
-            self::sortRule(User::ATTRIBUTES),
-            self::pageRule()
-        ));
         return array_merge(
-            self::fieldsAllowedRule([
+            self::fieldsRule([
                 'addresses',
                 'assets',
                 'messages',
                 'profiles',
                 'users'
             ]),
-            self::fieldsAddressesRule(),
-            self::fieldsAssetsRule(),
-            self::fieldsMessagesRule(),
-            self::fieldsProfilesRule(),
-            self::fieldsUsersRule(),
             self::includeRule([
                 'address',
                 'assets',
