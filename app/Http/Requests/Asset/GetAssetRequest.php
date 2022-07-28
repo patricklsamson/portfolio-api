@@ -44,7 +44,7 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
             self::fieldsAssetsRule(),
             self::filterableAttributesRule(['type']),
             self::filterValuesRule('type', Asset::TYPES),
-            self::includeRule(['profiles', 'address', 'users'])
+            self::includeRule(['address', 'profiles', 'users'])
         );
     }
 }
