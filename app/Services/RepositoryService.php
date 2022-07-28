@@ -66,6 +66,7 @@ class RepositoryService
         $this->addressRepository = $addressRepository;
         $this->assetRepository = $assetRepository;
         $this->messageRepository = $messageRepository;
+        $this->profileRepository = $profileRepository;
         $this->userRepository = $userRepository;
     }
 }
