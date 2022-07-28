@@ -56,13 +56,12 @@ class AssetController extends Controller
      * Get one model
      *
      * @param string $id
-     * @param GetAssetRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetAssetRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        return $this->assetService->getOne($id, $request);
+        return $this->assetService->getOne($id);
     }
 
     /**

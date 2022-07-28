@@ -44,26 +44,23 @@ class UserController extends Controller
     /**
      * Profile
      *
-     * @param GetUserRequest $request
-     *
      * @return JsonResource
      */
-    public function profile(GetUserRequest $request): JsonResource
+    public function profile(): JsonResource
     {
-        return $this->userService->profile($request);
+        return $this->userService->profile();
     }
 
     /**
      * Get one model
      *
      * @param string $id
-     * @param GetUserRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetUserRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        return $this->userService->getOne($id, $request);
+        return $this->userService->getOne($id);
     }
 
     /**

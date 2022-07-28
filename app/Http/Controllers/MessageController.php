@@ -58,13 +58,12 @@ class MessageController extends Controller
      * Get one model
      *
      * @param string $id
-     * @param GetMessageRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetMessageRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        return $this->messageService->getOne($id, $request);
+        return $this->messageService->getOne($id);
     }
 
     /**
