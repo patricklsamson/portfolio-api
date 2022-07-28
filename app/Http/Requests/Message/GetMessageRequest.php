@@ -19,6 +19,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
     public function data(Request $request): array
     {
         $data = $request->all();
+
         self::fieldsData($data, ['messages', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
@@ -35,11 +36,8 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         return array_merge(
-            self::fieldsAllowedRule(['messages', 'users']),
-            self::fieldsMessagesRule(),
-            self::fieldsUsersRule(),
-            self::filterableAttributesRule(['type']),
-            self::filterValuesRule('type', Message::TYPES),
+            self::fieldsRule(['messages', 'users']),
+            self::filterRule(['type' => Message::TYPES]),
             self::includeRule(['user']),
             self::sortRule(Message::ATTRIBUTES),
             self::pageRule()
