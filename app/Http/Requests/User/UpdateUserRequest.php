@@ -35,7 +35,8 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
 
         return array_merge(
             self::dataAttributesRule(
-                array_merge(User::ATTRIBUTES, ['password'])
+                array_merge(User::ATTRIBUTES, ['password']),
+                false
             ),
             self::relationshipsRule(['address' => Address::ATTRIBUTES]),
             [
