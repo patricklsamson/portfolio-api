@@ -16,6 +16,16 @@ class CreateProfilesTable extends Migration
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->text('description')->nullable();
+            $table->enum('type', [
+                'education',
+                'training',
+                'certification',
+                'experience',
+                'affiliation',
+                'project',
+                'soft_skill',
+                'tech_skill'
+            ])->index()->nullable();
 
             $table->enum('level', [
                 'beginner',
