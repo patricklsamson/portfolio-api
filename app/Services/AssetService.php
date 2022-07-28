@@ -15,10 +15,29 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class AssetService extends BaseService
+class AssetService
 {
     use ResourceTrait;
     use ResponseTrait;
+
+    /**
+     * Repository service
+     *
+     * @var RepositoryService
+     */
+    private $repositoryService;
+
+    /**
+     * Constructor
+     *
+     * @param RepositoryService $repositoryService
+     *
+     * @return void
+     */
+    public function __construct(RepositoryService $repositoryService)
+    {
+        $this->repositoryService = $repositoryService;
+    }
 
     /**
      * Get all models
@@ -31,9 +50,8 @@ class AssetService extends BaseService
     {
         $data = $request->data($request);
 
-        $assets = $this->assetRepository->getAll(
+        $assets = $this->repositoryService->assetRepository->getAll(
             Arr::get($data, 'filter.type'),
-            Arr::get($data, 'include'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
             Arr::get($data, 'page.cursor')
@@ -58,14 +76,12 @@ class AssetService extends BaseService
      * Get one model
      *
      * @param string $id
-     * @param GetAssetRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetAssetRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        $asset = $this->assetRepository
-            ->getOne($id, Arr::get($request->data($request), 'include'));
+        $asset = $this->repositoryService->assetRepository->getOne($id);
 
         throw_if(!$asset, NotFoundException::class);
 
@@ -82,21 +98,18 @@ class AssetService extends BaseService
     public function create(CreateAssetRequest $request): JsonResource
     {
         $data = $request->data($request);
-        $asset = $this->assetRepository->create(
+        $asset = $this->repositoryService->assetRepository->create(
             Arr::get($request->data($request), 'data.attributes')
         );
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
-            $type = get_class($this->assetRepository->model);
+            $type = get_class($this->repositoryService->assetRepository->model);
 
             Arr::set($data, "$address.parentable_id", $asset->id);
             Arr::set($data, "$address.parentable_type", $type);
 
-            $this->addressRepository->updateOrCreate(
-                ['parentable_id' => $asset->id, 'parentable_type' => $type],
-                Arr::get($data, $address)
-            );
+            $this->addressRepository->create(Arr::get($data, $address));
         }
 
         return $this->resource($asset);
@@ -115,17 +128,20 @@ class AssetService extends BaseService
         UpdateAssetRequest $request
     ): JsonResource {
         throw_if(
-            !$asset = $this->assetRepository->getOne($id),
+            !$asset = $this->repositoryService->assetRepository->getOne($id),
             NotFoundException::class
         );
 
         $data = $request->data($request);
 
-        $this->assetRepository->update($id, Arr::get($data, 'data.attributes'));
+        $this->repositoryService->assetRepository->update(
+            $id,
+            Arr::get($data, 'data.attributes')
+        );
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
-            $type = get_class($this->assetRepository->model);
+            $type = get_class($this->repositoryService->assetRepository->model);
 
             Arr::set($data, "$address.parentable_id", $id);
             Arr::set($data, "$address.parentable_type", $type);
@@ -136,11 +152,24 @@ class AssetService extends BaseService
             );
         }
 
+        if (Arr::has($data, 'data.relationships.profiles')) {
+            $profile = 'data.relationships.profiles.data.attributes';
+            $userId = auth()->user()->id;
+
+            Arr::set($data, "$profile.user_id", $userId);
+            Arr::set($data, "$profile.asset_id", $asset->id);
+
+            $this->profileRepository->updateOrCreate(
+                ['user_id' => $userId, 'asset_id', $asset->id],
+                Arr::get($data, $profile)
+            );
+        }
+
         return $this->resource($asset);
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param string $id
      * @param DeleteAssetRequest $request
@@ -154,11 +183,11 @@ class AssetService extends BaseService
         $ids = array_unique($ids, SORT_REGULAR);
 
         throw_if(
-            !$this->assetRepository->getAllByIdIn($ids),
+            !$this->repositoryService->assetRepository->getAllByIdIn($ids),
             NotFoundException::class
         );
 
-        $this->assetRepository->delete($ids);
+        $this->repositoryService->assetRepository->delete($ids);
 
         return response($this->content(['success' => true]));
     }

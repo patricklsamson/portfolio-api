@@ -14,10 +14,29 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 
-class UserService extends BaseService
+class UserService
 {
     use ResourceTrait;
     use ResponseTrait;
+
+    /**
+     * Repository service
+     *
+     * @var RepositoryService
+     */
+    private $repositoryService;
+
+    /**
+     * Constructor
+     *
+     * @param RepositoryService $repositoryService
+     *
+     * @return void
+     */
+    public function __construct(RepositoryService $repositoryService)
+    {
+        $this->repositoryService = $repositoryService;
+    }
 
     /**
      * Get all models
@@ -30,8 +49,7 @@ class UserService extends BaseService
     {
         $data = $request->data($request);
 
-        $users = $this->userRepository->getAll(
-            Arr::get($data, 'include'),
+        $users = $this->repositoryService->userRepository->getAll(
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
@@ -46,17 +64,12 @@ class UserService extends BaseService
     /**
      * Profile
      *
-     * @param GetUserRequest $request
-     *
      * @return JsonResource
      */
-    public function profile(GetUserRequest $request): JsonResource
+    public function profile(): JsonResource
     {
-        $data = $request->data($request);
-
-        return $this->resource($this->userRepository->getOne(
-            auth()->user()->id,
-            Arr::get($data, 'include')
+        return $this->resource($this->repositoryService->userRepository->getOne(
+            auth()->user()->id
         ));
     }
 
@@ -64,16 +77,12 @@ class UserService extends BaseService
      * Get one model
      *
      * @param string $id
-     * @param GetUserRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetUserRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        $user = $this->userRepository->getOne($id, Arr::get(
-            $request->data($request),
-            'include'
-        ));
+        $user = $this->repositoryService->userRepository->getOne($id);
 
         throw_if(!$user, NotFoundException::class);
 
@@ -97,9 +106,9 @@ class UserService extends BaseService
 
         unset($data['data']['attributes']['password_confirmation']);
 
-        return $this->resource(
-            $this->userRepository->create(Arr::get($data, 'data.attributes'))
-        );
+        return $this->resource($this->repositoryService->userRepository->create(
+            Arr::get($data, 'data.attributes')
+        ));
     }
 
     /**
@@ -114,11 +123,14 @@ class UserService extends BaseService
         $data = $request->data($request);
         $id = auth()->user()->id;
 
-        $this->userRepository->update($id, Arr::get($data, 'data.attributes'));
+        $this->repositoryService->userRepository->update($id, Arr::get(
+            $data,
+            'data.attributes'
+        ));
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
-            $type = get_class($this->userRepository->model);
+            $type = get_class($this->repositoryService->userRepository->model);
 
             Arr::set($data, "$address.parentable_id", $id);
             Arr::set($data, "$address.parentable_type", $type);
@@ -129,17 +141,19 @@ class UserService extends BaseService
             );
         }
 
-        return $this->resource($this->userRepository->getOne($id));
+        return $this->resource(
+            $this->repositoryService->userRepository->getOne($id)
+        );
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @return Response
      */
     public function delete(): Response
     {
-        $this->userRepository->delete(auth()->user()->id);
+        $this->repositoryService->userRepository->delete(auth()->user()->id);
 
         return response($this->content(['success' => true]));
     }

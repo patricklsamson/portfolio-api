@@ -15,10 +15,29 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class MessageService extends BaseService
+class MessageService
 {
     use ResourceTrait;
     use ResponseTrait;
+
+    /**
+     * Repository service
+     *
+     * @var RepositoryService
+     */
+    private $repositoryService;
+
+    /**
+     * Constructor
+     *
+     * @param RepositoryService $repositoryService
+     *
+     * @return void
+     */
+    public function __construct(RepositoryService $repositoryService)
+    {
+        $this->repositoryService = $repositoryService;
+    }
 
     /**
      * Get all models
@@ -31,9 +50,8 @@ class MessageService extends BaseService
     {
         $data = $request->data($request);
 
-        $messages = $this->messageRepository->getAll(
+        $messages = $this->repositoryService->messageRepository->getAll(
             Arr::get($data, 'filter.type'),
-            Arr::get($data, 'include'),
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
@@ -49,16 +67,12 @@ class MessageService extends BaseService
      * Get one model
      *
      * @param string $id
-     * @param GetMessageRequest $request
      *
      * @return JsonResource
      */
-    public function getOne(string $id, GetMessageRequest $request): JsonResource
+    public function getOne(string $id): JsonResource
     {
-        $message = $this->messageRepository->getOne($id, Arr::get(
-            $request->data($request),
-            'include'
-        ));
+        $message = $this->repositoryService->messageRepository->getOne($id);
 
         throw_if(!$message, NotFoundException::class);
 
@@ -84,9 +98,12 @@ class MessageService extends BaseService
      */
     public function create(CreateMessageRequest $request): JsonResource
     {
-        return $this->resource($this->messageRepository->create(
-            Arr::get($request->data($request), 'data.attributes')
-        ));
+        return $this->resource(
+            $this->repositoryService->messageRepository->create(Arr::get(
+                $request->data($request),
+                'data.attributes'
+            ))
+        );
     }
 
     /**
@@ -102,11 +119,12 @@ class MessageService extends BaseService
         UpdateMessageRequest $request
     ): JsonResource {
         throw_if(
-            !$message = $this->messageRepository->getOne($id),
+            !$message = $this->repositoryService->messageRepository
+                ->getOne($id),
             NotFoundException::class
         );
 
-        $this->messageRepository->update($id, Arr::get(
+        $this->repositoryService->messageRepository->update($id, Arr::get(
             $request->data($request),
             'data.attributes'
         ));
@@ -115,7 +133,7 @@ class MessageService extends BaseService
     }
 
     /**
-     * Delete model
+     * Delete model/s
      *
      * @param string $id
      * @param DeleteMessageRequest $request
@@ -129,11 +147,11 @@ class MessageService extends BaseService
         $ids = array_unique($ids, SORT_REGULAR);
 
         throw_if(
-            !$this->messageRepository->getAllByIdIn($ids),
+            !$this->repositoryService->messageRepository->getAllByIdIn($ids),
             NotFoundException::class
         );
 
-        $this->messageRepository->delete($ids);
+        $this->repositoryService->messageRepository->delete($ids);
 
         return response($this->content(['success' => true]));
     }
