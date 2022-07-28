@@ -18,24 +18,12 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->hasMessages(2)
-            ->has(Profile::factory()->for(
-                Asset::factory()->hasAddress()
-            ))
-            ->has(Profile::factory()->for(
-                Asset::factory()->hasAddress()
-            ))
-            ->has(Profile::factory()->project()->for(
-                Asset::factory()->project()->hasAddress()
-            ))
-            ->has(Profile::factory()->project()->for(
-                Asset::factory()->project()->hasAddress()
-            ))
-            ->has(Profile::factory()->skill()->for(
-                Asset::factory()->skill()->hasAddress()
-            ))
-            ->has(Profile::factory()->skill()->for(
-                Asset::factory()->skill()->hasAddress()
-            ))
+            ->hasProfiles()
+            ->hasProfiles()
+            ->has(Profile::factory()->project())
+            ->has(Profile::factory()->project())
+            ->has(Profile::factory()->skill())
+            ->has(Profile::factory()->skill())
             ->hasAddress()
             ->create();
 

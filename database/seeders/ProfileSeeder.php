@@ -15,18 +15,16 @@ class ProfileSeeder extends Seeder
      */
     public function run(): void
     {
-        Profile::factory()->forUser()->forAsset()->create();
+        Profile::factory()->forUser()->create();
 
         Profile::factory()
             ->project()
             ->forUser()
-            ->for(Asset::factory()->project())
             ->create();
 
         Profile::factory()
             ->skill()
             ->forUser()
-            ->for(Asset::factory()->skill())
             ->create();
     }
 }
