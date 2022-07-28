@@ -101,20 +101,6 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields allowed rule
-     *
-     * @param array $fieldsAllowed
-     *
-     * @return array
-     */
-    public function fieldsAllowedRule(array $fieldsAllowed): array
-    {
-        return [
-            'fields' => self::strArrayConcat('filled|array:', $fieldsAllowed)
-        ];
-    }
-
-    /**
      * Set fields addresses rule
      *
      * @return array
@@ -195,38 +181,77 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set filterable attributes rule
+     * Set fields allowed rule
      *
-     * @param array $filterableAttributes
+     * @param array $fields
      *
      * @return array
      */
-    public function filterableAttributesRule(array $filterableAttributes): array
+    public function fieldsRule(array $fields): array
     {
-        return [
-            'filter' => self::strArrayConcat(
-                'filled|array:',
-                $filterableAttributes
-            )
+        $rules = [
+            'fields' => self::strArrayConcat('filled|array:', $fields)
         ];
+
+        foreach ($fields as $field) {
+            switch ($field) {
+                case 'addresses':
+                    $rules = array_merge($rules, self::fieldsAddressesRule());
+
+                    break;
+                case 'assets':
+                    $rules = array_merge($rules, self::fieldsAssetsRule());
+
+                    break;
+                case 'messages':
+                    $rules = array_merge($rules, self::fieldsMessagesRule());
+
+                    break;
+                case 'profiles':
+                    $rules = array_merge($rules, self::fieldsProfilesRule());
+
+                    break;
+                case 'users':
+                    $rules = array_merge($rules, self::fieldsUsersRule());
+
+                    break;
+                default:
+                    return [];
+            }
+        }
+
+        return $rules;
     }
 
     /**
-     * Set filter values rule
+     * Set filterable attributes rule
+     *
+     * @param array $filterRulesMap
      *
      * @return array
      */
-    public function filterValuesRule(
-        string $filterableAttribute,
-        array $enumValues
+    public function filterRule(
+        array $filterRulesMap
     ): array {
-        return [
-            "filter.$filterableAttribute" => 'filled|array',
-            "filter.$filterableAttribute.*" => self::strArrayConcat(
-                "required_with:filter.$filterableAttribute|string|distinct|in:",
-                $enumValues
+        $rules = [
+            'filter' => self::strArrayConcat(
+                'filled|array:',
+                array_keys($filterRulesMap)
             )
         ];
+
+        foreach ($filterRulesMap as $attribute => $rule) {
+            $rule = array_merge($rules, [
+                "filter.$attribute" => 'filled|array',
+                "filter.$attribute.*" => "required_with:filter.$attribute|" .
+                    (is_array($rule) ? self::strArrayConcat(
+                        'string|distinct|in:',
+                        $rule
+                    ) : $rule)
+            ]);
+        }
+
+        return $rule;
     }
 
     /**
