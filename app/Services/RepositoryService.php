@@ -5,9 +5,10 @@ namespace App\Services;
 use App\Repositories\AddressRepository;
 use App\Repositories\AssetRepository;
 use App\Repositories\MessageRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 
-class BaseService
+class RepositoryService
 {
     /**
      * Address repository
@@ -31,6 +32,13 @@ class BaseService
     public $messageRepository;
 
     /**
+     * Profile repository
+     *
+     * @var ProfileRepository
+     */
+    public $profileRepository;
+
+    /**
      * User repository
      *
      * @var UserRepository
@@ -43,6 +51,7 @@ class BaseService
      * @param AddressRepository $addressRepository
      * @param AssetRepository $assetRepository
      * @param MessageRepository $messageRepository
+     * @param ProfileRepository $profileRepository
      * @param UserRepository $userRepository
      *
      * @return void
@@ -51,6 +60,7 @@ class BaseService
         AddressRepository $addressRepository,
         AssetRepository $assetRepository,
         MessageRepository $messageRepository,
+        ProfileRepository $profileRepository,
         UserRepository $userRepository
     ) {
         $this->addressRepository = $addressRepository;
