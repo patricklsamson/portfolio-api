@@ -11,6 +11,8 @@ use App\Http\Requests\Message\CreateMessageRequest;
 use App\Http\Requests\Message\DeleteMessageRequest;
 use App\Http\Requests\Message\GetMessageRequest;
 use App\Http\Requests\Message\UpdateMessageRequest;
+use App\Http\Requests\Profile\DeleteProfileRequest;
+use App\Http\Requests\Profile\GetProfileRequest;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\GetUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
@@ -19,8 +21,10 @@ use App\Repositories\BaseRepository;
 use App\Repositories\Interfaces\AssetRepositoryInterface;
 use App\Repositories\Interfaces\BaseRepositoryInterface;
 use App\Repositories\Interfaces\MessageRepositoryInterface;
+use App\Repositories\Interfaces\ProfileRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\MessageRepository;
+use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -55,6 +59,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             AssetRepositoryInterface::class,
             AssetRepository::class
+        );
+
+        $this->app->bind(
+            ProfileRepositoryInterface::class,
+            ProfileRepository::class
         );
     }
 
@@ -111,6 +120,14 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(DeleteAssetRequest::class, function () {
             return DeleteAssetRequest::capture();
+        });
+
+        $this->app->singleton(GetProfileRequest::class, function () {
+            return GetProfileRequest::capture();
+        });
+
+        $this->app->singleton(DeleteProfileRequest::class, function () {
+            return DeleteProfileRequest::capture();
         });
     }
 }
