@@ -46,10 +46,8 @@ class BaseCollection extends ResourceCollection
                     if ($resource instanceof ResourceCollection) {
                         foreach ($resource as $single) {
                             if (
-                                !$single || array_key_exists(
-                                    $single->id,
-                                    $includes
-                                )
+                                !$single ||
+                                array_key_exists($single->id, $includes)
                             ) {
                                 continue;
                             }
