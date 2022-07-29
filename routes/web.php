@@ -131,8 +131,8 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
         $router->group([
             'middleware' => ['auth']
         ], function () use ($router, $requests) {
-            $router->put('{id}/type', [
-                'uses' => 'MessageController@updateType',
+            $router->put('{id}', [
+                'uses' => 'MessageController@update',
                 'middleware' => ["validate:$requests\UpdateMessageRequest"]
             ]);
 
