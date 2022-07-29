@@ -119,8 +119,9 @@ class MessageService
         UpdateMessageRequest $request
     ): JsonResource {
         throw_if(
-            !$message = $this->repositoryService->messageRepository
-                ->getOne($id),
+            !$message = $this->repositoryService->messageRepository->getOne(
+                $id
+            ),
             NotFoundException::class
         );
 

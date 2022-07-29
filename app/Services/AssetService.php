@@ -98,6 +98,7 @@ class AssetService
     public function create(CreateAssetRequest $request): JsonResource
     {
         $data = $request->data($request);
+
         $asset = $this->repositoryService->assetRepository->create(
             Arr::get($request->data($request), 'data.attributes')
         );
@@ -136,7 +137,7 @@ class AssetService
 
         $this->repositoryService->assetRepository->update(
             $id,
-            Arr::get($data, 'data.attributes')
+            Arr::get($data, 'data.attributes', [])
         );
 
         if (Arr::has($data, 'data.relationships.address')) {

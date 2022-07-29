@@ -125,7 +125,8 @@ class UserService
 
         $this->repositoryService->userRepository->update($id, Arr::get(
             $data,
-            'data.attributes'
+            'data.attributes',
+            []
         ));
 
         if (Arr::has($data, 'data.relationships.address')) {
@@ -135,7 +136,7 @@ class UserService
             Arr::set($data, "$address.parentable_id", $id);
             Arr::set($data, "$address.parentable_type", $type);
 
-            $this->addressRepository->updateOrCreate(
+            $this->repositoryService->addressRepository->updateOrCreate(
                 ['parentable_id' => $id, 'parentable_type' => $type],
                 Arr::get($data, $address)
             );
