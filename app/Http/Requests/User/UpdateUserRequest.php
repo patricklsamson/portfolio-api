@@ -4,8 +4,6 @@ namespace App\Http\Requests\User;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Models\Address;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class UpdateUserRequest extends BaseRequest implements RequestInterface
@@ -29,46 +27,37 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $attributes = 'data.attributes';
-        $metadata = "$attributes.metadata";
+        $metadata = 'data.attributes.metadata';
         $relationships = 'data.relationships';
+        $address = "$relationships.address";
 
         return array_merge(
-            self::dataAttributesRule(
-                array_merge(User::ATTRIBUTES, ['password']),
-                false
-            ),
-            self::relationshipsRule(['address' => Address::ATTRIBUTES]),
-            [
-                "$attributes.name" => 'nullable|string|min:1|max:100',
-                "$attributes.email" => 'nullable|string|min:1|max:50',
-                "$attributes.username" => 'nullable|string|min:1|max:50',
-                "$attributes.password" =>
-                    'nullable|string|confirmed|min:1|max:100',
-                $metadata => 'filled|array:about,contacts,objective,websites',
-                "$metadata.about" => 'nullable|string|min:1',
-                "$metadata.contacts" => 'filled|array',
-                "$metadata.contacts.*" =>
+            self::dataAttributesRule([
+                'name' => 'nullable|string|min:1|max:100',
+                'email' => 'nullable|string|min:1|max:50',
+                'username' => 'nullable|string|min:1|max:50',
+                'password' => 'nullable|string|confirmed|min:1|max:100',
+                'metadata' => 'filled|array:about,contacts,objective,websites',
+                'metadata.about' => 'nullable|string|min:1',
+                'metadata.contacts' => 'filled|array',
+                'metadata.contacts.*' =>
                     "required_with:$metadata.contacts|string|distinct",
-                "$metadata.objective" => 'nullable|string|min:1',
-                "$metadata.websites" => 'filled|array',
-                "$metadata.websites.*" =>
-                    "required_with:$metadata.websites|string|distinct",
-                "$relationships.address.$attributes.line_1" =>
-                    "required_with:$relationships.address|string|min:1|max:255",
-                "$relationships.address.$attributes.line_2" =>
-                    'nullable|string|min:1|max:255',
-                "$relationships.address.$attributes.district" =>
-                    'nullable|string|min:1|max:50',
-                "$relationships.address.$attributes.city" =>
-                    "required_with:$relationships.address|string|min:1|max:50",
-                "$relationships.address.$attributes.state" =>
-                    'nullable|string|min:1|max:50',
-                "$relationships.address.$attributes.country" =>
-                    "required_with:$relationships.address|string|min:1|max:50",
-                "$relationships.address.$attributes.zip_code" =>
-                    'nullable|string|min:1|max:50'
-            ]
+                'metadata.objective' => 'nullable|string|min:1',
+                'metadata.websites' => 'filled|array',
+                'metadata.websites.*' =>
+                    "required_with:$metadata.websites|string|distinct"
+            ], false),
+            self::relationshipsRule([
+                'address' => [
+                    'line_1' => "required_with:$address|string|min:1|max:255",
+                    'line_2' => 'nullable|string|min:1|max:255',
+                    'district' => 'nullable|string|min:1|max:50',
+                    'city' => "required_with:$address|string|min:1|max:50",
+                    'state' => 'nullable|string|min:1|max:50',
+                    'country' => "required_with:$address|string|min:1|max:50",
+                    'zip_code' => 'nullable|string|min:1|max:50'
+                ]
+            ])
         );
     }
 }

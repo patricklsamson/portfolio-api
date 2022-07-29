@@ -27,22 +27,12 @@ class CreateUserRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $attributes = 'data.attributes';
-
-        return array_merge(
-            self::dataAttributesRule([
-                'name',
-                'email',
-                'username',
-                'password',
-                'password_confirmation'
-            ]), [
-                "$attributes.name" => 'required|string|min:1|max:100',
-                "$attributes.email" => 'required|string|min:1|max:50',
-                "$attributes.username" => 'required|string|min:1|max:50',
-                "$attributes.password" =>
-                    'required|string|confirmed|min:1|max:100'
-            ]
-        );
+        return self::dataAttributesRule([
+            'name' => 'required|string|min:1|max:100',
+            'email' => 'required|string|min:1|max:50',
+            'username' => 'required|string|min:1|max:50',
+            'password' => 'required|string|confirmed|min:1|max:100',
+            'password_confirmation' => null
+        ]);
     }
 }
