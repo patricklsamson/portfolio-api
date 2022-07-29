@@ -309,22 +309,38 @@ class BaseRequest extends Request
     /**
      * Set data attributes rule
      *
-     * @param array $attributes
+     * @param array $attributesMap
      * @param bool $required
      *
      * @return array
      */
     public function dataAttributesRule(
-        array $attributes,
+        array $attributesMap,
         bool $required = true
     ): array {
-        return [
+        $rules = [
             'data' => 'required|array:attributes',
             'data.attributes' => self::strArrayConcat(
                 ($required ? 'required' : 'nullable') . '|array:',
-                $attributes
+                array_filter(array_map(function ($attribute) {
+                    return !strpos($attribute, '.') ? $attribute : null;
+                }, array_keys($attributesMap)))
             )
         ];
+
+        foreach ($attributesMap as $attribute => $rule) {
+            if (!$rule) {
+                continue;
+            }
+
+            $rules = array_merge(
+                $rules, [
+                    "data.attributes.$attribute" => $rule
+                ]
+            );
+        }
+
+        return $rules;
     }
 
     /**
@@ -338,36 +354,40 @@ class BaseRequest extends Request
     {
         $data = 'data.relationships';
 
-        $rule = [
+        $rules = [
+            'data' => 'required|array:attributes,relationships',
             $data => self::strArrayConcat(
                 'filled|array:',
                 array_keys($relationshipsMap)
             )
         ];
 
-        foreach ($relationshipsMap as $relationship => $attributes) {
-            Arr::set(
-                $rule,
-                "$data.$relationship",
-                "required_with:$data|array:data"
-            );
+        foreach ($relationshipsMap as $relationship => $attributesMap) {
+            $rules = array_merge($rules, [
+                "$data.$relationship" => "required_with:$data|array:data"
+            ]);
 
-            Arr::set(
-                $rule,
-                "$data.$relationship.data",
-                "required_with:$data.$relationship.data|array:attributes"
-            );
+            $rules = array_merge($rules, [
+                "$data.$relationship.data" =>
+                    "required_with:$data.$relationship|array:attributes"
+            ]);
 
-            Arr::set(
-                $rule,
-                "$data.$relationship.data.attributes",
-                self::strArrayConcat(
+            $rules = array_merge($rules, [
+                "$data.$relationship.data.attributes" => self::strArrayConcat(
                     "required_with:$data.$relationship.data|array:",
-                    $attributes
+                    array_filter(array_map(function ($attribute) {
+                        return !strpos($attribute, '.') ? $attribute : null;
+                    }, array_keys($attributesMap)))
                 )
-            );
+            ]);
+
+            foreach ($attributesMap as $attribute => $rule) {
+                $rules = array_merge($rules, [
+                    "$data.$relationship.data.attributes.$attribute" => $rule
+                ]);
+            }
         }
 
-        return $rule;
+        return $rules;
     }
 }
