@@ -33,16 +33,13 @@ class LoginRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $attributes = 'data.attributes';
-
         return array_merge(
-            self::dataAttributesRule(['username', 'password']),
+            self::dataAttributesRule([
+                'username' => 'required|string|min:1|max:50',
+                'password' => 'required|string|min:1|max:100'
+            ]),
             self::fieldsRule(['users']),
-            self::includeRule(['user']),
-            [
-                "$attributes.username" => 'required|string|min:1|max:50',
-                "$attributes.password" => 'required|string|min:1|max:100'
-            ]
+            self::includeRule(['user'])
         );
     }
 }
