@@ -16,15 +16,13 @@ class UserResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse(
-            $request,
-            $this->id,
-            array_combine(User::ATTRIBUTES, [
+        return $this->formatResponse($request, $this->id, array_combine(
+            User::ATTRIBUTES, [
                 $this->name,
                 $this->email,
                 $this->username,
                 $this->metadata
-            ])
-        );
+            ]
+        ));
     }
 }

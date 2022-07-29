@@ -16,15 +16,13 @@ class AssetResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse(
-            $request,
-            $this->id,
-            array_combine(Asset::ATTRIBUTES, [
+        return $this->formatResponse($request, $this->id, array_combine(
+            Asset::ATTRIBUTES, [
                 $this->name,
                 $this->slug,
                 $this->type,
                 $this->metadata
-            ])
-        );
+            ]
+        ));
     }
 }

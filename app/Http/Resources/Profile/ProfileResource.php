@@ -16,10 +16,8 @@ class ProfileResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse(
-            $request,
-            $this->id,
-            array_combine(Profile::ATTRIBUTES, [
+        return $this->formatResponse($request, $this->id, array_combine(
+            Profile::ATTRIBUTES, [
                 $this->type,
                 $this->description,
                 $this->level,
@@ -27,7 +25,7 @@ class ProfileResource extends BaseResource
                 $this->start_date,
                 $this->end_date,
                 $this->metadata
-            ])
-        );
+            ]
+        ));
     }
 }

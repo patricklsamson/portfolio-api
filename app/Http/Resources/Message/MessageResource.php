@@ -16,15 +16,13 @@ class MessageResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse(
-            $request,
-            $this->id,
-            array_combine(Message::ATTRIBUTES, [
+        return $this->formatResponse($request, $this->id, array_combine(
+            Message::ATTRIBUTES, [
                 $this->sender,
                 $this->email,
                 $this->body,
                 $this->type
-            ])
-        );
+            ]
+        ));
     }
 }

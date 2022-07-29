@@ -16,10 +16,8 @@ class AddressResource extends BaseResource
      */
     public function toArray($request): array
     {
-        return $this->formatResponse(
-            $request,
-            $this->id,
-            array_combine(Address::ATTRIBUTES, [
+        return $this->formatResponse($request, $this->id, array_combine(
+            Address::ATTRIBUTES, [
                 $this->line_1,
                 $this->line_2,
                 $this->district,
@@ -27,7 +25,7 @@ class AddressResource extends BaseResource
                 $this->state,
                 $this->country,
                 $this->zip_code
-            ])
-        );
+            ]
+        ));
     }
 }
