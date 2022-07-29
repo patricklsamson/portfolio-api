@@ -114,7 +114,7 @@ class MessageService
      *
      * @return JsonResource
      */
-    public function updateType(
+    public function update(
         string $id,
         UpdateMessageRequest $request
     ): JsonResource {
