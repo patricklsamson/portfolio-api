@@ -26,12 +26,10 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
         self::includeData($data);
         self::sortData($data);
 
-        Arr::set($data, 'filter.starred', self::strToArray(
-            filter_var(
-                Arr::get($data, 'filter.starred'),
-                FILTER_VALIDATE_BOOLEAN
-            )
-        ));
+        Arr::set($data, 'filter.starred', self::strToArray(filter_var(
+            Arr::get($data, 'filter.starred'),
+            FILTER_VALIDATE_BOOLEAN
+        )));
 
         return $data;
     }
