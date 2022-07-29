@@ -4,7 +4,6 @@ namespace App\Http\Requests\Message;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Models\Message;
 use Illuminate\Http\Request;
 
 class CreateMessageRequest extends BaseRequest implements RequestInterface
@@ -28,17 +27,12 @@ class CreateMessageRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $attributes = 'data.attributes';
-
-        return array_merge(
-            self::dataAttributesRule(Message::ATTRIBUTES),
-            [
-                "$attributes.sender" => 'required|string|min:1|max:100',
-                "$attributes.email" => 'required|string|min:1|max:50',
-                "$attributes.body" => 'required|string|min:1',
-                "$attributes.type" => 'required|string|in:inbox',
-                "$attributes.user_id" => 'required|integer|min:1'
-            ]
-        );
+        return self::dataAttributesRule([
+            'sender' => 'required|string|min:1|max:100',
+            'email' => 'required|string|min:1|max:50',
+            'body' => 'required|string|min:1|max:50',
+            'type' => 'required|string|in:inbox',
+            'user_id' => 'required|integer|min:1'
+        ]);
     }
 }
