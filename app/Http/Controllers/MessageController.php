@@ -86,11 +86,11 @@ class MessageController extends Controller
      *
      * @return JsonResource
      */
-    public function updateType(
+    public function update(
         string $id,
         UpdateMessageRequest $request
     ): JsonResource {
-        return $this->messageService->updateType($id, $request);
+        return $this->messageService->update($id, $request);
     }
 
     /**
