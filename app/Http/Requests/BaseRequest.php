@@ -74,6 +74,23 @@ class BaseRequest extends Request
     }
 
     /**
+     * Set page data
+     *
+     * @param array &$data
+     *
+     * @return void
+     */
+    public function pageData(array &$data): void
+    {
+        if (Arr::has($data, 'cursor')) {
+            Arr::set($data, 'cursor', filter_var(
+                Arr::get($data, 'cursor'),
+                FILTER_VALIDATE_BOOLEAN
+            ));
+        }
+    }
+
+    /**
      * Set sort data
      *
      * @param array &$data
@@ -282,9 +299,12 @@ class BaseRequest extends Request
     {
         return [
             'page' => 'filled|array:cursor,number,size',
-            'page.cursor' => 'filled|integer|min:1',
-            'page.number' => 'filled|integer|min:1',
-            'page.size' => 'filled|integer|min:1'
+            'page.size' => 'filled|integer|min:1',
+            'page.number' =>
+                'filled|integer|prohibits:cursor,page.cursor|min:1',
+            'cursor' =>
+                'required_with:page.cursor|boolean|prohibits:page.number',
+            'page.cursor' => 'filled|string|prohibits:page.number|min:1'
         ];
     }
 
