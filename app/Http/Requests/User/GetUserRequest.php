@@ -29,6 +29,7 @@ class GetUserRequest extends BaseRequest implements RequestInterface
         ]);
 
         self::includeData($data);
+        self::pageData($data);
         self::sortData($data);
 
         return $data;
