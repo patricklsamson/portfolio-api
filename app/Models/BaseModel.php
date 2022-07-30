@@ -26,8 +26,8 @@ class BaseModel extends Model
      * @param Builder $query
      * @param ?int $pageSize
      * @param ?int $pageNumber
-     * @param ?string $pageCursor
      * @param bool $isCursor
+     * @param ?string $pageCursor
      *
      * @return mixed
      */
@@ -35,15 +35,15 @@ class BaseModel extends Model
         Builder $query,
         ?int $pageSize = null,
         ?int $pageNumber = null,
-        ?string $pageCursor = null,
-        bool $isCursor = false
+        bool $isCursor = false,
+        ?string $pageCursor = null
     ) {
         if ($query->get()->count() > 10) {
             $pageSize = 10;
         }
 
         return $pageSize ? (
-            $isCursor || $pageCursor ? $query->cursorPaginate(
+            $isCursor ? $query->cursorPaginate(
                 $pageSize,
                 ['*'],
                 'page[cursor]',
