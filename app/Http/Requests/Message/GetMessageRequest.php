@@ -23,6 +23,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
         self::fieldsData($data, ['messages', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
+        self::pageData($data);
         self::sortData($data);
 
         return $data;
