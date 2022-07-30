@@ -23,6 +23,7 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
         self::fieldsData($data, ['addresses', 'assets', 'profiles', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
+        self::pageData($data);
         self::sortData($data);
 
         return $data;
