@@ -54,6 +54,7 @@ class ProfileService
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
+            Arr::get($data, 'cursor', false),
             Arr::get($data, 'page.cursor')
         );
 
