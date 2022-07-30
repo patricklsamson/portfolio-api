@@ -24,6 +24,7 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
         self::fieldsData($data, ['assets', 'profiles', 'users']);
         self::filterData($data, ['level', 'starred', 'type']);
         self::includeData($data);
+        self::pageData($data);
         self::sortData($data);
 
         Arr::set($data, 'filter.starred', self::strToArray(filter_var(
