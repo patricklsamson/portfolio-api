@@ -23,17 +23,25 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
      * Get all models
      *
      * @param ?array $filterTypes
+     * @param ?array $sorts
+     * @param ?int $pageSize
+     * @param ?int $pageNumber
+     * @param bool $isCursor
+     * @param ?string $pageCursor
      *
      * @return ?object
      */
     public function getAll(
         ?array $filterTypes = null,
+        ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
+        bool $isCursor = false,
         ?string $pageCursor = null
     ): ?object {
         return $this->model
             ->filterTypes($filterTypes)
-            ->get();
+            ->sort($sorts)
+            ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }
 }

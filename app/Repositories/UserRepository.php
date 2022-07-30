@@ -25,6 +25,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
+     * @param bool $isCursor
      * @param ?string $pageCursor
      *
      * @return ?object
@@ -33,10 +34,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
+        bool $isCursor = false,
         ?string $pageCursor = null
     ): ?object {
         return $this->model
             ->sort($sorts)
-            ->page($pageSize, $pageNumber, $pageCursor);
+            ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }
 }

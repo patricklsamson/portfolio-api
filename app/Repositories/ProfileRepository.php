@@ -30,6 +30,7 @@ class ProfileRepository extends BaseRepository implements
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
+     * @param bool $isCursor
      * @param ?string $pageCursor
      *
      * @return ?object
@@ -42,6 +43,7 @@ class ProfileRepository extends BaseRepository implements
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
+        bool $isCursor = false,
         ?string $pageCursor = null
     ): ?object {
         return $this->model
@@ -51,6 +53,6 @@ class ProfileRepository extends BaseRepository implements
             ->filterStarreds($filterStarreds)
             ->filterRoles($filterRoles)
             ->sort($sorts)
-            ->page($pageSize, $pageNumber, $pageCursor);
+            ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }
 }
