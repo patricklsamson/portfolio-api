@@ -59,8 +59,6 @@ class MessageService
             Arr::get($data, 'page.cursor')
         );
 
-        throw_if(!$messages->count(), NotFoundException::class);
-
         return $this->resource($messages);
     }
 
