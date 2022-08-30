@@ -29,8 +29,8 @@ class CreateUserRequest extends BaseRequest implements RequestInterface
     {
         return self::dataAttributesRule([
             'name' => 'required|string|min:1|max:100',
-            'email' => 'required|string|min:1|max:50',
-            'username' => 'required|string|min:1|max:50',
+            'email' => 'required|string|unique:users,email|min:1|max:50',
+            'username' => 'required|string|unique:users,username|min:1|max:50',
             'password' => 'required|string|confirmed|min:1|max:100',
             'password_confirmation' => null
         ]);

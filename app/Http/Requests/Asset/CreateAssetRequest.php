@@ -41,7 +41,7 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
 
         return array_merge(
             self::dataAttributesRule([
-                'name' => 'required|string|min:1|max:100',
+                'name' => 'required|string|unique:assets,name|min:1|max:100',
                 'slug' => 'required|string|min:1|max:100',
                 'type' => self::strArrayConcat(
                     'required|string|in:',
