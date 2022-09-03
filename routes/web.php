@@ -2,7 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use App\Models\Profile;
+use App\Models\Message;
 use App\Models\User;
 
 /*
@@ -26,7 +26,7 @@ $router->get('v1/username', function () {
 });
 
 $router->get('v1/test', function () {
-    return Profile::all();
+    return Message::all();
 });
 
 $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
