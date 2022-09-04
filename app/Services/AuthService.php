@@ -24,6 +24,7 @@ class AuthService
      */
     public function login(LoginRequest $request): Response
     {
+        Auth::factory()->setTTL(0.01);
         $data = $request->data($request);
         $token = Auth::attempt(Arr::get($data, 'data.attributes'));
 
