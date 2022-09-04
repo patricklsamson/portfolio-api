@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
