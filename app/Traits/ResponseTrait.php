@@ -57,6 +57,8 @@ trait ResponseTrait
      */
     public function tokenContent(string $token): array
     {
+        Auth::factory()->setTTL(0.01);
+
         return $this->content([
             'token' => $token,
             'type' => 'bearer',
