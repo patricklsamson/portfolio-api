@@ -2,6 +2,10 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use App\Http\Resources\Message\MessageCollection;
+use App\Http\Resources\Message\MessageResource;
+use App\Http\Resources\User\UserCollection;
+use App\Http\Resources\User\UserResource;
 use App\Models\Message;
 use App\Models\User;
 
@@ -16,9 +20,6 @@ use App\Models\User;
 |
 */
 
-
-$requests = 'App\Http\Requests';
-
 // TEMPORARY
 $router->get('v1/username', function () {
     return User::find(1)->only(['id', 'username']);
@@ -26,8 +27,14 @@ $router->get('v1/username', function () {
 });
 
 $router->get('v1/test', function () {
-    return Message::all();
+    return new MessageCollection(Message::all());
 });
+
+$router->get('v1/test/{id}', function ($id) {
+    return new MessageResource(Message::find($id));
+});
+
+$requests = 'App\Http\Requests';
 
 $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     /**
