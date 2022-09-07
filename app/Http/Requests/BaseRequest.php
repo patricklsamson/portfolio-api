@@ -233,7 +233,7 @@ class BaseRequest extends Request
 
                     break;
                 default:
-                    return [];
+                    return $rules;
             }
         }
 
