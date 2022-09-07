@@ -36,32 +36,40 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
+        $data = App::make(Request::class)->all();
+        $type = Arr::get($data, 'data.attributes.type');
         $metadata = 'data.attributes.metadata';
         $relationships = 'data.relationships';
         $address = "$relationships.address";
 
-        $rules = [
-            self::dataAttributesRule([
-                'name' => 'required|string|unique:assets,name|min:1|max:100',
-                'slug' => 'required|string|min:1|max:100',
-                'type' => self::strArrayConcat(
-                    'required|string|in:',
-                    Asset::TYPES
-                ),
-                'metadata' => 'filled|array:project',
-                'metadata.project' => 'filled|array:dates,urls',
-                'metadata.project.dates' => 'filled|array:start,end',
-                'metadata.project.dates.start' =>
-                    "required_with:$metadata.project.dates|string",
-                'metadata.project.dates.end' => 'nullable|string',
-                'metadata.urls' => 'filled|array:code,live',
-                'metadata.urls.code' => "required_with:$metadata.urls|string",
-                'metadata.urls.live' => 'nullable|string'
-            ])
+        $dataAttributesRule = [
+            'name' => 'required|string|unique:assets,name|min:1|max:100',
+            'slug' => 'required|string|min:1|max:100',
+            'type' => self::strArrayConcat(
+                'required|string|in:',
+                Asset::TYPES
+            )
         ];
 
-        $data = App::make(Request::class)->all();
-        $type = Arr::get($data, 'data.attributes.type');
+        if ($type == 'project') {
+            $dataAttributesRule = array_merge(
+                $dataAttributesRule,
+                [
+                    'metadata' => 'filled|array:project',
+                    'metadata.project' => 'filled|array:dates,urls',
+                    'metadata.project.dates' => 'filled|array:start,end',
+                    'metadata.project.dates.start' =>
+                        "required_with:$metadata.project.dates|string",
+                    'metadata.project.dates.end' => 'nullable|string',
+                    'metadata.urls' => 'filled|array:code,live',
+                    'metadata.urls.code' =>
+                        "required_with:$metadata.urls|string",
+                    'metadata.urls.live' => 'nullable|string'
+                ]
+            );
+        }
+
+        $rules = [self::dataAttributesRule($dataAttributesRule)];
 
         if (
             $type != 'project' &&
