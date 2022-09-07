@@ -39,7 +39,9 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
         return array_merge(
             self::fieldsRule(['addresses', 'assets', 'profiles', 'users']),
             self::filterRule(['type' => Asset::TYPES]),
-            self::includeRule(['address', 'profiles', 'users'])
+            self::includeRule(['address', 'profiles', 'users']),
+            self::pageRule(),
+            self::sortRule(Asset::ATTRIBUTES)
         );
     }
 }
