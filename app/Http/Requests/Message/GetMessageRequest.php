@@ -40,9 +40,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $rules = array_merge(
-            self::includeRule(['user']),
-        );
+        $rules = [self::includeRule(['user'])];
 
         if (App::make(Request::class)->path() == 'v1/messages') {
             $rules = array_merge(
