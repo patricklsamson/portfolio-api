@@ -22,10 +22,10 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
         $data = $request->all();
 
         self::fieldsData($data, ['addresses', 'assets', 'profiles', 'users']);
-        self::filterData($data, ['type']);
         self::includeData($data);
 
         if ($request->path() == 'v1/assets') {
+            self::filterData($data, ['type']);
             self::pageData($data);
             self::sortData($data);
         }
@@ -42,13 +42,13 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
     {
         $rules = array_merge(
             self::fieldsRule(['addresses', 'assets', 'profiles', 'users']),
-            self::filterRule(['type' => Asset::TYPES]),
             self::includeRule(['address', 'profiles', 'users'])
         );
 
         if (App::make(Request::class)->path() == 'v1/assets') {
             $rules = array_merge(
                 $rules,
+                self::filterRule(['type' => Asset::TYPES]),
                 self::pageRule(),
                 self::sortRule(Asset::ATTRIBUTES)
             );
