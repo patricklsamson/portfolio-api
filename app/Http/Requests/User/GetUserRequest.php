@@ -6,6 +6,7 @@ use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class GetUserRequest extends BaseRequest implements RequestInterface
 {
@@ -29,8 +30,11 @@ class GetUserRequest extends BaseRequest implements RequestInterface
         ]);
 
         self::includeData($data);
-        self::pageData($data);
-        self::sortData($data);
+
+        if ($request->path() != 'v1/users/profile') {
+            self::pageData($data);
+            self::sortData($data);
+        }
 
         return $data;
     }
@@ -42,7 +46,7 @@ class GetUserRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        return array_merge(
+        $rules = array_merge(
             self::fieldsRule([
                 'addresses',
                 'assets',
@@ -55,9 +59,17 @@ class GetUserRequest extends BaseRequest implements RequestInterface
                 'assets',
                 'messages',
                 'profiles'
-            ]),
-            self::sortRule(User::ATTRIBUTES),
-            self::pageRule()
+            ])
         );
+
+        if (App::make(Request::class)->path() != 'v1/users/profile') {
+            $rules = array_merge(
+                $rules,
+                self::sortRule(User::ATTRIBUTES),
+                self::pageRule()
+            );
+        }
+
+        return $rules;
     }
 }
