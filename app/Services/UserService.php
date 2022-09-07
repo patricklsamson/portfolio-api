@@ -57,6 +57,8 @@ class UserService
             Arr::get($data, 'page.cursor')
         );
 
+        throw_if(!$users->count(), NotFoundException::class);
+
         return $this->resource($users);
     }
 

@@ -58,6 +58,8 @@ class ProfileService
             Arr::get($data, 'page.cursor')
         );
 
+        throw_if(!$profiles->count(), NotFoundException::class);
+
         return $this->resource($profiles);
     }
 

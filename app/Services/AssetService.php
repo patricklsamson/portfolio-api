@@ -59,6 +59,8 @@ class AssetService
             Arr::get($data, 'page.cursor')
         );
 
+        throw_if(!$assets->count(), NotFoundException::class);
+
         return $this->resource($assets);
     }
 
