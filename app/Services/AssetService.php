@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
+use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\Asset\CreateAssetRequest;
 use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
@@ -101,8 +102,19 @@ class AssetService
     {
         $data = $request->data($request);
 
+        if (Arr::get($data, 'data.attributes.type') == 'project') {
+            $start = Arr::get($data, 'data.attributes.metadata.project.dates.start');
+            $end = Arr::get($data, 'data.attributes.metadata.project.dates.end');
+
+            throw_if(
+                strtolower($end) != 'present' &&
+                strtotime($start) > strtotime($end),
+                UnprocessableEntityException::class
+            );
+        }
+
         $asset = $this->repositoryService->assetRepository->create(
-            Arr::get($request->data($request), 'data.attributes')
+            Arr::get($data, 'data.attributes')
         );
 
         if (Arr::has($data, 'data.relationships.address')) {
