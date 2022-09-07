@@ -21,10 +21,10 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
     {
         $data = $request->all();
 
+        self::fieldsData($data, ['messages', 'users']);
         self::includeData($data);
 
         if ($request->path() == 'v1/messages') {
-            self::fieldsData($data, ['messages', 'users']);
             self::filterData($data, ['type']);
             self::pageData($data);
             self::sortData($data);
@@ -40,12 +40,14 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $rules = [self::includeRule(['user'])];
+        $rules = array_merge(
+            self::fieldsRule(['messages', 'users']),
+            self::includeRule(['user'])
+        );
 
         if (App::make(Request::class)->path() == 'v1/messages') {
             $rules = array_merge(
                 $rules,
-                self::fieldsRule(['messages', 'users']),
                 self::filterRule(['type' => Message::TYPES]),
                 self::pageRule(),
                 self::sortRule(Message::ATTRIBUTES)
