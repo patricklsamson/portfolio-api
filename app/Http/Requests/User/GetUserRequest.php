@@ -65,8 +65,8 @@ class GetUserRequest extends BaseRequest implements RequestInterface
         if (App::make(Request::class)->path() != 'v1/users/profile') {
             $rules = array_merge(
                 $rules,
-                self::sortRule(User::ATTRIBUTES),
-                self::pageRule()
+                self::pageRule(),
+                self::sortRule(User::ATTRIBUTES)
             );
         }
 
