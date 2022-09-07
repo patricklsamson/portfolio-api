@@ -6,6 +6,7 @@ use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use App\Models\Asset;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class GetAssetRequest extends BaseRequest implements RequestInterface
 {
@@ -23,8 +24,11 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
         self::fieldsData($data, ['addresses', 'assets', 'profiles', 'users']);
         self::filterData($data, ['type']);
         self::includeData($data);
-        self::pageData($data);
-        self::sortData($data);
+
+        if ($request->path() == 'v1/assets') {
+            self::pageData($data);
+            self::sortData($data);
+        }
 
         return $data;
     }
@@ -36,12 +40,20 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        return array_merge(
+        $rules = array_merge(
             self::fieldsRule(['addresses', 'assets', 'profiles', 'users']),
             self::filterRule(['type' => Asset::TYPES]),
-            self::includeRule(['address', 'profiles', 'users']),
-            self::pageRule(),
-            self::sortRule(Asset::ATTRIBUTES)
+            self::includeRule(['address', 'profiles', 'users'])
         );
+
+        if (App::make(Request::class)->path() == 'v1/assets') {
+            $rules = array_merge(
+                $rules,
+                self::pageRule(),
+                self::sortRule(Asset::ATTRIBUTES)
+            );
+        }
+
+        return $rules;
     }
 }
