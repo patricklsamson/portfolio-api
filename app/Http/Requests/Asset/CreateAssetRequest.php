@@ -57,9 +57,40 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
                     'metadata' => 'filled|array:project',
                     'metadata.project' => 'filled|array:dates,urls',
                     'metadata.project.dates' => 'filled|array:start,end',
-                    'metadata.project.dates.start' =>
-                        "required_with:$metadata.project.dates|string",
-                    'metadata.project.dates.end' => 'nullable|string',
+                    'metadata.project.dates.start' => [
+                        "required_with:$metadata.project.dates",
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $endDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.attributes.metadata.project.dates.end'
+                            );
+
+                            if (
+                                $endDate &&
+                                self::isOlderDate($endDate, $value)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ],
+                    'metadata.project.dates.end' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $startDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.attributes.metadata.project.dates.start'
+                            );
+
+                            if (
+                                $value &&
+                                self::isOlderDate($value, $startDate)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ],
                     'metadata.urls' => 'filled|array:code,live',
                     'metadata.urls.code' =>
                         "required_with:$metadata.urls|string",
@@ -68,7 +99,7 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
             );
         }
 
-        $rules = [self::dataAttributesRule($dataAttributesRule)];
+        $rules = self::dataAttributesRule($dataAttributesRule);
         $address = 'data.relationships.address';
 
         if (

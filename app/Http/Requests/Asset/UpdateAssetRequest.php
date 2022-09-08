@@ -36,7 +36,6 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
                 Asset::find($request->id)->type
             );
         }
-        dd($data);
 
         return $data;
     }
@@ -48,8 +47,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $data = App::make(Request::class)->all();
-        $type = Arr::get($data, 'data.attributes.type');
+        $type = Asset::find(App::make(Request::class)->id)->type;
 
         $dataAttributesRule = [
             'name' => 'nullable|string|unique:assets,name|min:1|max:100',
@@ -63,8 +61,40 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
                     'metadata' => 'filled|array:project',
                     'metadata.project' => 'filled|array:dates,urls',
                     'metadata.project.dates' => 'filled|array:start,end',
-                    'metadata.project.dates.start' => 'nullable|string',
-                    'metadata.project.dates.end' => 'nullable|string',
+                    'metadata.project.dates.start' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $endDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.attributes.metadata.project.dates.end'
+                            );
+
+                            if (
+                                strtolower($endDate) != 'present' &&
+                                self::isOlderDate($endDate, $value)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ],
+                    'metadata.project.dates.end' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $startDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.attributes.metadata.project.dates.start'
+                            );
+
+                            if (
+                                $value != 'present' &&
+                                self::isOlderDate($value, $startDate)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ],
                     'metadata.urls' => 'filled|array:code,live',
                     'metadata.urls.code' => 'nullable|string',
                     'metadata.urls.live' => 'nullable|string',
@@ -72,34 +102,89 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             );
         }
 
-        $relationships = 'data.relationships';
-        $profiles = "$relationships.profiles";
-
-        $dataRelationshipsRule = [
-            'profiles' => [
-                'type' => self::strArrayConcat(
-                    "required_with:$profiles|string|in:",
-                    Profile::TYPES
-                ),
-                'description' => 'nullable|string|min:1',
-                'level' => self::strArrayConcat(
-                    'nullable|string|in:',
-                    array_keys(Profile::LEVELS)
-                ),
-                'starred' => 'nullable|boolean',
-                'start_date' => 'nullable|string',
-                'end_date' => 'nullable|string',
-                'metadata' => 'filled|array:project',
-                'metadata.project' => 'filled|array:role,contributions',
-                'metadata.project.role' =>
-                    'nullable|string|in:contributor,owner',
-                'metadata.project.contributions' => 'filled|array',
-                'metadata.project.contributions.*' =>
-                    'nullable|string|distinct'
-            ]
+        $profileAttributes = [
+            'type' => self::strArrayConcat(
+                "required_with:data.relationships.profiles|string|in:",
+                Profile::TYPES
+            ),
+            'description' => 'nullable|string|min:1'
         ];
 
-        $address = "$relationships.address";
+        if ($type == 'project') {
+            $profileAttributes = array_merge(
+                $profileAttributes,
+                [
+                    'starred' => 'nullable|boolean',
+                    'metadata' => 'filled|array:project',
+                    'metadata.project' => 'filled|array:role,contributions',
+                    'metadata.project.role' =>
+                        'nullable|string|in:contributor,owner',
+                    'metadata.project.contributions' => 'filled|array',
+                    'metadata.project.contributions.*' =>
+                        'nullable|string|distinct'
+                ]
+            );
+        }
+
+        if ($type != 'project' && $type != 'soft_skill') {
+            $profileAttributes = array_merge(
+                $profileAttributes,
+                [
+                    'start_date' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $endDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.relationships.profiles.' .
+                                    'data.attributes.start_date'
+                            );
+
+                            if (
+                                $value &&
+                                $endDate &&
+                                self::isOlderDate($value, $endDate)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ],
+                    'end_date' => [
+                        'nullable',
+                        'string',
+                        function ($attribute, $value, $fail) {
+                            $startDate = Arr::get(
+                                App::make(Request::class)->all(),
+                                'data.attributes.metadata.project.dates.start'
+                            );
+
+                            if (
+                                $startDate &&
+                                $value &&
+                                self::isOlderDate($startDate, $value)
+                            ) {
+                                $fail("$attribute is invalid.");
+                            }
+                        }
+                    ]
+                ]
+            );
+        }
+
+        if ($type == 'tech_skill') {
+            $profileAttributes = array_merge(
+                $profileAttributes,
+                [
+                    'level' => self::strArrayConcat(
+                        'nullable|string|in:',
+                        array_keys(Profile::LEVELS)
+                    )
+                ]
+            );
+        }
+
+        $dataRelationshipsRule = ['profiles' => $profileAttributes];
+        $address = 'data.relationships.address';
 
         if (
             $type != 'project' &&
@@ -124,10 +209,10 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             );
         }
 
-        $rules = [
+        $rules = array_merge(
             self::dataAttributesRule($dataAttributesRule, false),
             self::dataRelationshipsRule($dataRelationshipsRule)
-        ];
+        );
 
         return $rules;
     }
