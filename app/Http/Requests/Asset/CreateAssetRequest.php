@@ -78,7 +78,7 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
         ) {
             $rules = array_merge(
                 $rules,
-                self::relationshipsRule([
+                self::dataRelationshipsRule([
                     'address' => [
                         'line_1' =>
                             "required_with:$address|string|min:1|max:255",

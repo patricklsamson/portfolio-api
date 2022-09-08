@@ -67,7 +67,7 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
                 'metadata.websites.*' =>
                     "required_with:$metadata.websites|string|distinct"
             ], false),
-            self::relationshipsRule([
+            self::dataRelationshipsRule([
                 'address' => [
                     'line_1' => "required_with:$address|string|min:1|max:255",
                     'line_2' => 'nullable|string|min:1|max:255',

@@ -362,13 +362,13 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set relationships rule
+     * Set data relationships rule
      *
      * @param array $relationshipsMap
      *
      * @return array
      */
-    public function relationshipsRule(array $relationshipsMap): array
+    public function dataRelationshipsRule(array $relationshipsMap): array
     {
         $data = 'data.relationships';
 

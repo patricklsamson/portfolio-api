@@ -79,7 +79,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
         $relationships = 'data.relationships';
         $profiles = "$relationships.profiles";
 
-        $relationshipsRule = [
+        $dataRelationshipsRule = [
             'profiles' => [
                 'type' => self::strArrayConcat(
                     "required_with:$profiles|string|same:data.attributes.type|in:",
@@ -110,8 +110,8 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             $type != 'soft_skill' &&
             $type != 'tech_skill'
         ) {
-            $relationshipsRule = array_merge(
-                $relationshipsRule,
+            $dataRelationshipsRule = array_merge(
+                $dataRelationshipsRule,
                 [
                     'address' => [
                         'line_1' =>
@@ -130,7 +130,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
 
         $rules = [
             self::dataAttributesRule($dataAttributesRule, false),
-            self::relationshipsRule($relationshipsRule)
+            self::dataRelationshipsRule($dataRelationshipsRule)
         ];
 
         return $rules;
