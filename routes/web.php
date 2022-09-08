@@ -176,12 +176,12 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\CreateAssetRequest"]
         ]);
 
-        $router->put('{$id}', [
+        $router->put('{id}', [
             'uses' => 'AssetController@update',
             'middleware' => ["validate:$requests\UpdateAssetRequest"]
         ]);
 
-        $router->delete('{$id}', [
+        $router->delete('{id}', [
             'uses' => 'AssetController@delete',
             'middleware' => ["validate:$requests\DeleteAssetRequest"]
         ]);
@@ -201,7 +201,7 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\GetProfileRequest"]
         ]);
 
-        $router->delete('{$id}', [
+        $router->delete('{id}', [
             'uses' => 'ProfileController@delete',
             'middleware' => ["validate:$requests\DeleteProfileRequest"]
         ]);
