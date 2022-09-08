@@ -102,17 +102,6 @@ class AssetService
     {
         $data = $request->data($request);
 
-        if (Arr::get($data, 'data.attributes.type') == 'project') {
-            $start = Arr::get($data, 'data.attributes.metadata.project.dates.start');
-            $end = Arr::get($data, 'data.attributes.metadata.project.dates.end');
-
-            throw_if(
-                strtolower($end) != 'present' &&
-                strtotime($start) > strtotime($end),
-                UnprocessableEntityException::class
-            );
-        }
-
         $asset = $this->repositoryService->assetRepository->create(
             Arr::get($data, 'data.attributes')
         );
@@ -172,10 +161,10 @@ class AssetService
             $userId = auth()->user()->id;
 
             Arr::set($data, "$profile.user_id", $userId);
-            Arr::set($data, "$profile.asset_id", $asset->id);
+            Arr::set($data, "$profile.asset_id", $id);
 
             $this->profileRepository->updateOrCreate(
-                ['user_id' => $userId, 'asset_id', $asset->id],
+                ['user_id' => $userId, 'asset_id', $id],
                 Arr::get($data, $profile)
             );
         }
