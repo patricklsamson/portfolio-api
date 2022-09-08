@@ -38,9 +38,6 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
     {
         $data = App::make(Request::class)->all();
         $type = Arr::get($data, 'data.attributes.type');
-        $metadata = 'data.attributes.metadata';
-        $relationships = 'data.relationships';
-        $address = "$relationships.address";
 
         $dataAttributesRule = [
             'name' => 'required|string|unique:assets,name|min:1|max:100',
@@ -50,6 +47,8 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
                 Asset::TYPES
             )
         ];
+
+        $metadata = 'data.attributes.metadata';
 
         if ($type == 'project') {
             $dataAttributesRule = array_merge(
@@ -70,6 +69,7 @@ class CreateAssetRequest extends BaseRequest implements RequestInterface
         }
 
         $rules = [self::dataAttributesRule($dataAttributesRule)];
+        $address = 'data.relationships.address';
 
         if (
             $type != 'project' &&
