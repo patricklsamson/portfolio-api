@@ -16,15 +16,7 @@ class ProfileSeeder extends Seeder
     public function run(): void
     {
         Profile::factory()->forUser()->create();
-
-        Profile::factory()
-            ->project()
-            ->forUser()
-            ->create();
-
-        Profile::factory()
-            ->skill()
-            ->forUser()
-            ->create();
+        Profile::factory()->project()->forUser()->create();
+        Profile::factory()->skill()->forUser()->create();
     }
 }
