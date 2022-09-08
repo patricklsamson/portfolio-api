@@ -105,7 +105,7 @@ class UserService
             Arr::get($data, 'data.attributes.password')
         ));
 
-        unset($data['data']['attributes']['password_confirmation']);
+        Arr::pull($data, 'data.attributes.password_confirmation');
 
         return $this->resource($this->repositoryService->userRepository->create(
             Arr::get($data, 'data.attributes')
@@ -123,6 +123,11 @@ class UserService
     {
         $data = $request->data($request);
         $id = auth()->user()->id;
+
+        if (Arr::has($data, 'data.attributes.password')) {
+            Arr::pull($data, 'data.attributes.password_old');
+            Arr::pull($data, 'data.attributes.password_confirmation');
+        }
 
         $this->repositoryService->userRepository->update($id, Arr::get(
             $data,
