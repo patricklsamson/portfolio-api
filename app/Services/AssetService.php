@@ -132,16 +132,11 @@ class AssetService
         UpdateAssetRequest $request
     ): JsonResource {
         throw_if(
-            !$asset = $this->repositoryService->assetRepository->getOne($id),
+            !$this->repositoryService->assetRepository->getOne($id),
             NotFoundException::class
         );
 
         $data = $request->data($request);
-
-        $this->repositoryService->assetRepository->update(
-            $id,
-            Arr::get($data, 'data.attributes', [])
-        );
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
@@ -169,7 +164,13 @@ class AssetService
             );
         }
 
-        return $this->resource($asset);
+        return $this->resource(
+            $this->repositoryService->assetRepository->update($id, Arr::get(
+                $data,
+                'data.attributes',
+                []
+            ))
+        );
     }
 
     /**

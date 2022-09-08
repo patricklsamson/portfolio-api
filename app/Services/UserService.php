@@ -135,12 +135,6 @@ class UserService
             Arr::pull($data, 'data.attributes.password_confirmation');
         }
 
-        $this->repositoryService->userRepository->update($id, Arr::get(
-            $data,
-            'data.attributes',
-            []
-        ));
-
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
             $type = get_class($this->repositoryService->userRepository->model);
@@ -155,7 +149,11 @@ class UserService
         }
 
         return $this->resource(
-            $this->repositoryService->userRepository->getOne($id)
+            $this->repositoryService->userRepository->update($id, Arr::get(
+                $data,
+                'data.attributes',
+                []
+            ))
         );
     }
 

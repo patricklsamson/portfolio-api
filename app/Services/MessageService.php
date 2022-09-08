@@ -120,18 +120,18 @@ class MessageService
         UpdateMessageRequest $request
     ): JsonResource {
         throw_if(
-            !$message = $this->repositoryService->messageRepository->getOne(
+            !$this->repositoryService->messageRepository->getOne(
                 $id
             ),
             NotFoundException::class
         );
 
-        $this->repositoryService->messageRepository->update($id, Arr::get(
-            $request->data($request),
-            'data.attributes'
-        ));
-
-        return $this->resource($message);
+        return $this->resource(
+            $this->repositoryService->messageRepository->update($id, Arr::get(
+                $request->data($request),
+                'data.attributes'
+            ))
+        );
     }
 
     /**
