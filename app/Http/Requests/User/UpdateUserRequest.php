@@ -2,9 +2,13 @@
 
 namespace App\Http\Requests\User;
 
+use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 
 class UpdateUserRequest extends BaseRequest implements RequestInterface
 {
@@ -27,7 +31,8 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $metadata = 'data.attributes.metadata';
+        $attributes = 'data.attributes';
+        $metadata = "$attributes.metadata";
         $relationships = 'data.relationships';
         $address = "$relationships.address";
 
@@ -37,6 +42,21 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
                 'email' => 'nullable|string|min:1|max:50',
                 'username' => 'nullable|string|min:1|max:50',
                 'password' => 'nullable|string|confirmed|min:1|max:100',
+                'password_confirmation' => null,
+                'password_old' => [
+                    "required_with:$attributes.password",
+                    'string',
+                    'min:1',
+                    'max:100',
+                    function ($attribute, $value, $fail) {
+                        if (!Hash::check(
+                            $value,
+                            App::make(Request::class)->user()->password
+                        )) {
+                            $fail("$attribute is invalid.");
+                        }
+                    }
+                ],
                 'metadata' => 'filled|array:about,contacts,objective,websites',
                 'metadata.about' => 'nullable|string|min:1',
                 'metadata.contacts' => 'filled|array',
