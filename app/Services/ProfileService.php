@@ -45,7 +45,7 @@ class ProfileService
     public function getAll(GetProfileRequest $request): ResourceCollection
     {
         $data = $request->data($request);
-
+        // dd(Arr::get($data, 'filter.level'));
         $profiles = $this->repositoryService->profileRepository->getAll(
             Arr::get($data, 'filter.type'),
             Arr::get($data, 'filter.level'),
