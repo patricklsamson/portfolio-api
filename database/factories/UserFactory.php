@@ -42,9 +42,25 @@ class UserFactory extends Factory
         ];
     }
 
+    /**
+     * Indicate factory state
+     *
+     * @return Factory
+     */
     public function admin(): Factory {
         return $this->state(function () {
             return ['username' => 'admin'];
+        });
+    }
+
+    /**
+     * Indicate factory state
+     *
+     * @return Factory
+     */
+    public function dummy(): Factory {
+        return $this->state(function () {
+            return ['username' => 'dummy'];
         });
     }
 }
