@@ -260,7 +260,7 @@ class BaseRequest extends Request
         ];
 
         foreach ($filterRulesMap as $attribute => $rule) {
-            $rule = array_merge($rules, [
+            $rules = array_merge($rules, [
                 "filter.$attribute" => 'filled|array',
                 "filter.$attribute.*" => "required_with:filter.$attribute|" .
                     (is_array($rule) ? self::strArrayConcat(
@@ -270,7 +270,7 @@ class BaseRequest extends Request
             ]);
         }
 
-        return $rule;
+        return $rules;
     }
 
     /**
