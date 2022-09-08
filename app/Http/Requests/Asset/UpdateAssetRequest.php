@@ -87,8 +87,8 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
                     array_keys(Profile::LEVELS)
                 ),
                 'starred' => 'nullable|boolean',
-                'start_date' => 'nullable|date',
-                'end_date' => 'nullable|date',
+                'start_date' => 'nullable|string',
+                'end_date' => 'nullable|string',
                 'metadata' => 'filled|array:project',
                 'metadata.project' => 'filled|array:role,contributions',
                 'metadata.project.role' =>
