@@ -27,11 +27,13 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
         self::pageData($data);
         self::sortData($data);
 
-        Arr::set($data, 'filter.starred', self::strToArray(filter_var(
-            Arr::get($data, 'filter.starred'),
-            FILTER_VALIDATE_BOOLEAN
-        )));
-
+        if (Arr::has($data, 'filter.starred')) {
+            Arr::set($data, 'filter.starred.0', filter_var(
+                Arr::get($data, 'filter.starred.0'),
+                FILTER_VALIDATE_BOOLEAN
+            ));
+        }
+        // dd($data);
         return $data;
     }
 
@@ -42,10 +44,21 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
+        // dd(array_merge(
+        //     self::fieldsRule(['assets', 'profiles', 'users']),
+        //     self::filterRule([
+        //         'level' => array_keys(Profile::LEVELS),
+        //         'starred' => 'boolean|distinct',
+        //         'type' => Profile::TYPES
+        //     ]),
+        //     self::includeRule(['asset', 'user']),
+        //     self::sortRule(Profile::ATTRIBUTES),
+        //     self::pageRule()
+        // ));
         return array_merge(
             self::fieldsRule(['assets', 'profiles', 'users']),
             self::filterRule([
-                'level' => Profile::LEVELS,
+                'level' => array_keys(Profile::LEVELS),
                 'starred' => 'boolean|distinct',
                 'type' => Profile::TYPES
             ]),
