@@ -69,11 +69,13 @@ class BaseRepository implements BaseRepositoryInterface
      * @param string $id
      * @param array $attributes
      *
-     * @return int
+     * @return Model
      */
-    public function update(string $id, array $attributes): int
+    public function update(string $id, array $attributes): Model
     {
-        return $this->model->where('id', $id)->update($attributes);
+        return tap(
+            $this->model->where('id', $id)->first()
+        )->update($attributes);
     }
 
     /**
@@ -82,9 +84,12 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $identifiersMap
      * @param array $attributes
      *
-     * @return
+     * @return Model
      */
-    public function updateOrCreate(array $identifiersMap, array $attributes) {
+    public function updateOrCreate(
+        array $identifiersMap,
+        array $attributes
+    ): Model {
         return $this->model->updateOrCreate($identifiersMap, $attributes);
     }
 

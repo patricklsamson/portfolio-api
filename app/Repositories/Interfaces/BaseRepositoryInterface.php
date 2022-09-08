@@ -31,9 +31,22 @@ interface BaseRepositoryInterface
      * @param string $id
      * @param array $attributes
      *
-     * @return int
+     * @return Model
      */
-    public function update(string $id, array $attributes): int;
+    public function update(string $id, array $attributes): Model;
+
+    /**
+     * Update or create model
+     *
+     * @param array $identifiersMap
+     * @param array $attributes
+     *
+     * @return Model
+     */
+    public function updateOrCreate(
+        array $identifiersMap,
+        array $attributes
+    ): Model;
 
     /**
      * Delete model/s
