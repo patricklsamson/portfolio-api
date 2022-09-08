@@ -4,7 +4,6 @@ namespace App\Http\Requests\Asset;
 
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
-use App\Models\Address;
 use App\Models\Asset;
 use App\Models\Profile;
 use Illuminate\Http\Request;
@@ -34,9 +33,10 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             Arr::set(
                 $data,
                 'data.relationships.profile.type',
-                Arr::get($data, 'data.attributes.type')
+                Asset::find($request->id)->type
             );
         }
+        dd($data);
 
         return $data;
     }
@@ -53,11 +53,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
 
         $dataAttributesRule = [
             'name' => 'nullable|string|unique:assets,name|min:1|max:100',
-            'slug' => 'nullable|string|min:1|max:100',
-            'type' => self::strArrayConcat(
-                'required|string|in:',
-                Asset::TYPES
-            ),
+            'slug' => 'required_with:data.attributes.name|string|min:1|max:100',
         ];
 
         if ($type == 'project') {
@@ -82,13 +78,13 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
         $dataRelationshipsRule = [
             'profiles' => [
                 'type' => self::strArrayConcat(
-                    "required_with:$profiles|string|same:data.attributes.type|in:",
+                    "required_with:$profiles|string|in:",
                     Profile::TYPES
                 ),
                 'description' => 'nullable|string|min:1',
                 'level' => self::strArrayConcat(
                     'nullable|string|in:',
-                    Profile::LEVELS
+                    array_keys(Profile::LEVELS)
                 ),
                 'starred' => 'nullable|boolean',
                 'start_date' => 'nullable|date',
