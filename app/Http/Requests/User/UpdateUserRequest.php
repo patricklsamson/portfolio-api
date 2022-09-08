@@ -39,7 +39,8 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
                 'name' => 'nullable|string|min:1|max:100',
                 'email' => 'nullable|string|min:1|max:50',
                 'username' => 'nullable|string|min:1|max:50',
-                'password' => 'nullable|string|confirmed|min:1|max:100',
+                'password' => 'nullable|string|confirmed|' .
+                    "different:$attributes.password_old|min:1|max:100",
                 'password_confirmation' => null,
                 'password_old' => [
                     "required_with:$attributes.password",
