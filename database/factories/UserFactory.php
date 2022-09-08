@@ -41,4 +41,10 @@ class UserFactory extends Factory
             ]
         ];
     }
+
+    public function admin(): Factory {
+        return $this->state(function () {
+            return ['username' => 'admin'];
+        });
+    }
 }
