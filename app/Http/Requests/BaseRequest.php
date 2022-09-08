@@ -8,12 +8,14 @@ use App\Models\Message;
 use App\Models\Profile;
 use App\Models\User;
 use App\Traits\ArrayTrait;
+use App\Traits\DateTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
 class BaseRequest extends Request
 {
     use ArrayTrait;
+    use DateTrait;
 
     /**
      * Set fields data
