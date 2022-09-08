@@ -5,7 +5,6 @@ namespace App\Http\Requests\Auth;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class LoginRequest extends BaseRequest implements RequestInterface
 {
