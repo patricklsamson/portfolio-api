@@ -16,6 +16,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        User::factory()->admin()->create();
+        User::factory()->dummy()->create();
+
         User::factory()
             ->hasMessages(2)
             ->hasProfiles()
@@ -26,7 +29,5 @@ class UserSeeder extends Seeder
             ->has(Profile::factory()->skill())
             ->hasAddress()
             ->create();
-
-        User::factory()->admin()->create();
     }
 }
