@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests\User;
 
-use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\BaseRequest;
 use App\Http\Requests\Interfaces\RequestInterface;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 
