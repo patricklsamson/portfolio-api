@@ -125,6 +125,12 @@ class UserService
         $id = auth()->user()->id;
 
         if (Arr::has($data, 'data.attributes.password')) {
+            Arr::set(
+                $data,
+                'data.attributes.password',
+                Hash::make(Arr::get($data, 'data.attributes.password'))
+            );
+
             Arr::pull($data, 'data.attributes.password_old');
             Arr::pull($data, 'data.attributes.password_confirmation');
         }
