@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 
 trait ResponseTrait
 {
@@ -60,8 +59,7 @@ trait ResponseTrait
         return $this->content([
             'token' => $token,
             'type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL() *
-                Config::get('auth.expires_in')
+            'expires_in' => Auth::factory()->getTTL()
         ]);
     }
 }
