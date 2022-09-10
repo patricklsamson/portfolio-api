@@ -59,7 +59,7 @@ trait ResponseTrait
         return $this->content([
             'token' => $token,
             'type' => 'bearer',
-            'expires_in' => Auth::factory()->getTTL()
+            'expires_in' => Auth::factory()->getTTL() * 60
         ]);
     }
 }
