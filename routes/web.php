@@ -93,9 +93,9 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
     ], function () use ($router, $requests) {
         $requests = "$requests\Message";
 
-        // $router->group([
-        //     'middleware' => ['auth']
-        // ], function () use ($router, $requests) {
+        $router->group([
+            'middleware' => ['auth']
+        ], function () use ($router, $requests) {
             $router->get('', [
                 'uses' => 'MessageController@getAll',
                 'middleware' => ["validate:$requests\GetMessageRequest"]
@@ -107,16 +107,16 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
                 'uses' => 'MessageController@getOne',
                 'middleware' => ["validate:$requests\GetMessageRequest"]
             ]);
-        // });
+        });
 
         $router->post('', [
             'uses' => 'MessageController@create',
             'middleware' => ["validate:$requests\CreateMessageRequest"]
         ]);
 
-        // $router->group([
-        //     'middleware' => ['auth']
-        // ], function () use ($router, $requests) {
+        $router->group([
+            'middleware' => ['auth']
+        ], function () use ($router, $requests) {
             $router->put('{id}', [
                 'uses' => 'MessageController@update',
                 'middleware' => ["validate:$requests\UpdateMessageRequest"]
@@ -126,7 +126,7 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
                 'uses' => 'MessageController@delete',
                 'middleware' => ["validate:$requests\DeleteMessageRequest"]
             ]);
-        // });
+        });
     });
 
     /**
