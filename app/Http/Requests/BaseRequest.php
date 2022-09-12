@@ -96,13 +96,17 @@ class BaseRequest extends Request
      * Set sort data
      *
      * @param array &$data
+     * @param array $defaultSorts
      *
      * @return void
      */
-    public function sortData(array &$data): void
+    public function sortData(array &$data, array $defaultSorts = []): void
     {
-        if (Arr::has($data, 'sort')) {
-            $sorts = self::strToArray(Arr::get($data, 'sort'));
+        if (count($defaultSorts) > 0 || Arr::has($data, 'sort')) {
+            Arr::set($data, 'sort', $defaultSorts);
+
+            $sorts = self::strToArray(array_merge(Arr::get($data, 'sort', [])));
+            $sorts = array_merge($sorts, $defaultSorts);
             $formattedSorts = [];
 
             foreach ($sorts as $sort) {
