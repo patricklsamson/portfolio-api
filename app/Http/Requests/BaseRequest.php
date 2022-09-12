@@ -105,7 +105,7 @@ class BaseRequest extends Request
         if (count($defaultSorts) > 0 || Arr::has($data, 'sort')) {
             Arr::set($data, 'sort', $defaultSorts);
 
-            $sorts = self::strToArray(array_merge(Arr::get($data, 'sort', [])));
+            $sorts = self::strToArray(Arr::get($data, 'sort'));
             $sorts = array_merge($sorts, $defaultSorts);
             $formattedSorts = [];
 
