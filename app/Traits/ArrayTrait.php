@@ -8,12 +8,15 @@ trait ArrayTrait
      * Sanitize and transform string to array
      *
      * @param ?string $string
+     * @param mixed $failReturn
      *
      * @return mixed
      */
-    public function strToArray(?string $string)
+    public function strToArray(?string $string, $failReturn = null)
     {
-        return $string ? explode(',', str_replace(' ', '', $string)) : null;
+        return $string ?
+            explode(',', str_replace(' ', '', $string)) :
+            $failReturn;
     }
 
     /**
