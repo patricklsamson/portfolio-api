@@ -21,7 +21,7 @@ class MessageResource extends BaseResource
                 $this->sender,
                 $this->email,
                 $this->body,
-                $this->type
+                $this->category
             ]
         ));
     }
