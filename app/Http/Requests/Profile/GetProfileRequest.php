@@ -22,7 +22,7 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
         $data = $request->all();
 
         self::fieldsData($data, ['assets', 'profiles', 'users']);
-        self::filterData($data, ['level', 'starred', 'type']);
+        self::filterData($data, ['level', 'starred', 'category']);
         self::includeData($data);
         self::pageData($data);
         self::sortData($data);
@@ -33,7 +33,7 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
                 FILTER_VALIDATE_BOOLEAN
             ));
         }
-        // dd($data);
+
         return $data;
     }
 
@@ -44,23 +44,12 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        // dd(array_merge(
-        //     self::fieldsRule(['assets', 'profiles', 'users']),
-        //     self::filterRule([
-        //         'level' => array_keys(Profile::LEVELS),
-        //         'starred' => 'boolean|distinct',
-        //         'type' => Profile::TYPES
-        //     ]),
-        //     self::includeRule(['asset', 'user']),
-        //     self::sortRule(Profile::ATTRIBUTES),
-        //     self::pageRule()
-        // ));
         return array_merge(
             self::fieldsRule(['assets', 'profiles', 'users']),
             self::filterRule([
                 'level' => array_keys(Profile::LEVELS),
                 'starred' => 'boolean|distinct',
-                'type' => Profile::TYPES
+                'category' => Profile::CATEGORIES
             ]),
             self::includeRule(['asset', 'user']),
             self::sortRule(Profile::ATTRIBUTES),
