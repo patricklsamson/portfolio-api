@@ -18,7 +18,7 @@ class CreateMessagesTable extends Migration
             $table->string('sender', 100);
             $table->string('email', 50);
             $table->text('body');
-            $table->enum('type', [
+            $table->enum('category', [
                 'inbox',
                 'archives',
                 'spam'

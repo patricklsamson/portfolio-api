@@ -18,7 +18,7 @@ class CreateAssetsTable extends Migration
             $table->string('name', 100)->unique();
             $table->string('slug', 100);
 
-            $table->enum('type', [
+            $table->enum('category', [
                 'education',
                 'training',
                 'certification',
