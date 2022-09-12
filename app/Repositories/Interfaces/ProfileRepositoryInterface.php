@@ -7,7 +7,7 @@ interface ProfileRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $filterTypes
+     * @param ?array $filterCategories
      * @param ?array $filterLevels
      * @param ?array $filterStarreds
      * @param ?array $filterRoles
@@ -20,7 +20,7 @@ interface ProfileRepositoryInterface
      * @return ?object
      */
     public function getAll(
-        ?array $filterTypes = null,
+        ?array $filterCategories = null,
         ?array $filterLevels = null,
         ?array $filterStarreds = null,
         ?array $filterRoles = null,
