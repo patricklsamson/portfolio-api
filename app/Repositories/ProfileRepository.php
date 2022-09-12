@@ -23,7 +23,7 @@ class ProfileRepository extends BaseRepository implements
     /**
      * Get all models
      *
-     * @param ?array $filterTypes
+     * @param ?array $filterCategories
      * @param ?array $filterLevels
      * @param ?array $filterStarreds
      * @param ?array $filterRoles
@@ -36,7 +36,7 @@ class ProfileRepository extends BaseRepository implements
      * @return ?object
      */
     public function getAll(
-        ?array $filterTypes = null,
+        ?array $filterCategories = null,
         ?array $filterLevels = null,
         ?array $filterStarreds = null,
         ?array $filterRoles = null,
@@ -48,7 +48,7 @@ class ProfileRepository extends BaseRepository implements
     ): ?object {
         return $this->model
             ->byOwner()
-            ->filterTypes($filterTypes)
+            ->filterCategories($filterCategories)
             ->filterLevels($filterLevels)
             ->filterStarreds($filterStarreds)
             ->filterRoles($filterRoles)
