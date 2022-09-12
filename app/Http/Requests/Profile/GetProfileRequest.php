@@ -52,8 +52,11 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
                 'category' => Profile::CATEGORIES
             ]),
             self::includeRule(['asset', 'user']),
-            self::sortRule(Profile::ATTRIBUTES),
-            self::pageRule()
+            self::pageRule(),
+            self::sortRule(array_merge(Profile::ATTRIBUTES, [
+                'created_at',
+                'updated_at'
+            ]))
         );
     }
 }

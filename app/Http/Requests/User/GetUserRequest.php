@@ -66,7 +66,10 @@ class GetUserRequest extends BaseRequest implements RequestInterface
             $rules = array_merge(
                 $rules,
                 self::pageRule(),
-                self::sortRule(User::ATTRIBUTES)
+                self::sortRule(array_merge(User::ATTRIBUTES, [
+                    'created_at',
+                    'updated_at'
+                ]))
             );
         }
 

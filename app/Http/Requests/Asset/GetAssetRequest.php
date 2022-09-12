@@ -50,7 +50,10 @@ class GetAssetRequest extends BaseRequest implements RequestInterface
                 $rules,
                 self::filterRule(['category' => Asset::CATEGORIES]),
                 self::pageRule(),
-                self::sortRule(Asset::ATTRIBUTES)
+                self::sortRule(array_merge(Asset::ATTRIBUTES, [
+                    'created_at',
+                    'updated_at'
+                ]))
             );
         }
 

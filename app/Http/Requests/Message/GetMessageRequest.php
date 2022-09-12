@@ -50,7 +50,10 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
                 $rules,
                 self::filterRule(['category' => Message::CATEGORIES]),
                 self::pageRule(),
-                self::sortRule(Message::ATTRIBUTES)
+                self::sortRule(array_merge(Message::ATTRIBUTES, [
+                    'created_at',
+                    'updated_at'
+                ]))
             );
         }
 
