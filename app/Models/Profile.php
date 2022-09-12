@@ -15,7 +15,7 @@ class Profile extends BaseModel
      *
      * @var array
      */
-    const TYPES = [
+    const CATEGORIES = [
         'education',
         'training',
         'certification',
@@ -45,7 +45,7 @@ class Profile extends BaseModel
      * @var array
      */
     const ATTRIBUTES = [
-        'type',
+        'category',
         'description',
         'level',
         'starred',
@@ -60,7 +60,7 @@ class Profile extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'type',
+        'category',
         'description',
         'level',
         'starred',
@@ -118,15 +118,15 @@ class Profile extends BaseModel
      * Scope query
      *
      * @param Builder $query
-     * @param ?array $types
+     * @param ?array $categories
      *
      * @return Builder
      */
-    public function scopeFilterTypes(
+    public function scopeFilterCategories(
         Builder $query,
-        ?array $types = null
+        ?array $categories = null
     ): Builder {
-        return $types ? $query->whereIn('type', $types) : $query;
+        return $categories ? $query->whereIn('category', $categories) : $query;
     }
 
     /**

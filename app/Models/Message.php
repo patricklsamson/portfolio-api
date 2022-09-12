@@ -15,21 +15,21 @@ class Message extends BaseModel
      *
      * @var array
      */
-    const TYPES = ['inbox', 'archives', 'spam'];
+    const CATEGORIES = ['inbox', 'archives', 'spam'];
 
     /**
      * Resource attributes
      *
      * @var array
      */
-    const ATTRIBUTES = ['sender', 'email', 'body', 'type'];
+    const ATTRIBUTES = ['sender', 'email', 'body', 'category'];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['sender', 'email', 'body', 'type', 'user_id'];
+    protected $fillable = ['sender', 'email', 'body', 'category', 'user_id'];
 
     /**
      * Get parent model
@@ -45,14 +45,14 @@ class Message extends BaseModel
      * Scope query
      *
      * @param Builder $query
-     * @param ?array $types
+     * @param ?array $categories
      *
      * @return Builder
      */
-    public function scopeFilterTypes(
+    public function scopeFilterCategories(
         Builder $query,
-        ?array $types = null
+        ?array $categories = null
     ): Builder {
-        return $types ? $query->whereIn('type', $types) : $query;
+        return $categories ? $query->whereIn('category', $categories) : $query;
     }
 }

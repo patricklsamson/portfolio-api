@@ -17,7 +17,7 @@ class Asset extends BaseModel
      *
      * @var array
      */
-    const TYPES = [
+    const CATEGORIES = [
         'education',
         'training',
         'certification',
@@ -33,14 +33,14 @@ class Asset extends BaseModel
      *
      * @var array
      */
-    const ATTRIBUTES = ['name', 'slug', 'type', 'metadata'];
+    const ATTRIBUTES = ['name', 'slug', 'category', 'metadata'];
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name', 'slug', 'type', 'metadata'];
+    protected $fillable = ['name', 'slug', 'category', 'metadata'];
 
     /**
      * The attributes that should be cast.
@@ -90,14 +90,14 @@ class Asset extends BaseModel
      * Scope query
      *
      * @param Builder $query
-     * @param ?array $types
+     * @param ?array $categories
      *
      * @return Builder
      */
-    public function scopeFilterTypes(
+    public function scopeFilterCategories(
         Builder $query,
-        ?array $types = null
+        ?array $categories = null
     ): Builder {
-        return $types ? $query->whereIn('type', $types) : $query;
+        return $categories ? $query->whereIn('category', $categories) : $query;
     }
 }
