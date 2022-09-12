@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Exceptions\NotFoundException;
-use App\Exceptions\UnprocessableEntityException;
 use App\Http\Requests\Asset\CreateAssetRequest;
 use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
@@ -52,7 +51,7 @@ class AssetService
         $data = $request->data($request);
 
         $assets = $this->repositoryService->assetRepository->getAll(
-            Arr::get($data, 'filter.type'),
+            Arr::get($data, 'filter.category'),
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
@@ -66,13 +65,13 @@ class AssetService
     }
 
     /**
-     * Get types
+     * Get categories
      *
      * @return Response
      */
-    public function getTypes(): Response
+    public function getCategories(): Response
     {
-        return response($this->groupContent(Asset::TYPES, ['name']));
+        return response($this->groupContent(Asset::CATEGORIES, ['name']));
     }
 
     /**

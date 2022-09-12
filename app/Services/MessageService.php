@@ -51,7 +51,7 @@ class MessageService
         $data = $request->data($request);
 
         $messages = $this->repositoryService->messageRepository->getAll(
-            Arr::get($data, 'filter.type'),
+            Arr::get($data, 'filter.category'),
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
             Arr::get($data, 'page.number'),
@@ -81,13 +81,13 @@ class MessageService
     }
 
     /**
-     * Get types
+     * Get categories
      *
      * @return Response
      */
-    public function getTypes(): Response
+    public function getCategories(): Response
     {
-        return response($this->groupContent(Message::TYPES, ['name']));
+        return response($this->groupContent(Message::CATEGORIES, ['name']));
     }
 
     /**

@@ -47,7 +47,7 @@ class ProfileService
         $data = $request->data($request);
 
         $profiles = $this->repositoryService->profileRepository->getAll(
-            Arr::get($data, 'filter.type'),
+            Arr::get($data, 'filter.category'),
             Arr::get($data, 'filter.level'),
             Arr::get($data, 'filter.starred'),
             Arr::get($data, 'filter.role'),
