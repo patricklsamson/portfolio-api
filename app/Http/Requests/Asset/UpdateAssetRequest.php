@@ -29,11 +29,11 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             ));
         }
 
-        if (Arr::has($data, 'data.relationships.profile')) {
+        if (Arr::has($data, 'data.relationships.profiles')) {
             Arr::set(
                 $data,
-                'data.relationships.profile.type',
-                Asset::find($request->id)->type
+                'data.relationships.profiles.data.attributes.category',
+                Asset::find($request->id)->category
             );
         }
 
@@ -47,14 +47,14 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
      */
     public function rules(): array
     {
-        $type = Asset::find(App::make(Request::class)->id)->type;
+        $category = Asset::find(App::make(Request::class)->id)->category;
 
         $dataAttributesRule = [
             'name' => 'nullable|string|unique:assets,name|min:1|max:100',
             'slug' => 'required_with:data.attributes.name|string|min:1|max:100',
         ];
 
-        if ($type == 'project') {
+        if ($category == 'project') {
             $dataAttributesRule = array_merge(
                 $dataAttributesRule,
                 [
@@ -103,14 +103,14 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
         }
 
         $profileAttributes = [
-            'type' => self::strArrayConcat(
+            'category' => self::strArrayConcat(
                 "required_with:data.relationships.profiles|string|in:",
-                Profile::TYPES
+                Profile::CATEGORIES
             ),
             'description' => 'nullable|string|min:1'
         ];
 
-        if ($type == 'project') {
+        if ($category == 'project') {
             $profileAttributes = array_merge(
                 $profileAttributes,
                 [
@@ -126,7 +126,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             );
         }
 
-        if ($type != 'project' && $type != 'soft_skill') {
+        if ($category != 'project' && $category != 'soft_skill') {
             $profileAttributes = array_merge(
                 $profileAttributes,
                 [
@@ -171,7 +171,7 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
             );
         }
 
-        if ($type == 'tech_skill') {
+        if ($category == 'tech_skill') {
             $profileAttributes = array_merge(
                 $profileAttributes,
                 [
@@ -187,9 +187,9 @@ class UpdateAssetRequest extends BaseRequest implements RequestInterface
         $address = 'data.relationships.address';
 
         if (
-            $type != 'project' &&
-            $type != 'soft_skill' &&
-            $type != 'tech_skill'
+            $category != 'project' &&
+            $category != 'soft_skill' &&
+            $category != 'tech_skill'
         ) {
             $dataRelationshipsRule = array_merge(
                 $dataRelationshipsRule,
