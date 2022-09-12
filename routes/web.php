@@ -101,7 +101,9 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
                 'middleware' => ["validate:$requests\GetMessageRequest"]
             ]);
 
-            $router->get('types', ['uses' => 'MessageController@getTypes']);
+            $router->get('categories', [
+                'uses' => 'MessageController@getCategories'
+            ]);
 
             $router->get('{id}', [
                 'uses' => 'MessageController@getOne',
@@ -143,7 +145,7 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\GetAssetRequest"]
         ]);
 
-        $router->get('types', ['uses' => 'AssetController@getTypes']);
+        $router->get('categories', ['uses' => 'AssetController@getCategories']);
 
         $router->get('{id}', [
             'uses' => 'AssetController@getOne',
