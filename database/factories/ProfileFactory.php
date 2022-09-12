@@ -17,8 +17,8 @@ class ProfileFactory extends Factory
     {
         return [
             'asset_id' => Asset::factory()->hasAddress(),
-            'type' => function (array $attributes) {
-                return Asset::find($attributes['asset_id'])->type;
+            'category' => function (array $attributes) {
+                return Asset::find($attributes['asset_id'])->category;
             },
             'description' => $this->faker->sentence,
             'start_date' => $this->faker->randomElement([
@@ -45,8 +45,8 @@ class ProfileFactory extends Factory
         return $this->state(function () {
             return [
                 'asset_id' => Asset::factory()->project()->hasAddress(),
-                'type' => function (array $attributes) {
-                    return Asset::find($attributes['asset_id'])->type;
+                'category' => function (array $attributes) {
+                    return Asset::find($attributes['asset_id'])->category;
                 },
                 'starred' => $this->faker->boolean,
                 'metadata' => [
@@ -75,8 +75,8 @@ class ProfileFactory extends Factory
         return $this->state(function () {
             return [
                 'asset_id' => Asset::factory()->skill()->hasAddress(),
-                'type' => function (array $attributes) {
-                    return Asset::find($attributes['asset_id'])->type;
+                'category' => function (array $attributes) {
+                    return Asset::find($attributes['asset_id'])->category;
                 },
                 'level' => $this->faker->randomElement(
                     array_keys(Profile::LEVELS)

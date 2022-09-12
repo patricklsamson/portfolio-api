@@ -15,17 +15,17 @@ class AssetFactory extends Factory
     public function definition(): array
     {
         $name = $this->faker->words(2, true);
-        $type = $this->faker->randomElement(
-            array_filter(Asset::TYPES, function ($type) {
-                return $type != 'project' && $type != 'soft_skill' &&
-                    $type != 'tech_skill';
+        $category = $this->faker->randomElement(
+            array_filter(Asset::CATEGORIES, function ($category) {
+                return $category != 'project' && $category != 'soft_skill' &&
+                    $category != 'tech_skill';
             })
         );
 
         return [
             'name' => $name,
             'slug' => str_replace(' ', '-', $name),
-            'type' => $type
+            'category' => $category
         ];
     }
 
@@ -38,7 +38,7 @@ class AssetFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'type' => 'project',
+                'category' => 'project',
                 'metadata' => [
                     'project' => [
                         'dates' => [
@@ -76,7 +76,7 @@ class AssetFactory extends Factory
     {
         return $this->state(function () {
             return [
-                'type' => $this->faker->randomElement([
+                'category' => $this->faker->randomElement([
                     'soft_skill',
                     'tech_skill'
                 ])

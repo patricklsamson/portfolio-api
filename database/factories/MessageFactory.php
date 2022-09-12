@@ -18,7 +18,7 @@ class MessageFactory extends Factory
             'sender' => $this->faker->company,
             'email' => $this->faker->safeEmail,
             'body' => $this->faker->paragraph,
-            'type' => $this->faker->randomElement(Message::TYPES)
+            'category' => $this->faker->randomElement(Message::CATEGORIES)
         ];
     }
 }
