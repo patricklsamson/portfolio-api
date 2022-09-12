@@ -18,7 +18,7 @@ class ProfileResource extends BaseResource
     {
         return $this->formatResponse($request, $this->id, array_combine(
             Profile::ATTRIBUTES, [
-                $this->type,
+                $this->category,
                 $this->description,
                 $this->level,
                 $this->starred,
