@@ -20,7 +20,7 @@ class AssetResource extends BaseResource
             Asset::ATTRIBUTES, [
                 $this->name,
                 $this->slug,
-                $this->type,
+                $this->category,
                 $this->metadata
             ]
         ));
