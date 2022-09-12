@@ -43,13 +43,13 @@ class AssetController extends Controller
     }
 
     /**
-     * Get types
+     * Get categories
      *
      * @return Response
      */
-    public function getTypes(): Response
+    public function getCategories(): Response
     {
-        return $this->assetService->getTypes();
+        return $this->assetService->getCategories();
     }
 
     /**
