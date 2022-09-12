@@ -32,7 +32,7 @@ class CreateMessageRequest extends BaseRequest implements RequestInterface
             'sender' => 'required|string|min:1|max:100',
             'email' => 'required|string|min:1|max:50',
             'body' => 'required|string|min:1|max:50',
-            'type' => 'required|string|in:inbox',
+            'category' => 'required|string|in:inbox',
             'user_id' => [
                 'required',
                 'integer',

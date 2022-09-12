@@ -25,7 +25,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
         self::includeData($data);
 
         if ($request->path() == 'v1/messages') {
-            self::filterData($data, ['type']);
+            self::filterData($data, ['category']);
             self::pageData($data);
             self::sortData($data);
         }
@@ -48,7 +48,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
         if (App::make(Request::class)->path() == 'v1/messages') {
             $rules = array_merge(
                 $rules,
-                self::filterRule(['type' => Message::TYPES]),
+                self::filterRule(['category' => Message::CATEGORIES]),
                 self::pageRule(),
                 self::sortRule(Message::ATTRIBUTES)
             );

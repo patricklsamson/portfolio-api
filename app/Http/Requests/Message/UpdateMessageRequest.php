@@ -29,9 +29,9 @@ class UpdateMessageRequest extends BaseRequest implements RequestInterface
     public function rules(): array
     {
         return self::dataAttributesRule([
-            'type' => self::strArrayConcat(
+            'category' => self::strArrayConcat(
                 'required|string|in:',
-                Message::TYPES
+                Message::CATEGORIES
             )
         ]);
     }
