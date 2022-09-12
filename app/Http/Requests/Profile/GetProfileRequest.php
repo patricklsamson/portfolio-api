@@ -25,7 +25,7 @@ class GetProfileRequest extends BaseRequest implements RequestInterface
         self::filterData($data, ['level', 'starred', 'category']);
         self::includeData($data);
         self::pageData($data);
-        self::sortData($data);
+        self::sortData($data, ['-start_date']);
 
         if (Arr::has($data, 'filter.starred')) {
             Arr::set($data, 'filter.starred.0', filter_var(

@@ -27,7 +27,7 @@ class GetMessageRequest extends BaseRequest implements RequestInterface
         if ($request->path() == 'v1/messages') {
             self::filterData($data, ['category']);
             self::pageData($data);
-            self::sortData($data);
+            self::sortData($data, ['-created_at']);
         }
 
         return $data;
