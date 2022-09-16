@@ -168,6 +168,9 @@ class UserService
 
         $this->repositoryService->userRepository->delete($id);
 
-        return response($this->content(['success' => true, 'purged'=> $id]));
+        return response($this->content([
+            'success' => true,
+            'purged'=> $this->purgedIdsMap([$id])
+        ]));
     }
 }
