@@ -62,4 +62,22 @@ trait ResponseTrait
             'expires_in' => Auth::factory()->getTTL()
         ]);
     }
+
+    /**
+     * Map deleted ids
+     *
+     * @param array $ids
+     *
+     * @return array
+     */
+    public function deletedIdsMap(array $ids): array
+    {
+        $ids = [];
+
+        foreach ($ids as $id) {
+            array_push($content, ['id' => $id]);
+        }
+
+        return $ids;
+    }
 }
