@@ -64,13 +64,13 @@ trait ResponseTrait
     }
 
     /**
-     * Map deleted ids
+     * Map purged ids
      *
      * @param array $ids
      *
      * @return array
      */
-    public function deletedIdsMap(array $ids): array
+    public function purgedIdsMap(array $ids): array
     {
         $ids = [];
 

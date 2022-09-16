@@ -168,6 +168,6 @@ class UserService
 
         $this->repositoryService->userRepository->delete($id);
 
-        return response($this->content(['success' => true, 'deleted'=> $id]));
+        return response($this->content(['success' => true, 'purged'=> $id]));
     }
 }
