@@ -153,8 +153,12 @@ class MessageService
             NotFoundException::class
         );
 
+
         $this->repositoryService->messageRepository->delete($ids);
 
-        return response($this->content(['success' => true]));
+        return response($this->content([
+            'success' => true,
+            'deleted' => $this->deletedIdsMap($ids)
+        ]));
     }
 }

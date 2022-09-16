@@ -193,6 +193,9 @@ class AssetService
 
         $this->repositoryService->assetRepository->delete($ids);
 
-        return response($this->content(['success' => true]));
+        return response($this->content([
+            'success' => true,
+            'deleted' => $this->deletedIdsMap($ids)
+        ]));
     }
 }

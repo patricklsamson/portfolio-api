@@ -164,8 +164,10 @@ class UserService
      */
     public function delete(): Response
     {
-        $this->repositoryService->userRepository->delete(auth()->user()->id);
+        $id = auth()->user()->id;
 
-        return response($this->content(['success' => true]));
+        $this->repositoryService->userRepository->delete($id);
+
+        return response($this->content(['success' => true, 'deleted'=> $id]));
     }
 }

@@ -84,6 +84,9 @@ class ProfileService
 
         $this->repositoryService->profileRepository->delete($ids);
 
-        return response($this->content(['success' => true]));
+        return response($this->content([
+            'success' => true,
+            'deleted' => $this->deletedIdsMap($ids)
+        ]));
     }
 }
