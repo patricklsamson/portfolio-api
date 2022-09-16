@@ -72,12 +72,12 @@ trait ResponseTrait
      */
     public function purgedIdsMap(array $ids): array
     {
-        $ids = [];
+        $purgedIds = [];
 
         foreach ($ids as $id) {
-            array_push($content, ['id' => $id]);
+            array_push($purgedIds, ['id' => $id]);
         }
 
-        return $ids;
+        return $purgedIds;
     }
 }
