@@ -195,7 +195,7 @@ class AssetService
 
         return response($this->content([
             'success' => true,
-            'purged' => $this->deletedIdsMap($ids)
+            'purged' => $this->purgedIdsMap($ids)
         ]));
     }
 }
