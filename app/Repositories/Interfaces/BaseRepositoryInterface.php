@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 interface BaseRepositoryInterface
@@ -12,9 +12,9 @@ interface BaseRepositoryInterface
      *
      * @param array $ids
      *
-     * @return ?Collection
+     * @return ?Builder
      */
-    public function getAllByIdIn(array $ids): ?Collection;
+    public function getAllByIdIn(array $ids): ?Builder;
 
     /**
      * Create model

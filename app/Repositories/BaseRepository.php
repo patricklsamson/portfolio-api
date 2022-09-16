@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\BaseRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
@@ -32,9 +32,9 @@ class BaseRepository implements BaseRepositoryInterface
      *
      * @param array $ids
      *
-     * @return ?Collection
+     * @return ?Builder
      */
-    public function getAllByIdIn(array $ids): ?Collection
+    public function getAllByIdIn(array $ids): ?Builder
     {
         return $this->model->whereIdIn($ids);
     }
