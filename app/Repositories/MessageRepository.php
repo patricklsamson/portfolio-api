@@ -41,6 +41,7 @@ class MessageRepository extends BaseRepository implements
         ?string $pageCursor = null
     ): ?object {
         return $this->model
+            ->byOwner()
             ->filterCategories($filterCategories)
             ->sort($sorts)
             ->page($pageSize, $pageNumber, $isCursor, $pageCursor);

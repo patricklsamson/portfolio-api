@@ -45,6 +45,18 @@ class Message extends BaseModel
      * Scope query
      *
      * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeByOwner(Builder $query): Builder
+    {
+        return $query->where('user_id', auth()->user()->id);
+    }
+
+    /**
+     * Scope query
+     *
+     * @param Builder $query
      * @param ?array $categories
      *
      * @return Builder
