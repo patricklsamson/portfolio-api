@@ -182,6 +182,8 @@ $router->group(['prefix' => 'v1'], function () use ($router, $requests) {
             'middleware' => ["validate:$requests\GetProfileRequest"]
         ]);
 
+        $router->get('levels', ['uses' => 'ProfileController@getLevels']);
+
         $router->delete('{id}', [
             'uses' => 'ProfileController@delete',
             'middleware' => ["validate:$requests\DeleteProfileRequest"]

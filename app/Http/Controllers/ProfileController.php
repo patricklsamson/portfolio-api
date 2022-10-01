@@ -42,6 +42,16 @@ class ProfileController extends Controller
     }
 
     /**
+     * Get levels
+     *
+     * @return Response
+     */
+    public function getLevels(): Response
+    {
+        return $this->profileService->getLevels();
+    }
+
+    /**
      * Delete model/s
      *
      * @param string $id

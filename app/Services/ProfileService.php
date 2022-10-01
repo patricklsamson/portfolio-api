@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Exceptions\NotFoundException;
 use App\Http\Requests\Profile\DeleteProfileRequest;
 use App\Http\Requests\Profile\GetProfileRequest;
+use App\Models\Profile;
 use App\Traits\ResourceTrait;
 use App\Traits\ResponseTrait;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -61,6 +62,18 @@ class ProfileService
         throw_if(!$profiles->count(), NotFoundException::class);
 
         return $this->resource($profiles);
+    }
+
+    /**
+     * Get levels
+     *
+     * @return Response
+     */
+    public function getLevels(): Response
+    {
+        return response(
+            $this->groupContent(Profile::LEVELS, ['name', 'level'])
+        );
     }
 
     /**
