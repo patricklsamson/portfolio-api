@@ -23,7 +23,9 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name,
+            'first_name' => $this->faker->firstName,
+            'middle_name' => $this->faker->lastName,
+            'last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'username' => $this->faker->unique()->userName,
             'password' => Hash::make('password'),
@@ -56,11 +58,13 @@ class UserFactory extends Factory
     /**
      * Indicate factory state
      *
+     * @param ?string $username
+     *
      * @return Factory
      */
-    public function dummy(): Factory {
-        return $this->state(function () {
-            return ['username' => 'dummy'];
+    public function customUsername(?string $username = 'dummy'): Factory {
+        return $this->state(function () use ($username) {
+            return ['username' => $username];
         });
     }
 }

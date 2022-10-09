@@ -25,7 +25,9 @@ class User extends BaseModel implements
      * @var array
      */
     const ATTRIBUTES = [
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'username',
         'metadata'
@@ -37,7 +39,9 @@ class User extends BaseModel implements
      * @var array
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'middle_name',
+        'last_name',
         'email',
         'username',
         'password',
