@@ -122,81 +122,20 @@ class BaseRequest extends Request
     }
 
     /**
-     * Set fields addresses rule
+     * Set fields model rule
+     *
+     * @param string $model
+     * @param array $attributes
      *
      * @return array
      */
-    public function fieldsAddressesRule(): array
+    public function fieldsModelsRule(string $model, array $attributes): array
     {
         return [
-            'fields.addresses' => 'filled|array',
-            'fields.addresses.*' => self::strArrayConcat(
-                'required_with:fields.addresses|string|distinct|in:',
-                Address::ATTRIBUTES
-            )
-        ];
-    }
-
-    /**
-     * Set fields assets rule
-     *
-     * @return array
-     */
-    public function fieldsAssetsRule(): array
-    {
-        return [
-            'fields.assets' => 'filled|array',
-            'fields.assets.*' => self::strArrayConcat(
-                'required_with:fields.assets|string|distinct|in:',
-                Asset::ATTRIBUTES
-            )
-        ];
-    }
-
-    /**
-     * Set fields messages rule
-     *
-     * @return array
-     */
-    public function fieldsMessagesRule(): array
-    {
-        return [
-            'fields.messages' => 'filled|array',
-            'fields.messages.*' => self::strArrayConcat(
-                'required_with:fields.messages|string|distinct|in:',
-                Message::ATTRIBUTES
-            )
-        ];
-    }
-
-    /**
-     * Set fields profiles rule
-     *
-     * @return array
-     */
-    public function fieldsProfilesRule(): array
-    {
-        return [
-            'fields.profiles' => 'filled|array',
-            'fields.profiles.*' => self::strArrayConcat(
-                'required_with:fields.profiles|string|distinct|in:',
-                Profile::ATTRIBUTES
-            )
-        ];
-    }
-
-    /**
-     * Set fields users rule
-     *
-     * @return array
-     */
-    public function fieldsUsersRule(): array
-    {
-        return [
-            'fields.users' => 'filled|array',
-            'fields.users.*' => self::strArrayConcat(
-                'required_with:fields.users|string|distinct|in:',
-                User::ATTRIBUTES
+            "fields.$model" => 'filled|array',
+            "fields.$model.*" => self::strArrayConcat(
+                "required_with:fields.$model|string|distinct|in:",
+                $attributes
             )
         ];
     }
@@ -217,23 +156,38 @@ class BaseRequest extends Request
         foreach ($fields as $field) {
             switch ($field) {
                 case 'addresses':
-                    $rules = array_merge($rules, self::fieldsAddressesRule());
+                    $rules = array_merge(
+                        $rules,
+                        self::fieldsModelsRule('addresses', Address::ATTRIBUTES)
+                    );
 
                     break;
                 case 'assets':
-                    $rules = array_merge($rules, self::fieldsAssetsRule());
+                    $rules = array_merge(
+                        $rules,
+                        self::fieldsModelsRule('assets', Asset::ATTRIBUTES)
+                    );
 
                     break;
                 case 'messages':
-                    $rules = array_merge($rules, self::fieldsMessagesRule());
+                    $rules = array_merge(
+                        $rules,
+                        self::fieldsModelsRule('messages', Message::ATTRIBUTES)
+                    );
 
                     break;
                 case 'profiles':
-                    $rules = array_merge($rules, self::fieldsProfilesRule());
+                    $rules = array_merge(
+                        $rules,
+                        self::fieldsModelsRule('profiles', Profile::ATTRIBUTES)
+                    );
 
                     break;
                 case 'users':
-                    $rules = array_merge($rules, self::fieldsUsersRule());
+                    $rules = array_merge(
+                        $rules,
+                        self::fieldsModelsRule('users', User::ATTRIBUTES)
+                    );
 
                     break;
                 default:
