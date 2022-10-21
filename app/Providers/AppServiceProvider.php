@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Register requests
+     * Register repositories
      *
      * @return void
      */
