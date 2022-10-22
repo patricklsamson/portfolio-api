@@ -23,7 +23,7 @@ class MessageRepository extends BaseRepository implements
     /**
      * Get all models
      *
-     * @param ?array $filterCategories
+     * @param ?array $filterCategory
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
@@ -33,7 +33,7 @@ class MessageRepository extends BaseRepository implements
      * @return ?object
      */
     public function getAll(
-        ?array $filterCategories = null,
+        ?array $filterCategory = null,
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
@@ -42,7 +42,7 @@ class MessageRepository extends BaseRepository implements
     ): ?object {
         return $this->model
             ->byOwner()
-            ->filterCategories($filterCategories)
+            ->filterCategory($filterCategory)
             ->sort($sorts)
             ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }

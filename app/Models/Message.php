@@ -61,7 +61,7 @@ class Message extends BaseModel
      *
      * @return Builder
      */
-    public function scopeFilterCategories(
+    public function scopeFilterCategory(
         Builder $query,
         ?array $categories = null
     ): Builder {
