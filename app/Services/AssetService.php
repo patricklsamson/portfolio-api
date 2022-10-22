@@ -139,7 +139,7 @@ class AssetService extends BaseService
             Arr::set($data, "$profile.asset_id", $id);
 
             $this->profileRepository->updateOrCreate(
-                ['user_id' => $userId, 'asset_id', $id],
+                ['user_id' => $userId, 'asset_id' => $id],
                 Arr::get($data, $profile)
             );
         }
@@ -147,8 +147,7 @@ class AssetService extends BaseService
         return $this->resource(
             $this->assetRepository->update($id, Arr::get(
                 $data,
-                'data.attributes',
-                []
+                'data.attributes'
             ))
         );
     }
