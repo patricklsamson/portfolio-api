@@ -50,6 +50,12 @@ class Controller extends BaseController
      * Constructor
      *
      * @param AssetService $assetService
+     * @param AuthService $authService
+     * @param MessageService $messageService
+     * @param ProfileService $profileService
+     * @param UserService $userService
+     *
+     * @return void
      */
     public function __construct(
         AssetService $assetService,
