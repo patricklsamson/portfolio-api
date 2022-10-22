@@ -22,7 +22,7 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $filterCategories
+     * @param ?array $filterCategory
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
@@ -32,7 +32,7 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
      * @return ?object
      */
     public function getAll(
-        ?array $filterCategories = null,
+        ?array $filterCategory = null,
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
@@ -40,7 +40,7 @@ class AssetRepository extends BaseRepository implements AssetRepositoryInterface
         ?string $pageCursor = null
     ): ?object {
         return $this->model
-            ->filterCategories($filterCategories)
+            ->filterCategory($filterCategory)
             ->sort($sorts)
             ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }

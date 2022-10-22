@@ -7,7 +7,7 @@ interface AssetRepositoryInterface
     /**
      * Get all models
      *
-     * @param ?array $filterCategories
+     * @param ?array $filterCategory
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
@@ -17,7 +17,7 @@ interface AssetRepositoryInterface
      * @return ?object
      */
     public function getAll(
-        ?array $filterCategories = null,
+        ?array $filterCategory = null,
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
