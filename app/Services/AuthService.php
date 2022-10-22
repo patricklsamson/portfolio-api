@@ -32,10 +32,10 @@ class AuthService
         $content = $this->tokenContent($token);
 
         if (Arr::get($data, 'include.0') == 'user') {
-            Arr::set($content, 'data.relationships.user.data', [
+            $content['data']['relationships']['user']['data'][] = [
                 'id' => auth()->user()->id,
                 'type' => 'users'
-            ]);
+            ];
 
             $content = array_merge($content, [
                 'included' => [$this->resource(auth()->user())]
