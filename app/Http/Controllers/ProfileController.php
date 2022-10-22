@@ -11,25 +11,6 @@ use Illuminate\Http\Response;
 class ProfileController extends Controller
 {
     /**
-     * Model service
-     *
-     * @var ProfileService
-     */
-    private $profileService;
-
-    /**
-     * Constructor
-     *
-     * @param ProfileService $profileService
-     *
-     * @return void
-     */
-    public function __construct(ProfileService $profileService)
-    {
-        $this->profileService = $profileService;
-    }
-
-    /**
      * Get all models
      *
      * @param GetProfileRequest $request

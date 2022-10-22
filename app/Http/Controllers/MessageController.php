@@ -14,25 +14,6 @@ use Illuminate\Http\Response;
 class MessageController extends Controller
 {
     /**
-     * Model service
-     *
-     * @var MessageService
-     */
-    private $messageService;
-
-    /**
-     * Constructor
-     *
-     * @param MessageService $messageService
-     *
-     * @return void
-     */
-    public function __construct(MessageService $messageService)
-    {
-        $this->messageService = $messageService;
-    }
-
-    /**
      * Get all models
      *
      * @param GetMessageRequest $request

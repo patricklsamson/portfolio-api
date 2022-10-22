@@ -3,30 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
-use App\Services\AuthService;
 use Illuminate\Http\Response;
 
 class AuthController extends Controller
 {
-    /**
-     * Auth service
-     *
-     * @var AuthService
-     */
-    private $authService;
-
-    /**
-     * Constructor
-     *
-     * @param AuthService $authService
-     *
-     * @return void
-     */
-    public function __construct(AuthService $authService)
-    {
-        $this->authService = $authService;
-    }
-
     /**
      * Login
      *

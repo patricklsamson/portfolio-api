@@ -6,30 +6,12 @@ use App\Http\Requests\Asset\CreateAssetRequest;
 use App\Http\Requests\Asset\DeleteAssetRequest;
 use App\Http\Requests\Asset\GetAssetRequest;
 use App\Http\Requests\Asset\UpdateAssetRequest;
-use App\Services\AssetService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 
 class AssetController extends Controller
 {
-    /**
-     * Asset service
-     *
-     * @var AssetService
-     */
-    private $assetService;
-
-    /**
-     * Constructor
-     *
-     * @param AssetService $assetService
-     */
-    public function __construct(AssetService $assetService)
-    {
-        $this->assetService = $assetService;
-    }
-
     /**
      * Get all models
      *

@@ -13,23 +13,6 @@ use Illuminate\Http\Response;
 class UserController extends Controller
 {
     /**
-     * Model service
-     *
-     * @var UserService
-     */
-    private $userService;
-
-    /**
-     * Constructor
-     *
-     * @param UserService $userService
-     */
-    public function __construct(UserService $userService)
-    {
-        $this->userService = $userService;
-    }
-
-    /**
      * Get all models
      *
      * @param GetUserRequest $request
