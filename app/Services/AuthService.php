@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
-class AuthService
+class AuthService extends BaseService
 {
     use ResponseTrait;
     use ResourceTrait;

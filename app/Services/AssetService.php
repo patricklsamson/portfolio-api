@@ -15,29 +15,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class AssetService
+class AssetService extends BaseService
 {
     use ResourceTrait;
     use ResponseTrait;
-
-    /**
-     * Repository service
-     *
-     * @var RepositoryService
-     */
-    private $repositoryService;
-
-    /**
-     * Constructor
-     *
-     * @param RepositoryService $repositoryService
-     *
-     * @return void
-     */
-    public function __construct(RepositoryService $repositoryService)
-    {
-        $this->repositoryService = $repositoryService;
-    }
 
     /**
      * Get all models
@@ -50,7 +31,7 @@ class AssetService
     {
         $data = $request->data($request);
 
-        $assets = $this->repositoryService->assetRepository->getAll(
+        $assets = $this->assetRepository->getAll(
             Arr::get($data, 'filter.category'),
             Arr::get($data, 'sort'),
             Arr::get($data, 'page.size'),
@@ -83,7 +64,7 @@ class AssetService
      */
     public function getOne(string $id): JsonResource
     {
-        $asset = $this->repositoryService->assetRepository->getOne($id);
+        $asset = $this->assetRepository->getOne($id);
 
         throw_if(!$asset, NotFoundException::class);
 
@@ -101,13 +82,13 @@ class AssetService
     {
         $data = $request->data($request);
 
-        $asset = $this->repositoryService->assetRepository->create(
+        $asset = $this->assetRepository->create(
             Arr::get($data, 'data.attributes')
         );
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
-            $type = get_class($this->repositoryService->assetRepository->model);
+            $type = get_class($this->assetRepository->model);
 
             Arr::set($data, "$address.parentable_id", $asset->id);
             Arr::set($data, "$address.parentable_type", $type);
@@ -131,7 +112,7 @@ class AssetService
         UpdateAssetRequest $request
     ): JsonResource {
         throw_if(
-            !$this->repositoryService->assetRepository->getOne($id),
+            !$this->assetRepository->getOne($id),
             NotFoundException::class
         );
 
@@ -139,7 +120,7 @@ class AssetService
 
         if (Arr::has($data, 'data.relationships.address')) {
             $address = 'data.relationships.address.data.attributes';
-            $type = get_class($this->repositoryService->assetRepository->model);
+            $type = get_class($this->assetRepository->model);
 
             Arr::set($data, "$address.parentable_id", $id);
             Arr::set($data, "$address.parentable_type", $type);
@@ -164,7 +145,7 @@ class AssetService
         }
 
         return $this->resource(
-            $this->repositoryService->assetRepository->update($id, Arr::get(
+            $this->assetRepository->update($id, Arr::get(
                 $data,
                 'data.attributes',
                 []
@@ -187,11 +168,11 @@ class AssetService
         $ids = array_unique($ids, SORT_REGULAR);
 
         throw_if(
-            !$this->repositoryService->assetRepository->getAllByIdIn($ids),
+            !$this->assetRepository->getAllByIdIn($ids),
             NotFoundException::class
         );
 
-        $this->repositoryService->assetRepository->delete($ids);
+        $this->assetRepository->delete($ids);
 
         return response($this->content([
             'success' => true,

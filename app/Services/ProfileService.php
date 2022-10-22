@@ -12,29 +12,10 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 
-class ProfileService
+class ProfileService extends BaseService
 {
     use ResourceTrait;
     use ResponseTrait;
-
-    /**
-     * Repository service
-     *
-     * @var RepositoryService
-     */
-    private $repositoryService;
-
-    /**
-     * Constructor
-     *
-     * @param RepositoryService $repositoryService
-     *
-     * @return void
-     */
-    public function __construct(RepositoryService $repositoryService)
-    {
-        $this->repositoryService = $repositoryService;
-    }
 
     /**
      * Get all models
@@ -47,7 +28,7 @@ class ProfileService
     {
         $data = $request->data($request);
 
-        $profiles = $this->repositoryService->profileRepository->getAll(
+        $profiles = $this->profileRepository->getAll(
             Arr::get($data, 'filter.category'),
             Arr::get($data, 'filter.level'),
             Arr::get($data, 'filter.starred'),
@@ -91,11 +72,11 @@ class ProfileService
         $ids = array_unique($ids, SORT_REGULAR);
 
         throw_if(
-            !$this->repositoryService->profileRepository->getAllByIdIn($ids),
+            !$this->profileRepository->getAllByIdIn($ids),
             NotFoundException::class
         );
 
-        $this->repositoryService->profileRepository->delete($ids);
+        $this->profileRepository->delete($ids);
 
         return response($this->content([
             'success' => true,

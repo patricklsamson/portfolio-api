@@ -8,7 +8,7 @@ use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 
-class RepositoryService
+class BaseService
 {
     /**
      * Address repository
