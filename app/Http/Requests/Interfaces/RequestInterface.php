@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 interface RequestInterface
 {
     /**
-     * Get data to be validated from the request.
+     * Get data to be validated from the request
      *
      * @param Request $request
      *
@@ -16,7 +16,7 @@ interface RequestInterface
     public function data(Request $request): array;
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @return array
      */

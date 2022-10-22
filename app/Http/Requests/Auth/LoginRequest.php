@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class LoginRequest extends BaseRequest implements RequestInterface
 {
     /**
-     * Get data to be validated from the request.
+     * Get data to be validated from the request
      *
      * @param Request $request
      *
@@ -26,7 +26,7 @@ class LoginRequest extends BaseRequest implements RequestInterface
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @return array
      */

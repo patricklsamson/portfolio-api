@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 class UpdateUserRequest extends BaseRequest implements RequestInterface
 {
     /**
-     * Get data to be validated from the request.
+     * Get data to be validated from the request
      *
      * @param Request $request
      *
@@ -23,7 +23,7 @@ class UpdateUserRequest extends BaseRequest implements RequestInterface
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the request
      *
      * @return array
      */
