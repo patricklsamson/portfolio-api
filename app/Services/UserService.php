@@ -132,8 +132,7 @@ class UserService extends BaseService
         return $this->resource(
             $this->userRepository->update($id, Arr::get(
                 $data,
-                'data.attributes',
-                []
+                'data.attributes'
             ))
         );
     }
