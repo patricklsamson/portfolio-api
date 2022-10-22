@@ -23,10 +23,10 @@ class ProfileRepository extends BaseRepository implements
     /**
      * Get all models
      *
-     * @param ?array $filterCategories
-     * @param ?array $filterLevels
-     * @param ?array $filterStarreds
-     * @param ?array $filterRoles
+     * @param ?array $filterCategory
+     * @param ?array $filterLevel
+     * @param ?array $filterStarred
+     * @param ?array $filterRole
      * @param ?array $sorts
      * @param ?int $pageSize
      * @param ?int $pageNumber
@@ -36,10 +36,10 @@ class ProfileRepository extends BaseRepository implements
      * @return ?object
      */
     public function getAll(
-        ?array $filterCategories = null,
-        ?array $filterLevels = null,
-        ?array $filterStarreds = null,
-        ?array $filterRoles = null,
+        ?array $filterCategory = null,
+        ?array $filterLevel = null,
+        ?array $filterStarred = null,
+        ?array $filterRole = null,
         ?array $sorts = null,
         ?int $pageSize = null,
         ?int $pageNumber = null,
@@ -48,10 +48,10 @@ class ProfileRepository extends BaseRepository implements
     ): ?object {
         return $this->model
             ->byOwner()
-            ->filterCategories($filterCategories)
-            ->filterLevels($filterLevels)
-            ->filterStarreds($filterStarreds)
-            ->filterRoles($filterRoles)
+            ->filterCategory($filterCategory)
+            ->filterLevel($filterLevel)
+            ->filterStarred($filterStarred)
+            ->filterRole($filterRole)
             ->sort($sorts)
             ->page($pageSize, $pageNumber, $isCursor, $pageCursor);
     }

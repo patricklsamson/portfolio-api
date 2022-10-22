@@ -122,7 +122,7 @@ class Profile extends BaseModel
      *
      * @return Builder
      */
-    public function scopeFilterCategories(
+    public function scopeFilterCategory(
         Builder $query,
         ?array $categories = null
     ): Builder {
@@ -137,7 +137,7 @@ class Profile extends BaseModel
      *
      * @return Builder
      */
-    public function scopeFilterLevels(
+    public function scopeFilterLevel(
         Builder $query,
         ?array $levels = null
     ): Builder {
@@ -152,13 +152,13 @@ class Profile extends BaseModel
      *
      * @return Builder
      */
-    public function scopeFilterStarreds(
+    public function scopeFilterStarred(
         Builder $query,
-        ?array $starreds = null
+        ?array $starred = null
     ): Builder {
-        return $starreds == null ? $query : $query->whereIn(
+        return $starred == null ? $query : $query->whereIn(
             'starred',
-            $starreds
+            $starred
         );
     }
 
@@ -170,7 +170,7 @@ class Profile extends BaseModel
      *
      * @return Builder
      */
-    public function scopeFilterRoles(
+    public function scopeFilterRole(
         Builder $query,
         ?array $roles = null
     ): Builder {
