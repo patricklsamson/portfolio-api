@@ -2,6 +2,19 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
+
+/*
+|--------------------------------------------------------------------------
+| Load Environment Variables
+|--------------------------------------------------------------------------
+|
+| Here we will load the environment variables and bind them to the server
+| configuration as needed by the application. You can modify this line
+| as needed to customize the loading of environment variables.
+|
+*/
+
 Dotenv::load(__DIR__.'/../');
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
