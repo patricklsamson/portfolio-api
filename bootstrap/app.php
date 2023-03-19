@@ -6,48 +6,6 @@ require_once __DIR__.'/../vendor/autoload.php';
 //     dirname(__DIR__)
 // ))->bootstrap();
 
-if (! function_exists('env')) {
-    /**
-     * Gets the value of an environment variable.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
-     */
-    function env($key, $default = null)
-    {
-        $value = getenv($key);
-
-        if ($value === false) {
-            return $default;
-        }
-
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
-
-            case 'false':
-            case '(false)':
-                return false;
-
-            case 'empty':
-            case '(empty)':
-                return '';
-
-            case 'null':
-            case '(null)':
-                return null;
-        }
-
-        if (strlen($value) > 1 && str_starts_with($value, '"') && str_ends_with($value, '"')) {
-            return substr($value, 1, -1);
-        }
-
-        return $value;
-    }
-}
-
 date_default_timezone_set(env('APP_TIMEZONE', 'UTC'));
 
 /*
