@@ -1,15 +1,13 @@
 #!/usr/bin/env bash
 echo "Running composer first cycle"
 composer clear-cache
-composer install
-composer dump-autoload
-composer update
+composer install --no-dev --working-dir=/var/www/html --optimize-autoloader
+cp .env.example .env
 
 echo "Running composer second cycle"
 composer global require hirak/prestissimo
-composer install --no-dev --working-dir=/var/www/html
+composer install --no-dev --working-dir=/var/www/html --optimize-autoloader
 composer dump-autoload
-composer update
 
 echo "Clearing cache..."
 php artisan cache:clear
