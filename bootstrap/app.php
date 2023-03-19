@@ -2,8 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Dotenv\Dotenv;
-
 /*
 |--------------------------------------------------------------------------
 | Load Environment Variables
@@ -15,7 +13,8 @@ use Dotenv\Dotenv;
 |
 */
 
-Dotenv::load(__DIR__.'/../');
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+$dotenv->load();
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
     dirname(__DIR__)
