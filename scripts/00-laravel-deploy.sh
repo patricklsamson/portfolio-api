@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 echo "Running composer"
-composer install --no-dev --working-dir=/var/www/html
-composer dump-autoload
 composer clear-cache
-composer global require hirak/prestissimo
 composer install
+composer dump-autoload
+composer global require hirak/prestissimo
+composer install --no-dev --working-dir=/var/www/html
 composer update
 php artisan cache:clear
 
