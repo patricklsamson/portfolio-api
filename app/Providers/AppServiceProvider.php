@@ -27,6 +27,7 @@ use App\Repositories\MessageRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Lumen\Routing\UrlGenerator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,6 +40,18 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->registerRepositories();
         $this->registerRequests();
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot(UrlGenerator $url)
+    {
+        if (env('APP_ENV') == 'production') {
+            $url->forceScheme('https');
+        }
     }
 
     /**
