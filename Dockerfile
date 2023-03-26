@@ -1,20 +1,34 @@
-FROM richarvey/nginx-php-fpm:1.9.0
+# Use the official PHP 7.4 FPM Alpine Linux image
+FROM php:7.4-fpm-alpine
 
-COPY . .
+# Set the working directory
+WORKDIR /var/www/html
 
-# Image config
-ENV SKIP_COMPOSER 1
-ENV WEBROOT /var/www/html/public
-ENV PHP_ERRORS_STDERR 1
-ENV RUN_SCRIPTS 1
-ENV REAL_IP_HEADER 1
+# Copy the files to the container
+COPY . /var/www/html
 
-# Laravel config
-ENV APP_ENV production
-ENV APP_DEBUG false
-ENV LOG_CHANNEL stderr
+# Install required packages
+RUN apk update && apk add --no-cache \
+    postgresql-dev \
+    libpng-dev \
+    libzip-dev \
+    nginx \
+    supervisor
 
-# Allow composer to run as root
-ENV COMPOSER_ALLOW_SUPERUSER 1
+# Install PHP extensions
+RUN docker-php-ext-install pdo pdo_pgsql pgsql gd zip
 
-CMD ["/start.sh"]
+# Remove default nginx configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy the nginx configuration file to the container
+COPY ./nginx.conf /etc/nginx/conf.d/
+
+# Copy the supervisor configuration file to the container
+COPY ./supervisor.conf /etc/supervisor/conf.d/
+
+# Expose port 80
+EXPOSE 80
+
+# Start supervisord
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
