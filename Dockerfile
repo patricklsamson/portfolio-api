@@ -6,8 +6,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN apk update && apk add --no-cache postgresql-dev \
+RUN apk update && apk add --no-cache postgresql-dev zlib-dev libzip-dev \
     && docker-php-ext-install pdo pdo_pgsql \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install zip \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/bin --filename=composer \
     && composer install --no-dev \
