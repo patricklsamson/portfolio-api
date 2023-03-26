@@ -4,14 +4,14 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /app
 
+COPY . .
+
 RUN apk update && apk add --no-cache postgresql-dev \
     && docker-php-ext-install pdo pdo_pgsql \
     && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/bin --filename=composer \
     && composer install --no-dev \
     && rm composer-setup.php
-
-COPY . .
 
 EXPOSE 8080
 
