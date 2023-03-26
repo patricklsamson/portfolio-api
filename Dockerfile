@@ -11,6 +11,6 @@ RUN apk update && apk add --no-cache postgresql-dev \
     && composer install --no-dev \
     && rm composer-setup.php
 
-EXPOSE {{PORT}}
+EXPOSE 8080
 
-CMD ["php", "-S", "0.0.0.0:{{PORT}}", "-t", "public"]
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
