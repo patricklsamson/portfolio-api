@@ -22,10 +22,10 @@ RUN docker-php-ext-install pdo pdo_pgsql pgsql gd zip
 COPY ./nginx.conf /etc/nginx/conf.d/
 
 # Copy the supervisor configuration file to the container
-COPY ./supervisor.conf /etc/supervisor/conf.d/
+COPY ./supervisord.conf /etc/supervisord.conf
 
 # Expose port 80
 EXPOSE 80
 
 # Start supervisord
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
