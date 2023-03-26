@@ -18,9 +18,6 @@ RUN apk update && apk add --no-cache \
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_pgsql pgsql gd zip
 
-# Remove default nginx configuration
-RUN rm /etc/nginx/conf.d/default.conf
-
 # Copy the nginx configuration file to the container
 COPY ./nginx.conf /etc/nginx/conf.d/
 
