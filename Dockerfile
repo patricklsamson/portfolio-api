@@ -24,11 +24,8 @@ RUN rm /etc/nginx/conf.d/default.conf
 # Copy the nginx configuration file to the container
 COPY ./nginx.conf /etc/nginx/conf.d/
 
-# Copy the supervisor configuration file to the container
-COPY ./supervisor.conf /etc/supervisor/conf.d/
-
 # Expose port 80
 EXPOSE 80
 
 # Start supervisord
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord", "-n"]
