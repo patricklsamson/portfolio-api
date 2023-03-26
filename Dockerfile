@@ -1,31 +1,15 @@
-# Use the official PHP 7.4 FPM Alpine Linux image
-FROM php:7.4-fpm-alpine
+FROM php:8.0-fpm
 
-# Set the working directory
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Copy the files to the container
-COPY . /var/www/html
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql
 
-# Install required packages
-RUN apk update && apk add --no-cache \
-    postgresql-dev \
-    libpng-dev \
-    libzip-dev \
-    nginx \
-    supervisor
+# Copy application files
+COPY . /app
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql pgsql gd zip
-
-# Copy the nginx configuration file to the container
-COPY ./nginx.conf /etc/nginx/conf.d/
-
-# Copy the supervisor configuration file to the container
-COPY ./supervisord.conf /etc/supervisord.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start supervisord
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisord.conf"]
+# Expose port 8080 and start php-fpm server
+EXPOSE 8080
+CMD ["php-fpm", "--nodaemonize"]

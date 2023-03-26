@@ -1,0 +1,11 @@
+web:
+  - dockerfile: Dockerfile
+    env:
+      DOCUMENT_ROOT: public/
+    routes:
+      - src: /
+        dest: /public/index.php
+        check: true
+  - type: nginx
+    name: nginx
+    config: nginx.conf
