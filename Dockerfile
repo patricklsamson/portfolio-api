@@ -1,15 +1,16 @@
-FROM php:8.0-fpm
+FROM php:8.0-fpm-alpine
 
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    && docker-php-ext-install pdo pdo_pgsql
-
-# Copy application files
 COPY . /app
 
-# Expose port 8080 and start php-fpm server
-EXPOSE 8080
-CMD ["php-fpm", "--nodaemonize"]
+RUN apk update && apk add --no-cache postgresql-dev \
+    && docker-php-ext-install pdo pdo_pgsql \
+    && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/bin --filename=composer \
+    && composer install --no-dev \
+    && rm composer-setup.php
+
+EXPOSE {{PORT}}
+
+CMD ["php", "-S", "0.0.0.0:{{PORT}}", "-t", "public"]
