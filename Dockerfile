@@ -1,5 +1,7 @@
 FROM php:8.0-fpm-alpine
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 WORKDIR /app
 
 RUN apk update && apk add --no-cache postgresql-dev \
@@ -9,7 +11,7 @@ RUN apk update && apk add --no-cache postgresql-dev \
     && composer install --no-dev \
     && rm composer-setup.php
 
-COPY . /app
+COPY . .
 
 EXPOSE 8080
 
