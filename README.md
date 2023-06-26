@@ -1,4 +1,4 @@
-# Lumen PHP Framework
+<!-- # Lumen PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
@@ -21,4 +21,51 @@ If you discover a security vulnerability within Lumen, please send an e-mail to 
 
 ## License
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). -->
+
+# Portfolio API v1
+
+- PHP Version
+
+```shell
+PHP 7.4
+```
+
+- System Dependencies
+
+```shell
+Lumen 8.3.1
+Composer 2.3.5
+PostgreSQL 15.0
+
+(Optional)
+Laradock
+```
+
+- Configuration
+
+```shell
+composer install
+composer dump-autoload
+php artisan key:generate
+php artisan jwt:secret
+
+(Optional - when using Laradock)
+docker-compose up -d nginx postgres
+```
+
+- Database Initialization
+
+```shell
+php artisan migrate
+php artisan db:seed
+```
+
+- How to run the Test Suite
+
+```shell
+```
+
+---
+
+Fair Use
