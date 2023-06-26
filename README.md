@@ -64,6 +64,11 @@ php artisan db:seed
 - How to run the Test Suite
 
 ```shell
+vendor\bin\phpunit
+
+or
+
+vendor\bin\phpunit --filter=testHealth
 ```
 
 ---
