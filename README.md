@@ -37,8 +37,6 @@ PHP 7.4
 Lumen 8.3.1
 Composer 2.3.5
 PostgreSQL 15.0
-
-(Optional)
 Laradock
 ```
 
@@ -50,7 +48,6 @@ composer dump-autoload
 php artisan key:generate
 php artisan jwt:secret
 
-(Optional - when using Laradock)
 docker-compose up -d nginx postgres
 ```
 
@@ -64,11 +61,13 @@ php artisan db:seed
 - How to run the Test Suite
 
 ```shell
-vendor\bin\phpunit
+docker exec -it WORKSPACE_NAME bash
+
+phpunit
 
 or
 
-vendor\bin\phpunit --filter=testHealth
+phpunit --filter=testHealth
 ```
 
 ---
