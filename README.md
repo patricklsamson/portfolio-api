@@ -67,7 +67,7 @@ phpunit
 
 or
 
-phpunit --filter=testHealth
+phpunit --filter=HealthTest
 ```
 
 ---
