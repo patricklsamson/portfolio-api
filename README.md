@@ -63,11 +63,11 @@ php artisan db:seed
 ```shell
 docker exec -it WORKSPACE_NAME bash
 
-phpunit
+phpunit --testdox
 
 or
 
-phpunit --filter=HealthTest
+phpunit --testdox --filter=HealthTest
 ```
 
 ---
