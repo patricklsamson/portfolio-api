@@ -68,6 +68,10 @@ phpunit --testdox
 or
 
 phpunit --testdox --filter=HealthTest
+
+or
+
+phpunit --testdox --filter=testShouldCheckHealth
 ```
 
 ---
